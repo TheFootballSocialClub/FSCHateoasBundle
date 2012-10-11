@@ -1,0 +1,24 @@
+{
+    "name": "fsc/hateoas-bundle",
+    "require": {
+        "php": ">=5.3.0",
+        "jms/serializer-bundle": "dev-fixes as 1.0.0"
+    },
+    "require-dev": {
+        "symfony/framework-bundle": "2.1.*",
+        "symfony/class-loader": "2.1.*",
+        "symfony/yaml": "2.1.*",
+        "doctrine/common": "*"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/adrienbrault/JMSSerializerBundle"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "FSC\\HateoasBundle": "" }
+    },
+    "target-dir": "FSC/HateoasBundle",
+    "minimum-stability": "dev"
+}

@@ -1,0 +1,8 @@
+parameters:
+    fsc_hateoas.link_subscriber.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
+
+services:
+    fsc_hateoas.link_subscriber:
+        class: %fsc_hateoas.link_subscriber.class%
+        tags:
+            - { name: jms_serializer.event_subscriber }
