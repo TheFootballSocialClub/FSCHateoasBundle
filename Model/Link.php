@@ -2,9 +2,18 @@
 
 namespace FSC\HateoasBundle\Model;
 
+use JMS\SerializerBundle\Annotation as Serializer;
+
 class Link
 {
+    /**
+     * @Serializer\XmlAttribute
+     */
     private $rel;
+
+    /**
+     * @Serializer\XmlAttribute
+     */
     private $href;
 
     public function setHref($href)

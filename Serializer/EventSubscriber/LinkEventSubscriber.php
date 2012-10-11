@@ -29,12 +29,27 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     public function onPostSerializeXML(Event $event)
     {
+        if (null === ($links = $this->getLinks($event))) {
+            return;
+        }
+
         $xmlSerializationVisitor = $event->getVisitor();
         $navigator = $xmlSerializationVisitor->getNavigator();
 
         $currentNode = $xmlSerializationVisitor->getCurrentNode(); // \DOMElement ... :)
+        $document = $xmlSerializationVisitor->getDocument();
 
-        // TODO handle xml case ...
+        foreach ($links as $link) {
+            $entryNode = $document->createElement('link');
+            $currentNode->appendChild($entryNode);
+            $xmlSerializationVisitor->setCurrentNode($entryNode);
+
+            if (null !== $node = $navigator->accept($link, null, $xmlSerializationVisitor)) {
+                $xmlSerializationVisitor->getCurrentNode()->appendChild($node);
+            }
+
+            $xmlSerializationVisitor->revertCurrentNode();
+        }
     }
 
     public function onPostSerializeJSON(Event $event)
@@ -65,21 +80,30 @@ class LinkEventSubscriber implements EventSubscriberInterface
         $link1->setHref('http://symfony.com/hey');
         $link1->setRel('self');
 
+        $link2 = new Link();
+        $link2->setHref('http://symfony.com/fabpot');
+        $link2->setRel('alternate');
+
         return array(
             $link1->getRel() => $link1,
+            $link2->getRel() => $link2,
         );
     }
 
     protected function addLinksToGenericVisitor(Event $event, $links)
     {
-        $type = array(
+        $data = $event->getVisitor()->getNavigator()->accept($links, $this->getLinksType(), $event->getVisitor());
+        $event->getVisitor()->addData('links', $data);
+    }
+
+    protected static function getLinksType()
+    {
+        return array(
             'name' => 'array',
             'params' => array(
                 array('name' => 'string'),
                 array('name' => 'FSC\HateoasBundle\Model\Link'),
             )
         );
-        $data = $event->getVisitor()->getNavigator()->accept($links, $type, $event->getVisitor());
-        $event->getVisitor()->addData('links', $data);
     }
 }
