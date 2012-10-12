@@ -1,8 +1,17 @@
 parameters:
     fsc_hateoas.link_subscriber.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
+    fsc_hateoas.factory.link.class: FSC\HateoasBundle\Factory\LinkFactory
 
 services:
     fsc_hateoas.link_subscriber:
         class: %fsc_hateoas.link_subscriber.class%
+        arguments:
+            - @fsc_hateoas.factory.link
         tags:
             - { name: jms_serializer.event_subscriber }
+
+    fsc_hateoas.factory.link:
+        class: %fsc_hateoas.factory.link.class%
+        arguments:
+            - @router
+            - @fsc_hateoas.metadata.factory

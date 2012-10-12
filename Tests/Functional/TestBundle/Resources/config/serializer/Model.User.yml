@@ -1,0 +1,4 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
+    properties:
+        id:
+            xml_attribute: true

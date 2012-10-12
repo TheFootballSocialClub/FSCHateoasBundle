@@ -10,15 +10,15 @@ class LinkEventSubscriberTest extends TestCase
     public function testXML()
     {
         $user = new User();
+        $user->setId(24);
         $user->setFirstName('Adrien');
         $user->setLastName('Brault');
 
         $this->assertSerializedXmlEquals(
-'<result>
+'<result id="24">
   <first_name><![CDATA[Adrien]]></first_name>
   <last_name><![CDATA[Brault]]></last_name>
-  <link rel="self" href="http://symfony.com/hey"/>
-  <link rel="alternate" href="http://symfony.com/fabpot"/>
+  <link rel="self" href="http://localhost/users/24"/>
 </result>',
             $user
         );
@@ -27,21 +27,19 @@ class LinkEventSubscriberTest extends TestCase
     public function testJSON()
     {
         $user = new User();
+        $user->setId(24);
         $user->setFirstName('Adrien');
         $user->setLastName('Brault');
 
         $this->assertSerializedJsonEquals(
 '{'.
+    '"id":24,'.
     '"first_name":"Adrien",'.
     '"last_name":"Brault",'.
     '"links":{'.
         '"self":{'.
             '"rel":"self",'.
-            '"href":"http:\/\/symfony.com\/hey"'.
-        '},'.
-        '"alternate":{'.
-            '"rel":"alternate",'.
-            '"href":"http:\/\/symfony.com\/fabpot"'.
+            '"href":"http:\/\/localhost\/users\/24"'.
         '}'.
     '}'.
 '}',

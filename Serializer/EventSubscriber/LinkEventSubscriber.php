@@ -5,8 +5,10 @@ namespace FSC\HateoasBundle\Serializer\EventSubscriber;
 use JMS\SerializerBundle\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
+use JMS\SerializerBundle\Serializer\TypeParser;
 
 use FSC\HateoasBundle\Model\Link;
+use FSC\HateoasBundle\Factory\LinkFactoryInterface;
 
 class LinkEventSubscriber implements EventSubscriberInterface
 {
@@ -20,90 +22,80 @@ class LinkEventSubscriber implements EventSubscriberInterface
             $methods[] = array(
                 'event' => Events::POST_SERIALIZE,
                 'format' => $format,
-                'method' => 'onPostSerialize'.strtoupper($format)
+                'method' => 'onPostSerialize'.('xml' == $format ? 'xml' : ''),
             );
         }
 
         return $methods;
     }
 
+    /**
+     * @var LinkFactoryInterface
+     */
+    protected $linkFactory;
+
+    /**
+     * @var array ('name' => '', 'params' => array(...))
+     */
+    protected $linksType;
+
+    public function __construct(LinkFactoryInterface $linkFactory)
+    {
+        $this->linkFactory = $linkFactory;
+    }
+
     public function onPostSerializeXML(Event $event)
     {
-        if (null === ($links = $this->getLinks($event))) {
+        if (null === ($links = $this->linkFactory->createLinks($event->getObject(), $event->getType()))) {
             return;
         }
 
-        $xmlSerializationVisitor = $event->getVisitor();
-        $navigator = $xmlSerializationVisitor->getNavigator();
-
-        $currentNode = $xmlSerializationVisitor->getCurrentNode(); // \DOMElement ... :)
-        $document = $xmlSerializationVisitor->getDocument();
+        $visitor = $event->getVisitor();
 
         foreach ($links as $link) {
-            $entryNode = $document->createElement('link');
-            $currentNode->appendChild($entryNode);
-            $xmlSerializationVisitor->setCurrentNode($entryNode);
+            $entryNode = $visitor->getDocument()->createElement('link');
+            $visitor->getCurrentNode()->appendChild($entryNode);
+            $visitor->setCurrentNode($entryNode);
 
-            if (null !== $node = $navigator->accept($link, null, $xmlSerializationVisitor)) {
-                $xmlSerializationVisitor->getCurrentNode()->appendChild($node);
+            if (null !== $node = $visitor->getNavigator()->accept($link, null, $visitor)) {
+                $visitor->getCurrentNode()->appendChild($node);
             }
 
-            $xmlSerializationVisitor->revertCurrentNode();
+            $visitor->revertCurrentNode();
         }
     }
 
-    public function onPostSerializeJSON(Event $event)
+    public function onPostSerialize(Event $event)
     {
-        if (null === ($links = $this->getLinks($event))) {
+        if (null === ($links = $this->linkFactory->createLinks($event->getObject()))) {
             return;
         }
 
-        $this->addLinksToGenericVisitor($event, $links);
-    }
+        $links = $this->indexLinksByRel($links);
 
-    public function onPostSerializeYML(Event $event)
-    {
-        if (null === ($links = $this->getLinks($event))) {
-            return;
-        }
-
-        $this->addLinksToGenericVisitor($event, $links);
-    }
-
-    protected function getLinks(Event $event)
-    {
-        if ($event->getObject() instanceof Link) {
-            return null;
-        }
-
-        $link1 = new Link();
-        $link1->setHref('http://symfony.com/hey');
-        $link1->setRel('self');
-
-        $link2 = new Link();
-        $link2->setHref('http://symfony.com/fabpot');
-        $link2->setRel('alternate');
-
-        return array(
-            $link1->getRel() => $link1,
-            $link2->getRel() => $link2,
-        );
-    }
-
-    protected function addLinksToGenericVisitor(Event $event, $links)
-    {
         $data = $event->getVisitor()->getNavigator()->accept($links, $this->getLinksType(), $event->getVisitor());
         $event->getVisitor()->addData('links', $data);
     }
 
-    protected static function getLinksType()
+    protected function getLinksType()
     {
-        return array(
-            'name' => 'array',
-            'params' => array(
-                array('name' => 'string'),
-                array('name' => 'FSC\HateoasBundle\Model\Link'),
-            )
-        );
+        if (null !== $this->linksType) {
+            return $this->linksType;
+        }
+
+        $typeParser = new TypeParser();
+
+        return $typeParser->parse('array<string,FSC\HateoasBundle\Model\Link>');
+    }
+
+    protected static function indexLinksByRel($links)
+    {
+        $newLinks = array();
+
+        foreach ($links as $link) {
+            $newLinks[$link->getRel()] = $link;
+        }
+
+        return $newLinks;
     }
 }

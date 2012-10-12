@@ -1,0 +1,57 @@
+parameters:
+    fsc_hateoas.metadata.factory.class: Metadata\MetadataFactory
+    fsc_hateoas.metadata.driver.chain.class: Metadata\Driver\DriverChain
+    fsc_hateoas.metadata.driver.lazy_loading.class: Metadata\Driver\LazyLoadingDriver
+    fsc_hateoas.metadata.driver.yaml.class: FSC\HateoasBundle\Metadata\Driver\YamlDriver
+    fsc_hateoas.metadata.driver.annotation.class: FSC\HateoasBundle\Metadata\Driver\AnnotationDriver
+    fsc_hateoas.metadata.file_locator.class: Metadata\Driver\FileLocator
+    fsc_hateoas.metadata.cache.file.class: Metadata\Cache\FileCache
+
+services:
+    fsc_hateoas.metadata.factory:
+        class: %fsc_hateoas.metadata.factory.class%
+        arguments:
+            - @fsc_hateoas.metadata.driver.lazy_loading
+            - null
+            - null # debug
+
+    fsc_hateoas.metadata.driver.chain:
+        class: %fsc_hateoas.metadata.driver.chain.class%
+        arguments:
+            -
+                - @fsc_hateoas.metadata.driver.yaml
+                # - @fsc_hateoas.metadata.driver.annotation
+
+    fsc_hateoas.metadata.driver.lazy_loading:
+        class: %fsc_hateoas.metadata.driver.lazy_loading.class%
+        public: false
+        arguments:
+            - @service_container
+            - fsc_hateoas.metadata.driver.chain
+
+    fsc_hateoas.metadata.driver.yaml:
+        class: %fsc_hateoas.metadata.driver.yaml.class%
+        public: false
+        arguments:
+            - @fsc_hateoas.metadata.file_locator
+
+    fsc_hateoas.metadata.driver.annotation:
+        class: %fsc_hateoas.metadata.driver.annotation.class%
+        public: false
+        arguments:
+            - @annotation_reader
+
+    fsc_hateoas.metadata.file_locator:
+        class: %fsc_hateoas.metadata.file_locator.class%
+        public: false
+        arguments:
+            - null # directories
+
+    fsc_hateoas.metadata.cache:
+        alias: fsc_hateoas.metadata.cache.file
+
+    fsc_hateoas.metadata.cache.file:
+        class: %fsc_hateoas.metadata.cache.file.class%
+        public: false
+        arguments:
+            - null # directory
