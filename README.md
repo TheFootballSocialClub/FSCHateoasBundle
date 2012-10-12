@@ -52,6 +52,8 @@ class User
 Then doing:
 
 ```
+<?php
+
 $user = new User();
 $user->id = 24;
 $user->username = 'adrienbrault';
