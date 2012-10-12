@@ -1,0 +1,6 @@
+FSC\HateoasBundle\Model\Link:
+    properties:
+        rel:
+            xml_attribute: true
+        href:
+            xml_attribute: true
