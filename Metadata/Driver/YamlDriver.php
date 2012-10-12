@@ -28,10 +28,16 @@ class YamlDriver extends AbstractFileDriver
             $links = array();
 
             foreach ($config['links'] as $rel => $link) {
+                if (is_string($link)) {
+                    $link = array(
+                        'route' => $link,
+                    );
+                }
+
                 $links[] = array(
                     'rel' => $rel,
                     'route' => $link['route'],
-                    'params' => $link['params'],
+                    'params' => isset($link['params']) ? $link['params'] : array(),
                 );
             }
 

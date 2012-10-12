@@ -19,6 +19,9 @@ With the following configuration and entity:
 api_user_get:
     pattern: /api/users/{id}
 
+api_user_list:
+    pattern: /api/users
+
 user_profile:
     pattern: /profile/{user_id}
 ```
@@ -33,6 +36,7 @@ Acme\FooBundle\Entity\User:
         alternate:
             route: user_profile
             params: { user_id: id }
+        users: api_user_list
 ```
 
 ```php
@@ -68,6 +72,7 @@ Would result in:
   <username><![CDATA[adrienbrault]]></username>
   <link rel="self" href="http://localhost/api/users/24"/>
   <link rel="alternate" href="http://localhost/profile/24"/>
+  <link rel="users" href="http://localhost/api/users"/>
 </user>
 ```
 
@@ -84,6 +89,10 @@ or
         "alternate": {
             "rel": "alternate",
             "href": "http:\/\/localhost\/profile\/24"
+        },
+        "users": {
+            "rel": "users",
+            "href": "http:\/\/localhost\/api\/users"
         }
     }
 }

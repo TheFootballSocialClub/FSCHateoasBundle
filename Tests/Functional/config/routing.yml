@@ -1,5 +1,8 @@
 api_user_get:
     pattern: /api/users/{identifier}
 
+api_user_list:
+    pattern: /api/users
+
 user_profile:
     pattern: /profile/{id}

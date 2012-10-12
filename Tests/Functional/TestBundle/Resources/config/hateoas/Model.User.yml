@@ -8,3 +8,4 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
             route: user_profile
             params:
                 id: id
+        users: api_user_list
