@@ -1,2 +1,5 @@
-user_get:
-    pattern: /users/{identifier}
+api_user_get:
+    pattern: /api/users/{identifier}
+
+user_profile:
+    pattern: /profile/{id}

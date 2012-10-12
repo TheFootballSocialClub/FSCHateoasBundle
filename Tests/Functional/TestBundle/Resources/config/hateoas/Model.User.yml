@@ -1,6 +1,10 @@
 FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
     links:
         self:
-            route: user_get
+            route: api_user_get
             params:
                 identifier: id
+        alternate:
+            route: user_profile
+            params:
+                id: id

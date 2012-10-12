@@ -18,7 +18,8 @@ class LinkEventSubscriberTest extends TestCase
 '<result id="24">
   <first_name><![CDATA[Adrien]]></first_name>
   <last_name><![CDATA[Brault]]></last_name>
-  <link rel="self" href="http://localhost/users/24"/>
+  <link rel="self" href="http://localhost/api/users/24"/>
+  <link rel="alternate" href="http://localhost/profile/24"/>
 </result>',
             $user
         );
@@ -39,7 +40,11 @@ class LinkEventSubscriberTest extends TestCase
     '"links":{'.
         '"self":{'.
             '"rel":"self",'.
-            '"href":"http:\/\/localhost\/users\/24"'.
+            '"href":"http:\/\/localhost\/api\/users\/24"'.
+        '},'.
+        '"alternate":{'.
+            '"rel":"alternate",'.
+            '"href":"http:\/\/localhost\/profile\/24"'.
         '}'.
     '}'.
 '}',
