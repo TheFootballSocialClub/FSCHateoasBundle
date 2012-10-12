@@ -44,6 +44,8 @@ Acme\FooBundle\Entity\User:
 
 // src/Acme/FooBundle/Entity/User.php
 
+use JMS\SerializerBundle\Annotation as Serializer;
+
 /** @Serializer\XmlRoot("user") */
 class User
 {
