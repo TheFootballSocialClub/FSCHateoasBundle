@@ -55,7 +55,7 @@ class User
 
 Then doing:
 
-```
+```php
 <?php
 
 $user = new User();
