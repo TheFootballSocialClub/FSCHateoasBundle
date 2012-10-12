@@ -1,5 +1,13 @@
 {
     "name": "fsc/hateoas-bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adrien Brault",
+            "email": "adrien.brault@gmail.com"
+        }
+    ],
     "require": {
         "php": ">=5.3.0",
         "jms/metadata": ">=1.1.0,<1.3-dev",
