@@ -7,7 +7,7 @@ This bundle hooks into the JMSSerializerBundle serialization process, and provid
 Right now, only adding links is supported.
 
 Even though there are some tests, be aware that this is a work in progress.
-For example, only yaml metadata configuration is supported.
+For example, only yaml and annotation metadata configuration is supported.
 
 Adding links
 ------------
@@ -26,27 +26,21 @@ user_profile:
     pattern: /profile/{user_id}
 ```
 
-```yaml
-# AcmeFooBundle/Resources/config/hateoas/Entity.User.yml
-Acme\FooBundle\Entity\User:
-    links:
-        self:
-            route: api_user_get
-            params: { id: id }
-        alternate:
-            route: user_profile
-            params: { user_id: id }
-        users: api_user_list
-```
-
 ```php
 <?php
 
 // src/Acme/FooBundle/Entity/User.php
 
 use JMS\SerializerBundle\Annotation as Serializer;
+use FSC\HateoasBundle\Annotation as Hateoas;
 
-/** @Serializer\XmlRoot("user") */
+/**
+ * @Hateoas\Link("self", route = "api_user_get", params = { "id" = "id" })
+ * @Hateoas\Link("alternate", route = "user_profile", params = { "user_id" = "id" })
+ * @Hateoas\Link("users", route = "api_user_list")
+ *
+ * @Serializer\XmlRoot("user")
+ */
 class User
 {
     /** @Serializer\XmlAttribute */

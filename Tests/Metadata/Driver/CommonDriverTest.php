@@ -3,21 +3,38 @@
 namespace FSC\HateoasBundle\Tests\Metadata\Driver;
 
 use Metadata\Driver\FileLocator;
+use Doctrine\Common\Annotations\AnnotationReader;
 
+use FSC\HateoasBundle\Metadata\Driver\AnnotationDriver;
 use FSC\HateoasBundle\Metadata\Driver\YamlDriver;
 
-class YamlDriverTest extends \PHPUnit_Framework_TestCase
+class CommonDriverTest extends \PHPUnit_Framework_TestCase
 {
-    protected function createDriver()
+    protected function createAnnotationDriver()
+    {
+        return new AnnotationDriver(new AnnotationReader());
+    }
+
+    protected function createYamlDriver()
     {
         return new YamlDriver(new FileLocator(array(
             'FSC\HateoasBundle\Tests\Fixtures' => __DIR__.'/yml',
         )));
     }
 
-    public function testUser()
+    public function getDrivers()
     {
-        $driver = $this->createDriver();
+        return array(
+            array($this->createAnnotationDriver()),
+            array($this->createYamlDriver()),
+        );
+    }
+
+    /**
+     * @dataProvider getDrivers
+     */
+    public function testUser($driver)
+    {
         $classMetadata = $driver->loadMetadataForClass(new \ReflectionClass('FSC\HateoasBundle\Tests\Fixtures\User'));
 
         $this->assertInstanceOf('FSC\HateoasBundle\Metadata\ClassMetadata', $classMetadata);
