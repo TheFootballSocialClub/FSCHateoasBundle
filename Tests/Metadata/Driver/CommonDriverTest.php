@@ -22,19 +22,30 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         )));
     }
 
-    public function getDrivers()
+    protected function createDriver($name)
+    {
+        switch ($name) {
+            case 'annotation': return $this->createAnnotationDriver();
+            case 'yaml': return $this->createYamlDriver();
+        }
+
+        throw new \RuntimeException(sprintf('Driver "%s" doesn\'t exists.', $name));
+    }
+
+    public function getDriversName()
     {
         return array(
-            array($this->createAnnotationDriver()),
-            array($this->createYamlDriver()),
+            array('annotation'),
+            array('yaml'),
         );
     }
 
     /**
-     * @dataProvider getDrivers
+     * @dataProvider getDriversName
      */
-    public function testUser($driver)
+    public function testUser($driverName)
     {
+        $driver = $this->createDriver($driverName);
         $classMetadata = $driver->loadMetadataForClass(new \ReflectionClass('FSC\HateoasBundle\Tests\Fixtures\User'));
 
         $this->assertInstanceOf('FSC\HateoasBundle\Metadata\ClassMetadata', $classMetadata);
