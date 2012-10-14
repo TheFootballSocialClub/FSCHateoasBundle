@@ -30,14 +30,14 @@ class LinkEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @var array ('name' => '', 'params' => array(...))
+     */
+    protected static $linksType;
+
+    /**
      * @var LinkFactoryInterface
      */
     protected $linkFactory;
-
-    /**
-     * @var array ('name' => '', 'params' => array(...))
-     */
-    protected $linksType;
 
     public function __construct(LinkFactoryInterface $linkFactory)
     {
@@ -77,15 +77,15 @@ class LinkEventSubscriber implements EventSubscriberInterface
         $event->getVisitor()->addData('links', $data);
     }
 
-    protected function getLinksType()
+    protected static function getLinksType()
     {
-        if (null !== $this->linksType) {
-            return $this->linksType;
+        if (null !== self::$linksType) {
+            return self::$linksType;
         }
 
         $typeParser = new TypeParser();
 
-        return $typeParser->parse('array<string,FSC\HateoasBundle\Model\Link>');
+        return self::$linksType = $typeParser->parse('array<string,FSC\HateoasBundle\Model\Link>');
     }
 
     protected static function indexLinksByRel($links)
