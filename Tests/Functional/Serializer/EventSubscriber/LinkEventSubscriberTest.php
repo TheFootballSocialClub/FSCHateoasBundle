@@ -39,18 +39,9 @@ class LinkEventSubscriberTest extends TestCase
     '"first_name":"Adrien",'.
     '"last_name":"Brault",'.
     '"links":{'.
-        '"self":{'.
-            '"rel":"self",'.
-            '"href":"http:\/\/localhost\/api\/users\/24"'.
-        '},'.
-        '"alternate":{'.
-            '"rel":"alternate",'.
-            '"href":"http:\/\/localhost\/profile\/24"'.
-        '},'.
-        '"users":{'.
-            '"rel":"users",'.
-            '"href":"http:\/\/localhost\/api\/users"'.
-        '}'.
+        '"self":"http:\/\/localhost\/api\/users\/24",'.
+        '"alternate":"http:\/\/localhost\/profile\/24",'.
+        '"users":"http:\/\/localhost\/api\/users"'.
     '}'.
 '}',
             $user

@@ -30,9 +30,9 @@ class LinkEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @var array ('name' => '', 'params' => array(...))
+     * @var array 'type' => ('name' => '', 'params' => array(...))
      */
-    protected static $linksType;
+    protected static $serializerTypeCache;
 
     /**
      * @var LinkFactoryInterface
@@ -71,29 +71,30 @@ class LinkEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $links = $this->indexLinksByRel($links);
+        $links = $this->createLinksArray($links);
 
-        $data = $event->getVisitor()->getNavigator()->accept($links, $this->getLinksType(), $event->getVisitor());
+        $data = $event->getVisitor()->getNavigator()->accept($links, $this->getSerializerType('array<string,string>'), $event->getVisitor());
         $event->getVisitor()->addData('links', $data);
     }
 
-    protected static function getLinksType()
+    protected static function getSerializerType($type)
     {
-        if (null !== self::$linksType) {
-            return self::$linksType;
+        if (isset(self::$serializerTypeCache[$type])) {
+            return self::$serializerTypeCache[$type];
         }
 
+        // Todo create a CachedTypeParser that would be wrapper
         $typeParser = new TypeParser();
 
-        return self::$linksType = $typeParser->parse('array<string,FSC\HateoasBundle\Model\Link>');
+        return self::$serializerTypeCache[$type] = $typeParser->parse($type);
     }
 
-    protected static function indexLinksByRel($links)
+    protected static function createLinksArray($links)
     {
         $newLinks = array();
 
         foreach ($links as $link) {
-            $newLinks[$link->getRel()] = $link;
+            $newLinks[$link->getRel()] = $link->getHref();
         }
 
         return $newLinks;

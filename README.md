@@ -78,18 +78,9 @@ or
 {
     "id": 24,
     "links": {
-        "self": {
-            "rel": "self",
-            "href": "http:\/\/localhost\/api\/users\/24"
-        },
-        "alternate": {
-            "rel": "alternate",
-            "href": "http:\/\/localhost\/profile\/24"
-        },
-        "users": {
-            "rel": "users",
-            "href": "http:\/\/localhost\/api\/users"
-        }
+        "self": "http:\/\/localhost\/api\/users\/24",
+        "alternate": "http:\/\/localhost\/profile\/24",
+        "users": "http:\/\/localhost\/api\/users"
     }
 }
 ```
