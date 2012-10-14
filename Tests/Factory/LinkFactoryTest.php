@@ -16,9 +16,9 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateLinksFromMetadata()
     {
-        $router = $this->getMock('Symfony\Component\Routing\RouterInterface');
+        $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $metadataFactory = $this->getMock('Metadata\MetadataFactoryInterface');
-        $linkFactory = new LinkFactory($router, $metadataFactory);
+        $linkFactory = new LinkFactory($urlGenerator, $metadataFactory);
 
         $object = (object) array('id' => $id = 3);
 
@@ -35,7 +35,7 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
             )))
         ;
 
-        $router
+        $urlGenerator
             ->expects($this->once())
             ->method('generate')
             ->with($route, array('identifier' => $id), true)

@@ -2,7 +2,7 @@
 
 namespace FSC\HateoasBundle\Factory;
 
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Form\Util\PropertyPath;
 use Metadata\MetadataFactoryInterface;
 
@@ -11,12 +11,12 @@ use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
 
 class LinkFactory implements LinkFactoryInterface
 {
-    protected $router;
+    protected $urlGenerator;
     protected $metadataFactory;
 
-    public function __construct(RouterInterface $router, MetadataFactoryInterface $metadataFactory)
+    public function __construct(UrlGeneratorInterface $urlGenerator, MetadataFactoryInterface $metadataFactory)
     {
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
         $this->metadataFactory = $metadataFactory;
     }
 
@@ -38,7 +38,7 @@ class LinkFactory implements LinkFactoryInterface
         $links = array();
 
         foreach ($classMetadata->getLinks() as $linkMeta) {
-            $href = $this->router->generate($linkMeta['route'], $this->createRouteParameters($linkMeta['params'], $object), true);
+            $href = $this->urlGenerator->generate($linkMeta['route'], $this->createRouteParameters($linkMeta['params'], $object), true);
             $links[] = $this->createLink($linkMeta['rel'], $href);
         }
 
