@@ -1,0 +1,9 @@
+FSC\HateoasBundle\Tests\Fixtures\User:
+    links:
+        self:
+            route: _some_route
+            params:
+                identifier: id
+        users:
+            route: _users
+        home: homepage
