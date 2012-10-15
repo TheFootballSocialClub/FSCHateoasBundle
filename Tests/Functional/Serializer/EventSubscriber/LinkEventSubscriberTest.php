@@ -38,11 +38,20 @@ class LinkEventSubscriberTest extends TestCase
     '"id":24,'.
     '"first_name":"Adrien",'.
     '"last_name":"Brault",'.
-    '"links":{'.
-        '"self":"http:\/\/localhost\/api\/users\/24",'.
-        '"alternate":"http:\/\/localhost\/profile\/24",'.
-        '"users":"http:\/\/localhost\/api\/users"'.
-    '}'.
+    '"links":['.
+        '{'.
+            '"rel":"self",'.
+            '"href":"http:\/\/localhost\/api\/users\/24"'.
+        '},'.
+        '{'.
+            '"rel":"alternate",'.
+            '"href":"http:\/\/localhost\/profile\/24"'.
+        '},'.
+        '{'.
+            '"rel":"users",'.
+            '"href":"http:\/\/localhost\/api\/users"'.
+        '}'.
+    ']'.
 '}',
             $user
         );

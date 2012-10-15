@@ -77,10 +77,19 @@ or
 ```json
 {
     "id": 24,
-    "links": {
-        "self": "http:\/\/localhost\/api\/users\/24",
-        "alternate": "http:\/\/localhost\/profile\/24",
-        "users": "http:\/\/localhost\/api\/users"
-    }
+    "links": [
+        {
+            "rel": "self",
+            "href": "http:\/\/localhost\/api\/users\/24"
+        },
+        {
+            "rel": "alternate",
+            "href": "http:\/\/localhost\/profile\/24"
+        },
+        {
+            "rel": "users",
+            "href": "http:\/\/localhost\/api\/users"
+        }
+    ]
 }
 ```

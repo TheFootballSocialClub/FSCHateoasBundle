@@ -71,9 +71,7 @@ class LinkEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $links = $this->createLinksArray($links);
-
-        $data = $event->getVisitor()->getNavigator()->accept($links, $this->getSerializerType('array<string,string>'), $event->getVisitor());
+        $data = $event->getVisitor()->getNavigator()->accept($links, $this->getSerializerType('array<FSC\HateoasBundle\Model\Link>'), $event->getVisitor());
         $event->getVisitor()->addData('links', $data);
     }
 
@@ -87,16 +85,5 @@ class LinkEventSubscriber implements EventSubscriberInterface
         $typeParser = new TypeParser();
 
         return self::$serializerTypeCache[$type] = $typeParser->parse($type);
-    }
-
-    protected static function createLinksArray($links)
-    {
-        $newLinks = array();
-
-        foreach ($links as $link) {
-            $newLinks[$link->getRel()] = $link->getHref();
-        }
-
-        return $newLinks;
     }
 }
