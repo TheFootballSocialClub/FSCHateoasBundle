@@ -57,8 +57,13 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
                 'params' => array('identifier' => 'id')
             ),
             array(
-                'rel' => 'users',
-                'route' => '_users',
+                'rel' => 'alternate',
+                'route' => '_some_route2',
+                'params' => array(),
+            ),
+            array(
+                'rel' => 'alternate',
+                'route' => '_some_route3',
                 'params' => array(),
             ),
             array(

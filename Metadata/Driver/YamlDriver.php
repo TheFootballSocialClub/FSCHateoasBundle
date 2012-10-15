@@ -25,26 +25,44 @@ class YamlDriver extends AbstractFileDriver
         $classMetadata = new ClassMetadata($name);
 
         if (isset($config['links'])) {
-            $links = array();
-
-            foreach ($config['links'] as $rel => $link) {
-                if (is_string($link)) {
-                    $link = array(
-                        'route' => $link,
-                    );
-                }
-
-                $links[] = array(
-                    'rel' => $rel,
-                    'route' => $link['route'],
-                    'params' => isset($link['params']) ? $link['params'] : array(),
-                );
-            }
-
-            $classMetadata->setLinks($links);
+            $classMetadata->setLinks($this->normalizeLinks($config['links']));
         }
 
         return $classMetadata;
+    }
+
+    protected function normalizeLinks(array $links)
+    {
+        $newLinks = array();
+
+        foreach ($links as $rel => $link) {
+            if (is_array($link) && array_keys($link) === range(0, count($link) - 1)) {
+                foreach ($link as $subLink) {
+                    $newLinks[] = $this->parseLink($rel, $subLink);
+                }
+
+                continue;
+            }
+
+            $newLinks[] = $this->parseLink($rel, $link);
+        }
+
+        return $newLinks;
+    }
+
+    protected function parseLink($rel, $link)
+    {
+        if (is_string($link)) {
+            $link = array(
+                'route' => $link,
+            );
+        }
+
+        return array(
+            'rel' => $rel,
+            'route' => $link['route'],
+            'params' => isset($link['params']) ? $link['params'] : array(),
+        );
     }
 
     /**

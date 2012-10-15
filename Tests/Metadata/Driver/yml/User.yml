@@ -4,6 +4,7 @@ FSC\HateoasBundle\Tests\Fixtures\User:
             route: _some_route
             params:
                 identifier: id
-        users:
-            route: _users
+        alternate:
+            - _some_route2
+            - { route: _some_route3 }
         home: homepage

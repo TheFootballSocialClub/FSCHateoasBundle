@@ -6,7 +6,8 @@ use FSC\HateoasBundle\Annotation as Hateoas;
 
 /**
  * @Hateoas\Link("self", route = "_some_route", params = { "identifier" = "id"})
- * @Hateoas\Link("users", route = "_users")
+ * @Hateoas\Link("alternate", route = "_some_route2")
+ * @Hateoas\Link("alternate", route = "_some_route3")
  * @Hateoas\Link("home", route = "homepage")
  */
 class User
