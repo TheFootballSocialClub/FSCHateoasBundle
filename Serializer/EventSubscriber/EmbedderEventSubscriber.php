@@ -13,8 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pagerfanta\PagerfantaInterface;
 
 use FSC\HateoasBundle\Factory\ContentFactoryInterface;
-use FSC\HateoasBundle\Factory\PagerLinkFactoryInterface;
-use FSC\HateoasBundle\Serializer\LinkSerializationHelper;
+use FSC\HateoasBundle\Factory\RouteAwarePagerFactoryInterface;
 
 class EmbedderEventSubscriber implements EventSubscriberInterface
 {
@@ -37,17 +36,15 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     protected $contentFactory;
     protected $serializerMetadataFactory;
-    protected $pagerLinkFactory;
-    protected $linkSerializationHelper;
+    protected $routeAwarePagerFactory;
     protected $typeParser;
 
     public function __construct(ContentFactoryInterface $contentFactory, MetadataFactoryInterface $serializerMetadataFactory,
-        PagerLinkFactoryInterface $pagerLinkFactory, LinkSerializationHelper $linkSerializationHelper, TypeParser $typeParser = null)
+        RouteAwarePagerFactoryInterface $routeAwarePagerFactory, TypeParser $typeParser = null)
     {
         $this->contentFactory = $contentFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
-        $this->pagerLinkFactory = $pagerLinkFactory;
-        $this->linkSerializationHelper = $linkSerializationHelper;
+        $this->routeAwarePagerFactory = $routeAwarePagerFactory;
         $this->typeParser = $typeParser ?: new TypeParser();
     }
 
@@ -66,12 +63,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
             $visitor->getCurrentNode()->setAttribute('rel', $rel);
 
-            if ($relation['content']['value'] instanceof PagerfantaInterface) {
-                $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content']['value'], $relation);
-                $this->linkSerializationHelper->addLinksToXMLSerialization($links, $visitor);
-            }
-
-            if (null !== ($node = $visitor->getNavigator()->accept($relation['content']['value'], $this->getRelationType($relation), $visitor))) {
+            if (null !== ($node = $visitor->getNavigator()->accept($this->getRelationContent($event, $relation), $this->getRelationType($relation), $visitor))) {
                 $visitor->getCurrentNode()->appendChild($node);
             }
 
@@ -89,12 +81,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $relationsData = array();
         foreach ($relationsContent as $rel => $relation) {
-            $relationsData[$rel] = $visitor->getNavigator()->accept($relation['content']['value'], $this->getRelationType($relation), $visitor);
-
-            if ($relation['content']['value'] instanceof PagerfantaInterface) {
-                $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content']['value'], $relation);
-                $relationsData[$rel]['links'] = $this->linkSerializationHelper->createGenericLinksData($links, $visitor);
-            }
+            $relationsData[$rel] = $visitor->getNavigator()->accept($this->getRelationContent($event, $relation), $this->getRelationType($relation), $visitor);
         }
 
         $event->getVisitor()->addData('relations', $relationsData);
@@ -116,5 +103,14 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         }
 
         return $elementName;
+    }
+
+    protected function getRelationContent(Event $event, $relation)
+    {
+        if (!$relation['content']['value'] instanceof PagerfantaInterface) {
+            return $relation['content']['value'];
+        }
+
+        return $this->routeAwarePagerFactory->create($relation['content']['value'], $relation, $event->getObject());
     }
 }
