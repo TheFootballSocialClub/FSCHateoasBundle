@@ -4,5 +4,5 @@ namespace FSC\HateoasBundle\Metadata;
 
 interface ClassMetadataInterface
 {
-    public function getLinks();
+    public function getRelations();
 }

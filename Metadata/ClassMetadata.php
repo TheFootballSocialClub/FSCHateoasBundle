@@ -17,6 +17,10 @@ class ClassMetadata extends MergeableClassMetadata implements ClassMetadataInter
      *         'route' => 'xxx',
      *         'params' => array(
      *             'name' => 'propertyPath',
+     *         ),
+     *         'content_provider' => array(
+     *             'id' => 'some.service',
+     *             'method' => 'getSomething',
      *         )
      *     ),
      *     array(
@@ -28,22 +32,22 @@ class ClassMetadata extends MergeableClassMetadata implements ClassMetadataInter
      *     ),
      * )
      */
-    protected $links = array();
+    protected $relations = array();
 
-    public function getLinks()
+    public function getRelations()
     {
-        return $this->links;
+        return $this->relations;
     }
 
-    public function setLinks(array $links)
+    public function setRelations(array $relations)
     {
-        $this->links = $links;
+        $this->relations = $relations;
     }
 
     public function serialize()
     {
         return serialize(array(
-            $this->links,
+            $this->relations,
             parent::serialize(),
         ));
     }
@@ -51,7 +55,7 @@ class ClassMetadata extends MergeableClassMetadata implements ClassMetadataInter
     public function unserialize($str)
     {
         list(
-            $this->links,
+            $this->relations,
             $parentStr
         ) = unserialize($str);
 

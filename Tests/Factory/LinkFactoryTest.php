@@ -25,7 +25,7 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $classMetadata = $this->getMock('FSC\HateoasBundle\Metadata\ClassMetadataInterface');
         $classMetadata
             ->expects($this->once())
-            ->method('getLinks')
+            ->method('getRelations')
             ->will($this->returnValue($metadataLinks = array(
                 array(
                     'rel' => $rel = 'self',

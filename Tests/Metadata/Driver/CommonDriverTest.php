@@ -71,6 +71,12 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
                 'route' => 'homepage',
                 'params' => array(),
             ),
-        ), $classMetadata->getLinks());
+            array(
+                'rel' => 'friends',
+                'route' => 'user_friends_list',
+                'params' => array('id' => 'id'),
+                'content_provider' => array('id' => 'acme.foo.user_provider', 'method' => 'getUserFriendsPager'),
+            ),
+        ), $classMetadata->getRelations());
     }
 }

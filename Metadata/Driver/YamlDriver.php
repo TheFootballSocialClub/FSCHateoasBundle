@@ -25,17 +25,26 @@ class YamlDriver extends AbstractFileDriver
         $classMetadata = new ClassMetadata($name);
 
         if (isset($config['relations'])) {
-            $links = array();
+            $relations = array();
 
-            foreach ($config['relations'] as $link) {
-                $links[] = array(
-                    'rel' => $link['rel'],
-                    'route' => $link['route'],
-                    'params' => isset($link['params']) ? $link['params'] : array(),
+            foreach ($config['relations'] as $currentRelation) {
+                $relation = array(
+                    'rel' => $currentRelation['rel'],
+                    'route' => $currentRelation['route'],
+                    'params' => isset($currentRelation['params']) ? $currentRelation['params'] : array(),
                 );
+
+                if (!empty($currentRelation['content_provider'])) {
+                    $relation['content_provider'] = array(
+                        'id' => $currentRelation['content_provider']['id'],
+                        'method' => $currentRelation['content_provider']['method'],
+                    );
+                }
+
+                $relations[] = $relation;
             }
 
-            $classMetadata->setLinks($links);
+            $classMetadata->setRelations($relations);
         }
 
         return $classMetadata;

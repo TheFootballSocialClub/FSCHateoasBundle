@@ -37,9 +37,9 @@ class LinkFactory implements LinkFactoryInterface
     {
         $links = array();
 
-        foreach ($classMetadata->getLinks() as $linkMeta) {
-            $href = $this->urlGenerator->generate($linkMeta['route'], $this->createRouteParameters($linkMeta['params'], $object), true);
-            $links[] = $this->createLink($linkMeta['rel'], $href);
+        foreach ($classMetadata->getRelations() as $relationMeta) {
+            $href = $this->urlGenerator->generate($relationMeta['route'], $this->createRouteParameters($relationMeta['params'], $object), true);
+            $links[] = $this->createLink($relationMeta['rel'], $href);
         }
 
         return $links;

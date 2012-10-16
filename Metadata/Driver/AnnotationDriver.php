@@ -28,14 +28,23 @@ class AnnotationDriver implements DriverInterface
         $links = array();
         foreach ($this->reader->getClassAnnotations($class) as $annotation) {
             if ($annotation instanceof Annotation\Relation) {
-                $links[] = array(
+                $link = array(
                     'rel' => $annotation->rel,
                     'route' => $annotation->route,
                     'params' => $annotation->params ?: array(),
                 );
+
+                if (!empty($annotation->content_provider)) {
+                    $link['content_provider'] = array(
+                        'id' => $annotation->content_provider['id'],
+                        'method' => $annotation->content_provider['method'],
+                    );
+                }
+
+                $links[] = $link;
             }
         }
-        $classMetadata->setLinks($links);
+        $classMetadata->setRelations($links);
 
         return $classMetadata;
     }

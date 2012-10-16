@@ -8,7 +8,12 @@ use FSC\HateoasBundle\Annotation as Hateoas;
  * @Hateoas\Relation("self", route = "_some_route", params = { "identifier" = "id"})
  * @Hateoas\Relation("alternate", route = "_some_route2")
  * @Hateoas\Relation("alternate", route = "_some_route3")
- * @Hateoas\Relation("home", route = "homepage")
+ * @Hateoas\Relation("home",      route = "homepage")
+ * @Hateoas\Relation("friends",
+ *     route = "user_friends_list",
+ *     params = { "id" = "id" },
+ *     content_provider = { "id" = "acme.foo.user_provider", "method" = "getUserFriendsPager" }
+ * )
  */
 class User
 {

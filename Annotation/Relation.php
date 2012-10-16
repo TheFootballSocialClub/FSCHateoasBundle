@@ -26,4 +26,9 @@ final class Relation
      * @var array
      */
     public $params;
+
+    /**
+     * @var array
+     */
+    public $content_provider;
 }
