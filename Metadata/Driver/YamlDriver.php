@@ -24,10 +24,10 @@ class YamlDriver extends AbstractFileDriver
 
         $classMetadata = new ClassMetadata($name);
 
-        if (isset($config['links'])) {
+        if (isset($config['relations'])) {
             $links = array();
 
-            foreach ($config['links'] as $link) {
+            foreach ($config['relations'] as $link) {
                 $links[] = array(
                     'rel' => $link['rel'],
                     'route' => $link['route'],

@@ -1,5 +1,5 @@
 FSC\HateoasBundle\Tests\Fixtures\User:
-    links:
+    relations:
         - rel: self
           route: _some_route
           params:

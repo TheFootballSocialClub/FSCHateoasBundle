@@ -1,5 +1,5 @@
 FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
-    links:
+    relations:
         - rel: self
           route: api_user_get
           params:
