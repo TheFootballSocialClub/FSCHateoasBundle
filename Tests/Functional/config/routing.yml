@@ -20,3 +20,8 @@ api_user_posts_list:
 
 user_profile:
     pattern: /profile/{id}
+
+api_mixed:
+    pattern: /api/mixed
+    defaults:
+        _controller: TestBundle:Mixed:list

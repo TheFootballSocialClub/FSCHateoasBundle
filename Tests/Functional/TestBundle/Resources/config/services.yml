@@ -1,3 +1,6 @@
 services:
     test.provider.post:
         class: FSC\HateoasBundle\Tests\Functional\TestBundle\Provider\PostProvider
+
+    test.provider.user:
+        class: FSC\HateoasBundle\Tests\Functional\TestBundle\Provider\UserProvider

@@ -50,4 +50,27 @@ class ControllerTest extends TestCase
 ',
             $response->getContent());
     }
+
+    public function testGetMixedElementNamesXml()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/mixed?_format=xml');
+
+        $response = $client->getResponse(); /**  */
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $document->loadXML($response->getContent());
+        $xpath = new \DOMXPath($document);
+
+        $nodeList = $xpath->query('/result/post');
+        $this->assertEquals(2, $nodeList->length);
+
+        $nodeList = $xpath->query('/result/user');
+        $this->assertEquals(1, $nodeList->length);
+
+        $nodeList = $xpath->query('/result/*');
+        $this->assertEquals(3, $nodeList->length);
+    }
 }
