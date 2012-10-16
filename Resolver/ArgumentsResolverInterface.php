@@ -4,5 +4,5 @@ namespace FSC\HateoasBundle\Resolver;
 
 interface ArgumentsResolverInterface
 {
-    public function resolve(\ReflectionFunctionAbstract $method, $parameters);
+    public function resolve(\ReflectionFunctionAbstract $method, array $parameters);
 }
