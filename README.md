@@ -35,9 +35,9 @@ use JMS\SerializerBundle\Annotation as Serializer;
 use FSC\HateoasBundle\Annotation as Hateoas;
 
 /**
- * @Hateoas\Link("self",      route = "api_user_get", params = { "id" = "id" })
- * @Hateoas\Link("alternate", route = "user_profile", params = { "user_id" = "id" })
- * @Hateoas\Link("users",     route = "api_user_list")
+ * @Hateoas\Relation("self",      route = "api_user_get", params = { "id" = "id" })
+ * @Hateoas\Relation("alternate", route = "user_profile", params = { "user_id" = "id" })
+ * @Hateoas\Relation("users",     route = "api_user_list")
  *
  * @Serializer\XmlRoot("user")
  */

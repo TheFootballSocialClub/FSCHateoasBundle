@@ -27,7 +27,7 @@ class AnnotationDriver implements DriverInterface
 
         $links = array();
         foreach ($this->reader->getClassAnnotations($class) as $annotation) {
-            if ($annotation instanceof Annotation\Link) {
+            if ($annotation instanceof Annotation\Relation) {
                 $links[] = array(
                     'rel' => $annotation->rel,
                     'route' => $annotation->route,

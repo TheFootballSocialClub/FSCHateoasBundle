@@ -5,10 +5,10 @@ namespace FSC\HateoasBundle\Tests\Fixtures;
 use FSC\HateoasBundle\Annotation as Hateoas;
 
 /**
- * @Hateoas\Link("self", route = "_some_route", params = { "identifier" = "id"})
- * @Hateoas\Link("alternate", route = "_some_route2")
- * @Hateoas\Link("alternate", route = "_some_route3")
- * @Hateoas\Link("home", route = "homepage")
+ * @Hateoas\Relation("self", route = "_some_route", params = { "identifier" = "id"})
+ * @Hateoas\Relation("alternate", route = "_some_route2")
+ * @Hateoas\Relation("alternate", route = "_some_route3")
+ * @Hateoas\Relation("home", route = "homepage")
  */
 class User
 {

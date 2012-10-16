@@ -6,7 +6,7 @@ namespace FSC\HateoasBundle\Annotation;
  * @Annotation
  * @Target("CLASS")
  */
-final class Link
+final class Relation
 {
     /**
      * @Required
