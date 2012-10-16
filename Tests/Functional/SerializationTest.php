@@ -88,6 +88,21 @@ class SerializationTest extends TestCase
             ]
         },
         "posts": {
+            "page": 1,
+            "limit": 1,
+            "total": 2,
+            "results": [
+                {
+                    "id": 2,
+                    "title": "How to create awesome symfony2 application",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "http:\/\/localhost\/api\/posts\/2"
+                        }
+                    ]
+                }
+            ],
             "links": [
                 {
                     "rel": "self",
@@ -104,21 +119,6 @@ class SerializationTest extends TestCase
                 {
                     "rel": "next",
                     "href": "http:\/\/localhost\/api\/users\/24\/posts?page=2&limit=1"
-                }
-            ],
-            "page": 1,
-            "limit": 1,
-            "total": 2,
-            "results": [
-                {
-                    "id": 2,
-                    "title": "How to create awesome symfony2 application",
-                    "links": [
-                        {
-                            "rel": "self",
-                            "href": "http:\/\/localhost\/api\/posts\/2"
-                        }
-                    ]
                 }
             ]
         }

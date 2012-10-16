@@ -89,16 +89,12 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $relationsData = array();
         foreach ($relationsContent as $rel => $relation) {
-            $relationData = array();
+            $relationsData[$rel] = $visitor->getNavigator()->accept($relation['content']['value'], $this->getRelationType($relation), $visitor);
 
             if ($relation['content']['value'] instanceof PagerfantaInterface) {
                 $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content']['value'], $relation);
-                $relationData['links'] = $this->linkSerializationHelper->createGenericLinksData($links, $visitor);
+                $relationsData[$rel]['links'] = $this->linkSerializationHelper->createGenericLinksData($links, $visitor);
             }
-
-            $relationData = array_merge($relationData, $visitor->getNavigator()->accept($relation['content']['value'], $this->getRelationType($relation), $visitor));
-
-            $relationsData[$rel] = $relationData;
         }
 
         $event->getVisitor()->addData('relations', $relationsData);
