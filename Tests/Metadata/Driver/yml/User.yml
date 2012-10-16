@@ -1,10 +1,12 @@
 FSC\HateoasBundle\Tests\Fixtures\User:
     links:
-        self:
-            route: _some_route
-            params:
-                identifier: id
-        alternate:
-            - _some_route2
-            - { route: _some_route3 }
-        home: homepage
+        - rel: self
+          route: _some_route
+          params:
+              identifier: id
+        - rel: alternate
+          route: _some_route2
+        - rel: alternate
+          route: _some_route3
+        - rel: home
+          route: homepage
