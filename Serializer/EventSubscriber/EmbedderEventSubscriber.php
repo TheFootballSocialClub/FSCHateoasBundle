@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
 use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
+use FSC\HateoasBundle\Resolver\ArgumentsResolverInterface;
 
 class EmbedderEventSubscriber implements EventSubscriberInterface
 {
@@ -42,16 +43,18 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
     protected $serializerMetadataFactory;
     protected $container;
     protected $parametersFactory;
+    protected $argumentsResolver;
     protected $typeParser;
 
     public function __construct(MetadataFactoryInterface $metadataFactory, MetadataFactoryInterface $serializerMetadataFactory,
                                 ContainerInterface $container, ParametersFactoryInterface $parametersFactory,
-                                TypeParser $typeParser = null)
+                                ArgumentsResolverInterface $argumentsResolver, TypeParser $typeParser = null)
     {
         $this->metadataFactory = $metadataFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->container = $container;
         $this->parametersFactory = $parametersFactory;
+        $this->argumentsResolver = $argumentsResolver;
         $this->typeParser = $typeParser ?: new TypeParser();
     }
 
@@ -112,17 +115,6 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         $event->getVisitor()->addData('relations', $relationsData);
     }
 
-    public static function resolveMethodArguments(\ReflectionMethod $method, $parameters)
-    {
-        $arguments = array();
-
-        foreach ($method->getParameters() as $parameter) {
-            $arguments[] = $parameters[$parameter->getName()];
-        }
-
-        return $arguments;
-    }
-
     protected function getRelationsContent(ClassMetadataInterface $classMetadata, $object)
     {
         $relationsContent = array();
@@ -136,7 +128,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
             $providerMethod = $providerClass->getMethod($relation['content_provider']['method']);
 
             $parameters = $this->parametersFactory->createParameters($object, $relation['params']);
-            $arguments = $this->resolveMethodArguments($providerMethod, $parameters);
+            $arguments = $this->argumentsResolver->resolve($providerMethod, $parameters);
             $content = call_user_func_array(array($provider, $relation['content_provider']['method']), $arguments);
 
             if (isset($relationsContent[$relation['rel']])) {
