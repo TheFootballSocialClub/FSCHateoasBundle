@@ -6,6 +6,7 @@ use JMS\SerializerBundle\Serializer\Handler\SubscribingHandlerInterface;
 use JMS\SerializerBundle\Serializer\GraphNavigator;
 use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
 use JMS\SerializerBundle\Serializer\GenericSerializationVisitor;
+use Metadata\MetadataFactoryInterface;
 use Pagerfanta\Pagerfanta;
 
 class PagerfantaHandler implements SubscribingHandlerInterface
@@ -25,6 +26,15 @@ class PagerfantaHandler implements SubscribingHandlerInterface
         return $methods;
     }
 
+    protected $serializerMetadataFactory;
+    protected $xmlElementsNamesUseSerializerMetadata;
+
+    public function __construct(MetadataFactoryInterface $serializerMetadataFactory, $xmlElementsNamesUseSerializerMetadata = true)
+    {
+        $this->serializerMetadataFactory = $serializerMetadataFactory;
+        $this->xmlElementsNamesUseSerializerMetadata = $xmlElementsNamesUseSerializerMetadata;
+    }
+
     public function serializeToXML(XmlSerializationVisitor $visitor, Pagerfanta $pager, array $resultsType)
     {
         if (null === $visitor->document) {
@@ -38,7 +48,26 @@ class PagerfantaHandler implements SubscribingHandlerInterface
 
         $resultsType = isset($resultsType['params'][0]) ? $resultsType['params'][0] : null;
 
-        return $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
+        if (!$this->xmlElementsNamesUseSerializerMetadata) {
+            return $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
+        }
+
+        foreach ($pager->getCurrentPageResults() as $result) {
+            $elementName = 'entry';
+            if (is_object($result) && null !== ($resultMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($result)))) {
+                $elementName = $resultMetadata->xmlRootName ?: $elementName;
+            }
+
+            $entryNode = $visitor->getDocument()->createElement($elementName);
+            $visitor->getCurrentNode()->appendChild($entryNode);
+            $visitor->setCurrentNode($entryNode);
+
+            if (null !== $node = $visitor->getNavigator()->accept($result, $resultsType, $visitor)) {
+                $visitor->getCurrentNode()->appendChild($node);
+            }
+
+            $visitor->revertCurrentNode();
+        }
     }
 
     public function serializeToArray(GenericSerializationVisitor $visitor, Pagerfanta $pager, array $type)

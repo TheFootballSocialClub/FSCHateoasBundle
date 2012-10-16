@@ -104,6 +104,10 @@ or
 
 The bundle provides a Pagerfanta handler.
 
+By default, the handler will use the serializer's xml root name metadata to know what xml element name should be used
+for each result.
+ie: `/** @Serializer\XmlRootName("user") */ class User {} )`
+
 Example:
 
 ```php
@@ -129,16 +133,16 @@ public function getListAction($page = 1, $limit = 10)
 
 ```xml
 <users page="3" limit="10" total="234">
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
+  <user>
+    <link rel="self" href="..."/>
+  </user>
+  <user>
+    <link rel="self" href="..."/>
+  </user>
+  <user>
+    <link rel="self" href="..."/>
+  </user>
+  ...
 </users>
 ```
 
@@ -181,16 +185,16 @@ public function getListAction(Request $request, $page = 1, $limit = 10)
   <link rel="last" href="http://localhost/api/users?limit=10&amp;page=24"/>
   <link rel="previous" href="http://localhost/api/users?limit=10&amp;page=2"/>
   <link rel="next" href="http://localhost/api/users?limit=10&amp;page=4"/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
+  <user>
+    <link rel="self" href="..."/>
+  </user>
+  <user>
+    <link rel="self" href="..."/>
+  </user>
+  <user>
+    <link rel="self" href="..."/>
+  </user>
+  ...
 </users>
 ```
 
@@ -308,21 +312,21 @@ class UserManager
     <link rel="first" href="http://localhost/api/users/42/friends?limit=10&amp;page=1"/>
     <link rel="last" href="http://localhost/api/users/42/friends?limit=10&amp;page=27"/>
     <link rel="next" href="http://localhost/api/users/42/friends?limit=10&amp;page=2"/>
-    <entry>
+    <user>
       <link rel="self" href="..."/>
-    </entry>
-    <entry>
+    </user>
+    <user>
       <link rel="self" href="..."/>
-    </entry>
-    <entry>
+    </user>
+    <user>
       <link rel="self" href="..."/>
-    </entry>
-    <entry>
+    </user>
+    <user>
       <link rel="self" href="..."/>
-    </entry>
-    <entry>
+    </user>
+    <user>
       <link rel="self" href="..."/>
-    </entry>
+    </user>
   </users>
 </user>
 ```
@@ -335,20 +339,20 @@ and `GET /api/users/42/friends` would result in
   <link rel="first" href="http://localhost/api/users/42/friends?limit=20&amp;page=1"/>
   <link rel="last" href="http://localhost/api/users/42/friends?limit=20&amp;page=7"/>
   <link rel="next" href="http://localhost/api/users/42/friends?limit=20&amp;page=2"/>
-  <entry>
+  <user>
     <link rel="self" href="..."/>
-  </entry>
-  <entry>
+  </user>
+  <user>
     <link rel="self" href="..."/>
-  </entry>
-  <entry>
+  </user>
+  <user>
     <link rel="self" href="..."/>
-  </entry>
-  <entry>
+  </user>
+  <user>
     <link rel="self" href="..."/>
-  </entry>
-  <entry>
+  </user>
+  <user>
     <link rel="self" href="..."/>
-  </entry>
+  </user>
 </users>
 ```

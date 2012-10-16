@@ -38,14 +38,14 @@ class ControllerTest extends TestCase
   <link rel="self" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
   <link rel="first" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
   <link rel="last" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
-  <entry id="2">
+  <post id="2">
     <title><![CDATA[How to create awesome symfony2 application]]></title>
     <link rel="self" href="http://localhost/api/posts/2"/>
-  </entry>
-  <entry id="1">
+  </post>
+  <post id="1">
     <title><![CDATA[Welcome on the blog!]]></title>
     <link rel="self" href="http://localhost/api/posts/1"/>
-  </entry>
+  </post>
 </posts>
 ',
             $response->getContent());

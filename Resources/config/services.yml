@@ -60,6 +60,9 @@ services:
 
     fsc_hateoas.serializer.handler.pagerfanta:
         class: %fsc_hateoas.serializer.handler.pagerfanta.class%
+        arguments:
+            - @jms_serializer.metadata_factory
+            - true
         tags:
             - { name: jms_serializer.subscribing_handler }
 

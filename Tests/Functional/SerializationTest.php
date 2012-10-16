@@ -32,10 +32,10 @@ class SerializationTest extends TestCase
     <link rel="first" href="http://localhost/api/users/24/posts?limit=1&amp;page=1"/>
     <link rel="last" href="http://localhost/api/users/24/posts?limit=1&amp;page=2"/>
     <link rel="next" href="http://localhost/api/users/24/posts?limit=1&amp;page=2"/>
-    <entry id="2">
+    <post id="2">
       <title><![CDATA[How to create awesome symfony2 application]]></title>
       <link rel="self" href="http://localhost/api/posts/2"/>
-    </entry>
+    </post>
   </posts>
 </user>',
             $user

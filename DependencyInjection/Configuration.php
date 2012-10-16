@@ -20,6 +20,15 @@ class Configuration implements ConfigurationInterface
                 ->children()
         ;
 
+        $root
+            ->arrayNode('pagerfanta')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->booleanNode('xml_elements_names_use_serializer_metadata')->defaultTrue()->end()
+                ->end()
+            ->end()
+        ;
+
         $this->addMetadataSection($root);
 
         return $tb;
