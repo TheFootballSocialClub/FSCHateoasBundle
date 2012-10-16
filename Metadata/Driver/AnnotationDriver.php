@@ -25,26 +25,27 @@ class AnnotationDriver implements DriverInterface
         $classMetadata = new ClassMetadata($name = $class->getName());
         $classMetadata->fileResources[] = $class->getFilename();
 
-        $links = array();
+        $relations = array();
         foreach ($this->reader->getClassAnnotations($class) as $annotation) {
             if ($annotation instanceof Annotation\Relation) {
-                $link = array(
+                $relation = array(
                     'rel' => $annotation->rel,
                     'route' => $annotation->route,
                     'params' => $annotation->params ?: array(),
                 );
 
-                if (!empty($annotation->content_provider)) {
-                    $link['content_provider'] = array(
-                        'id' => $annotation->content_provider['id'],
-                        'method' => $annotation->content_provider['method'],
+                if (!empty($annotation->content)) {
+                    $relation['content'] = array(
+                        'provider_id' => $annotation->content['provider_id'],
+                        'provider_method' => $annotation->content['provider_method'],
+                        'serializer_type' => isset($annotation->content['serializer_type']) ? $annotation->content['serializer_type'] : null,
                     );
                 }
 
-                $links[] = $link;
+                $relations[] = $relation;
             }
         }
-        $classMetadata->setRelations($links);
+        $classMetadata->setRelations($relations);
 
         return $classMetadata;
     }

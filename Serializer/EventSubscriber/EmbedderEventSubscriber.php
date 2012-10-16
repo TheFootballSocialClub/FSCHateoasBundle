@@ -57,8 +57,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         $visitor = $event->getVisitor(); /** @var $visitor XmlSerializationVisitor */
 
         foreach ($relationsContent as $rel => $relation) {
-            $type = (null !== $relation['type']) ? $this->getSerializerType($relation['type']) : $relation['type'];
-            if (null === $type) {
+            if (null === $relation['type']) {
                 $entryNode = $visitor->getDocument()->createElement('relation');
                 $visitor->getCurrentNode()->appendChild($entryNode);
                 $visitor->setCurrentNode($entryNode);
@@ -66,9 +65,9 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
             $visitor->getCurrentNode()->setAttribute('rel', $rel);
 
-            $node = $visitor->getNavigator()->accept($relation['content'], $type, $visitor);
+            $node = $visitor->getNavigator()->accept($relation['content'], $relation['type'], $visitor);
 
-            if (null === $type) {
+            if (null === $relation['type']) {
                 if (null !== $node) {
                     $visitor->getCurrentNode()->appendChild($node);
                 }
@@ -92,8 +91,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $relationsData = array();
         foreach ($relationsContent as $rel => $relation) {
-            $type = (null !== $relation['type']) ? $this->typeParser->parse($relation['type']) : $relation['type'];
-            $relationsData[$rel] = $visitor->getNavigator()->accept($relation['content'], $type, $visitor);
+            $relationsData[$rel] = $visitor->getNavigator()->accept($relation['content'], $relation['type'], $visitor);
         }
 
         $event->getVisitor()->addData('relations', $relationsData);

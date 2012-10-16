@@ -30,5 +30,5 @@ final class Relation
     /**
      * @var array
      */
-    public $content_provider;
+    public $content;
 }

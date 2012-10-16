@@ -34,10 +34,11 @@ class YamlDriver extends AbstractFileDriver
                     'params' => isset($currentRelation['params']) ? $currentRelation['params'] : array(),
                 );
 
-                if (!empty($currentRelation['content_provider'])) {
-                    $relation['content_provider'] = array(
-                        'id' => $currentRelation['content_provider']['id'],
-                        'method' => $currentRelation['content_provider']['method'],
+                if (!empty($currentRelation['content'])) {
+                    $relation['content'] = array(
+                        'provider_id' => $currentRelation['content']['provider_id'],
+                        'provider_method' => $currentRelation['content']['provider_method'],
+                        'serializer_type' => isset($currentRelation['content']['serializer_type']) ? $currentRelation['content']['serializer_type'] : null,
                     );
                 }
 

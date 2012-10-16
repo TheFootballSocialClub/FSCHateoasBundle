@@ -39,7 +39,7 @@ class ContentFactory implements ContentFactoryInterface
     {
         $relationsContent = array();
         foreach ($classMetadata->getRelations() as $relation) {
-            if (!isset($relation['content_provider'])) {
+            if (!isset($relation['content'])) {
                 continue;
             }
 
@@ -50,7 +50,7 @@ class ContentFactory implements ContentFactoryInterface
             }
             $relationsContent[$relation['rel']] = array(
                 'content' => $content,
-                'type' => null,
+                'type' => $relation['content']['serializer_type'],
             );
         }
 
@@ -59,13 +59,13 @@ class ContentFactory implements ContentFactoryInterface
 
     protected function getContent(array $relation, $object)
     {
-        $provider = $this->container->get($relation['content_provider']['id']);
+        $provider = $this->container->get($relation['content']['provider_id']);
         $providerClass = new \ReflectionClass(get_class($provider));
-        $providerMethod = $providerClass->getMethod($relation['content_provider']['method']);
+        $providerMethod = $providerClass->getMethod($relation['content']['provider_method']);
 
         $parameters = $this->parametersFactory->createParameters($object, $relation['params']);
         $arguments = $this->argumentsResolver->resolve($providerMethod, $parameters);
 
-        return call_user_func_array(array($provider, $relation['content_provider']['method']), $arguments);
+        return call_user_func_array(array($provider, $relation['content']['provider_method']), $arguments);
     }
 }

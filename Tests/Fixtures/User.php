@@ -12,7 +12,12 @@ use FSC\HateoasBundle\Annotation as Hateoas;
  * @Hateoas\Relation("friends",
  *     route = "user_friends_list",
  *     params = { "id" = "id" },
- *     content_provider = { "id" = "acme.foo.user_provider", "method" = "getUserFriendsPager" }
+ *     content = { "provider_id" = "acme.foo.user_provider", "provider_method" = "getUserFriendsPager" }
+ * )
+ * @Hateoas\Relation("favorites",
+ *     route = "user_favorites_list",
+ *     params = { "id" = "id" },
+ *     content = { "provider_id" = "acme.foo.favorite_provider", "provider_method" = "getUserFavoritesPager", "serializer_type" = "Pagerfanta<custom>" }
  * )
  */
 class User

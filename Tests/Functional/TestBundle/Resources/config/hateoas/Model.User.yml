@@ -13,4 +13,4 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
         - rel: posts
           route: api_user_posts_list
           params: { id: id }
-          content_provider: { id: test.provider.post, method: getUserPosts }
+          content: { provider_id: test.provider.post, provider_method: getUserPosts }
