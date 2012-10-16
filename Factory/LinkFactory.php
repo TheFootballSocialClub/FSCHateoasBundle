@@ -39,8 +39,8 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
 
     public function createPagerLinks($object, PagerfantaInterface $pager, $relationData)
     {
-        $route = $relationData['meta']['route'];
-        $defaultParameters = array_merge($this->parametersFactory->createParameters($object, $relationData['meta']['params']), array(
+        $route = $relationData['route'];
+        $defaultParameters = array_merge($this->parametersFactory->createParameters($object, $relationData['params']), array(
             'page' => $pager->getCurrentPage(),
             'limit' => $pager->getMaxPerPage(),
         ));

@@ -64,26 +64,32 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         $visitor = $event->getVisitor(); /** @var $visitor XmlSerializationVisitor */
 
         foreach ($relationsContent as $rel => $relation) {
-            if (null === $relation['type']) {
-                $entryNode = $visitor->getDocument()->createElement('relation');
-                $visitor->getCurrentNode()->appendChild($entryNode);
-                $visitor->setCurrentNode($entryNode);
-            } else {
-                $relation['type'] = $this->typeParser->parse($relation['type']);
+            $elementName = 'relation';
+            if (null !== $relation['content']['serializer_xml_element_name']) {
+                $elementName = $relation['content']['serializer_xml_element_name'];
+            } else if (true === $relation['content']['serializer_xml_element_name_root_metadata']) {
+                $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($relation['content']['value']));
+                $elementName = $classMetadata->xmlRootName ?: $elementName;
             }
+
+            $entryNode = $visitor->getDocument()->createElement($elementName);
+            $visitor->getCurrentNode()->appendChild($entryNode);
+            $visitor->setCurrentNode($entryNode);
+
+            $type = null !== $relation['content']['serializer_type'] ? $this->typeParser->parse($relation['content']['serializer_type']) : null;
 
             $visitor->getCurrentNode()->setAttribute('rel', $rel);
 
-            if ($relation['content'] instanceof \Pagerfanta\Pagerfanta) {
+            if ($relation['content']['value'] instanceof \Pagerfanta\Pagerfanta) {
                 // Add links
 
-                $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content'], $relation);
+                $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content']['value'], $relation);
                 $this->linkSerializationHelper->addLinksToXMLSerialization($links, $visitor);
             }
 
-            $node = $visitor->getNavigator()->accept($relation['content'], $relation['type'], $visitor);
+            $node = $visitor->getNavigator()->accept($relation['content']['value'], $type, $visitor);
 
-            if (null === $relation['type']) {
+            if (null === $type) {
                 if (null !== $node) {
                     $visitor->getCurrentNode()->appendChild($node);
                 }
@@ -107,20 +113,18 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $relationsData = array();
         foreach ($relationsContent as $rel => $relation) {
-            if (null !== $relation['type']) {
-                $relation['type'] = $this->typeParser->parse($relation['type']);
-            }
+            $type = null !== $relation['content']['serializer_type'] ? $this->typeParser->parse($relation['content']['serializer_type']) : null;
 
             $relationData = array();
 
-            if ($relation['content'] instanceof \Pagerfanta\Pagerfanta) {
+            if ($relation['content']['value'] instanceof \Pagerfanta\Pagerfanta) {
                 // Add links
 
-                $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content'], $relation);
+                $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content']['value'], $relation);
                 $relationData['links'] = $this->linkSerializationHelper->createGenericLinksData($links, $visitor);
             }
 
-            $relationData = array_merge($relationData, $visitor->getNavigator()->accept($relation['content'], $relation['type'], $visitor));
+            $relationData = array_merge($relationData, $visitor->getNavigator()->accept($relation['content']['value'], $type, $visitor));
 
             $relationsData[$rel] = $relationData;
         }

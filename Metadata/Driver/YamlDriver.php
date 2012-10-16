@@ -39,6 +39,8 @@ class YamlDriver extends AbstractFileDriver
                         'provider_id' => $currentRelation['content']['provider_id'],
                         'provider_method' => $currentRelation['content']['provider_method'],
                         'serializer_type' => isset($currentRelation['content']['serializer_type']) ? $currentRelation['content']['serializer_type'] : null,
+                        'serializer_xml_element_name' => isset($currentRelation['content']['serializer_xml_element_name']) ? $currentRelation['content']['serializer_xml_element_name'] : null,
+                        'serializer_xml_element_name_root_metadata' => isset($currentRelation['content']['serializer_xml_element_name_root_metadata']) ? (Boolean) $currentRelation['content']['serializer_xml_element_name_root_metadata'] : false,
                     );
                 }
 

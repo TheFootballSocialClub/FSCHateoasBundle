@@ -39,6 +39,8 @@ class AnnotationDriver implements DriverInterface
                         'provider_id' => $annotation->content['provider_id'],
                         'provider_method' => $annotation->content['provider_method'],
                         'serializer_type' => isset($annotation->content['serializer_type']) ? $annotation->content['serializer_type'] : null,
+                        'serializer_xml_element_name' => isset($annotation->content['serializer_xml_element_name']) ? $annotation->content['serializer_xml_element_name'] : null,
+                        'serializer_xml_element_name_root_metadata' => isset($annotation->content['serializer_xml_element_name_root_metadata']) ? (Boolean) $annotation->content['serializer_xml_element_name_root_metadata'] : false,
                     );
                 }
 

@@ -43,16 +43,13 @@ class ContentFactory implements ContentFactoryInterface
                 continue;
             }
 
-            $content = $this->getContent($relation, $object);
-
             if (isset($relationsContent[$relation['rel']])) {
                 throw new \RuntimeException(sprintf('You cannot embed content twice for the same rel "%s".', $relation['rel']));
             }
-            $relationsContent[$relation['rel']] = array(
-                'content' => $content,
-                'type' => $relation['content']['serializer_type'],
-                'meta' => $relation,
-            );
+
+            $relation['content']['value'] = $this->getContent($relation, $object);
+
+            $relationsContent[$relation['rel']] = $relation;
         }
 
         return $relationsContent;

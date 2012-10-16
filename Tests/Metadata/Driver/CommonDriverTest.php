@@ -79,6 +79,8 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
                     'provider_id' => 'acme.foo.user_provider',
                     'provider_method' => 'getUserFriendsPager',
                     'serializer_type' => null,
+                    'serializer_xml_element_name' => null,
+                    'serializer_xml_element_name_root_metadata' => true,
                 ),
             ),
             array(
@@ -89,6 +91,8 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
                     'provider_id' => 'acme.foo.favorite_provider',
                     'provider_method' => 'getUserFavoritesPager',
                     'serializer_type' => 'Pagerfanta<custom>',
+                    'serializer_xml_element_name' => 'favorites',
+                    'serializer_xml_element_name_root_metadata' => false,
                 ),
             ),
         ), $classMetadata->getRelations());

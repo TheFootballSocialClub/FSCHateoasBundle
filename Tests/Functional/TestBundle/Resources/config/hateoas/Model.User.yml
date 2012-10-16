@@ -16,9 +16,11 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
           content:
               provider_id: test.provider.post
               provider_method: getUserLastPost
+              serializer_xml_element_name_root_metadata: true
         - rel: posts
           route: api_user_posts_list
           params: { id: id }
           content:
               provider_id: test.provider.post
               provider_method: getUserPostsPager
+              serializer_xml_element_name: posts
