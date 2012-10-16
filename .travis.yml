@@ -8,5 +8,5 @@ before_script:
   - php composer.phar --dev install
 
 script:
-  - phpunit -c phpunit.unit.functional.xml.dist --coverage-text
+  - phpunit -c phpunit.unit.xml.dist --coverage-text
   - phpunit -c phpunit.functional.xml.dist --coverage-text
