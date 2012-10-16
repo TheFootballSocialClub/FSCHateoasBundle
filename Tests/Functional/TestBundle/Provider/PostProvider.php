@@ -9,7 +9,7 @@ use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\Post;
 
 class PostProvider
 {
-    public function getUserPostsPager($id)
+    public function getUserPostsPager($id, $page = 1, $limit = 10)
     {
         // Ie, in real life there would be a database query
         // That would then return a pager
@@ -20,7 +20,8 @@ class PostProvider
         );
 
         $pager = new Pagerfanta(new ArrayAdapter($posts));
-        $pager->setMaxPerPage(1);
+        $pager->setCurrentPage($page);
+        $pager->setMaxPerPage($limit);
 
         return $pager;
     }

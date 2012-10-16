@@ -29,14 +29,18 @@ class YamlDriver extends AbstractFileDriver
         if (isset($config['relations'])) {
             foreach ($config['relations'] as $relation) {
                 $relationMetadata = new RelationMetadata($relation['rel'], $relation['route']);
-                if (isset($relation['params'])) {
-                    $relationMetadata->setParams($relation['params']);
+                if (isset($relation['parameters'])) {
+                    $relationMetadata->setParams($relation['parameters']);
                 }
 
                 if (!empty($relation['content'])) {
                     $relationContent = $relation['content'];
                     $relationContentMetadata = new RelationContentMetadata($relationContent['provider_id'], $relationContent['provider_method']);
                     $relationMetadata->setContent($relationContentMetadata);
+
+                    if (isset($relationContent['provider_parameters'])) {
+                        $relationContentMetadata->setProviderParameters($relationContent['provider_parameters']);
+                    }
 
                     if (isset($relationContent['serializer_type'])) {
                         $relationContentMetadata->setSerializerType($relationContent['serializer_type']);

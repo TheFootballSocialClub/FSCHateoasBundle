@@ -63,7 +63,7 @@ class ContentFactory implements ContentFactoryInterface
         $providerClass = new \ReflectionClass(get_class($provider));
         $providerMethod = $providerClass->getMethod($relationMetadata->getContent()->getProviderMethod());
 
-        $parameters = $this->parametersFactory->createParameters($object, $relationMetadata->getParams());
+        $parameters = $this->parametersFactory->createParameters($object, $relationMetadata->getContent()->getProviderParameters());
         $arguments = $this->argumentsResolver->resolve($providerMethod, $parameters);
 
         return call_user_func_array(array($provider, $relationMetadata->getContent()->getProviderMethod()), $arguments);

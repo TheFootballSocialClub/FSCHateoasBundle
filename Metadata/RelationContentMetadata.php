@@ -6,6 +6,7 @@ class RelationContentMetadata implements RelationContentMetadataInterface
 {
     private $providerId;
     private $providerMethod;
+    private $providerParameters;
     private $serializerType;
     private $serializerXmlElementName;
     private $serializerXmlElementRootName;
@@ -15,6 +16,7 @@ class RelationContentMetadata implements RelationContentMetadataInterface
         $this->providerId = $providerId;
         $this->providerMethod = $providerMethod;
 
+        $this->providerParameters = array();
         $this->serializerXmlElementRootName = false;
     }
 
@@ -47,6 +49,19 @@ class RelationContentMetadata implements RelationContentMetadataInterface
     public function setSerializerType($serializerType)
     {
         $this->serializerType = $serializerType;
+    }
+
+    public function setProviderParameters($providerParameters)
+    {
+        $this->providerParameters = $providerParameters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProviderParameters()
+    {
+        return $this->providerParameters;
     }
 
     /**

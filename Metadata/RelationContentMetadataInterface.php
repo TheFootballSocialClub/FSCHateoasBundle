@@ -17,6 +17,11 @@ interface RelationContentMetadataInterface
     /**
      * @return string
      */
+    public function getProviderParameters();
+
+    /**
+     * @return string
+     */
     public function getSerializerType();
 
     /**

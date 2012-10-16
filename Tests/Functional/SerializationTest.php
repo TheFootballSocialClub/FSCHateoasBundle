@@ -2,6 +2,7 @@
 
 namespace FSC\HateoasBundle\Tests\Functional;
 
+use FSC\HateoasBundle\Tests\Functional\TestCase;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User;
 
 class SerializationTest extends TestCase
@@ -27,10 +28,10 @@ class SerializationTest extends TestCase
     <link rel="self" href="http://localhost/api/posts/2"/>
   </post>
   <posts rel="posts" page="1" limit="1" total="2">
-    <link rel="self" href="http://localhost/api/users/24/posts?page=1&amp;limit=1"/>
-    <link rel="first" href="http://localhost/api/users/24/posts?page=1&amp;limit=1"/>
-    <link rel="last" href="http://localhost/api/users/24/posts?page=2&amp;limit=1"/>
-    <link rel="next" href="http://localhost/api/users/24/posts?page=2&amp;limit=1"/>
+    <link rel="self" href="http://localhost/api/users/24/posts?limit=1&amp;page=1"/>
+    <link rel="first" href="http://localhost/api/users/24/posts?limit=1&amp;page=1"/>
+    <link rel="last" href="http://localhost/api/users/24/posts?limit=1&amp;page=2"/>
+    <link rel="next" href="http://localhost/api/users/24/posts?limit=1&amp;page=2"/>
     <entry id="2">
       <title><![CDATA[How to create awesome symfony2 application]]></title>
       <link rel="self" href="http://localhost/api/posts/2"/>
@@ -105,19 +106,19 @@ class SerializationTest extends TestCase
             "links": [
                 {
                     "rel": "self",
-                    "href": "http:\/\/localhost\/api\/users\/24\/posts?page=1&limit=1"
+                    "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=1"
                 },
                 {
                     "rel": "first",
-                    "href": "http:\/\/localhost\/api\/users\/24\/posts?page=1&limit=1"
+                    "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=1"
                 },
                 {
                     "rel": "last",
-                    "href": "http:\/\/localhost\/api\/users\/24\/posts?page=2&limit=1"
+                    "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=2"
                 },
                 {
                     "rel": "next",
-                    "href": "http:\/\/localhost\/api\/users\/24\/posts?page=2&limit=1"
+                    "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=2"
                 }
             ]
         }

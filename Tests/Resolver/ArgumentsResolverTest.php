@@ -40,7 +40,6 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
                 array('name' => 'adrien', 'id' => 3),
                 array('adrien'),
             ),
-
             array(
                 array('id' => null, 'name' => 'adrien'),
                 array('id' => 3),

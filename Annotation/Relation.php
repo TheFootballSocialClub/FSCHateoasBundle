@@ -25,7 +25,7 @@ final class Relation
     /**
      * @var array
      */
-    public $params;
+    public $parameters;
 
     /**
      * @var array

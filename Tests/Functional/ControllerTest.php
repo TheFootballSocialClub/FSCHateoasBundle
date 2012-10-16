@@ -34,14 +34,17 @@ class ControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(
             '<?xml version="1.0" encoding="UTF-8"?>
-<result page="1" limit="1" total="2">
-  <link rel="self" href="http://localhost/api/users/42/posts?page=1&amp;limit=1"/>
-  <link rel="first" href="http://localhost/api/users/42/posts?page=1&amp;limit=1"/>
-  <link rel="last" href="http://localhost/api/users/42/posts?page=2&amp;limit=1"/>
-  <link rel="next" href="http://localhost/api/users/42/posts?page=2&amp;limit=1"/>
+<result page="1" limit="10" total="2">
+  <link rel="self" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
+  <link rel="first" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
+  <link rel="last" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
   <entry id="2">
     <title><![CDATA[How to create awesome symfony2 application]]></title>
     <link rel="self" href="http://localhost/api/posts/2"/>
+  </entry>
+  <entry id="1">
+    <title><![CDATA[Welcome on the blog!]]></title>
+    <link rel="self" href="http://localhost/api/posts/1"/>
   </entry>
 </result>
 ',

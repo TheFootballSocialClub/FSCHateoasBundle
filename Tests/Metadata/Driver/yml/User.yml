@@ -2,7 +2,7 @@ FSC\HateoasBundle\Tests\Fixtures\User:
     relations:
         - rel: self
           route: _some_route
-          params:
+          parameters:
               identifier: id
         - rel: alternate
           route: _some_route2
@@ -12,13 +12,14 @@ FSC\HateoasBundle\Tests\Fixtures\User:
           route: homepage
         - rel: friends
           route: user_friends_list
-          params: { id: id }
+          parameters: { id: id }
           content: { provider_id: acme.foo.user_provider, provider_method: getUserFriendsPager, serializer_xml_element_name_root_metadata: true }
         - rel: favorites
           route: user_favorites_list
-          params: { id: id }
+          parameters: { id: id }
           content:
               provider_id: acme.foo.favorite_provider
               provider_method: getUserFavoritesPager
+              provider_parameters: { id: id, limit: =3 }
               serializer_type: Pagerfanta<custom>
               serializer_xml_element_name: favorites

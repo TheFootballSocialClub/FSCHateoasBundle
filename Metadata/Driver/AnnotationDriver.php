@@ -30,13 +30,17 @@ class AnnotationDriver implements DriverInterface
         foreach ($this->reader->getClassAnnotations($class) as $annotation) {
             if ($annotation instanceof Annotation\Relation) {
                 $relationMetadata = new RelationMetadata($annotation->rel, $annotation->route);
-                if (!empty($annotation->params)) {
-                    $relationMetadata->setParams($annotation->params);
+                if (!empty($annotation->parameters)) {
+                    $relationMetadata->setParams($annotation->parameters);
                 }
 
                 if (!empty($annotation->content)) {
                     $relationContentMetadata = new RelationContentMetadata($annotation->content['provider_id'], $annotation->content['provider_method']);
                     $relationMetadata->setContent($relationContentMetadata);
+
+                    if (isset($annotation->content['provider_parameters'])) {
+                        $relationContentMetadata->setProviderParameters($annotation->content['provider_parameters']);
+                    }
 
                     if (isset($annotation->content['serializer_type'])) {
                         $relationContentMetadata->setSerializerType($annotation->content['serializer_type']);

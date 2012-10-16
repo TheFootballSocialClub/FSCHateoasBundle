@@ -40,10 +40,12 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
 
     public function createPagerLinks(PagerfantaInterface $pager, $route, $defaultRouteParameters)
     {
-        $defaultRouteParameters = array_merge($defaultRouteParameters, array(
-            'page' => $pager->getCurrentPage(),
-            'limit' => $pager->getMaxPerPage(),
-        ));
+        if (!isset($defaultRouteParameters['page'])) {
+            $defaultRouteParameters['page'] = $pager->getCurrentPage();
+        }
+        if (!isset($defaultRouteParameters['limit'])) {
+            $defaultRouteParameters['limit'] = $pager->getMaxPerPage();
+        }
 
         $links = array();
         $links[] = $this->createLink('self', $this->generateUrl($route, $defaultRouteParameters));
@@ -102,6 +104,8 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
 
     public function generateUrl($name, $parameters = array())
     {
+        ksort($parameters); // Have consistent url query strings, for the tests
+
         return $this->urlGenerator->generate($name, $parameters, true);
     }
 

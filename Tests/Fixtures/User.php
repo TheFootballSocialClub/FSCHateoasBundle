@@ -5,21 +5,22 @@ namespace FSC\HateoasBundle\Tests\Fixtures;
 use FSC\HateoasBundle\Annotation as Hateoas;
 
 /**
- * @Hateoas\Relation("self", route = "_some_route", params = { "identifier" = "id"})
+ * @Hateoas\Relation("self", route = "_some_route", parameters = { "identifier" = "id"})
  * @Hateoas\Relation("alternate", route = "_some_route2")
  * @Hateoas\Relation("alternate", route = "_some_route3")
  * @Hateoas\Relation("home",      route = "homepage")
  * @Hateoas\Relation("friends",
  *     route = "user_friends_list",
- *     params = { "id" = "id" },
+ *     parameters = { "id" = "id" },
  *     content = { "provider_id" = "acme.foo.user_provider", "provider_method" = "getUserFriendsPager", "serializer_xml_element_name_root_metadata" = true }
  * )
  * @Hateoas\Relation("favorites",
  *     route = "user_favorites_list",
- *     params = { "id" = "id" },
+ *     parameters = { "id" = "id" },
  *     content = {
  *          "provider_id" = "acme.foo.favorite_provider",
  *          "provider_method" = "getUserFavoritesPager",
+ *          "provider_parameters" = { "id" = "id", "limit" = "=4" },
  *          "serializer_type" = "Pagerfanta<custom>",
  *          "serializer_xml_element_name" = "favorites"
  *     }
