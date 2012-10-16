@@ -33,6 +33,7 @@ class PagerfantaHandler implements SubscribingHandlerInterface
         $currentNode->setAttribute('total', $pager->getNbResults());
 
         $resultsType = isset($resultsType['params'][0]) ? $resultsType['params'][0] : null;
+
         return $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
     }
 
