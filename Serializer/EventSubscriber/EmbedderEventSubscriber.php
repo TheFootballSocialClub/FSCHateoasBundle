@@ -10,10 +10,10 @@ use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
 use Metadata\MetadataFactoryInterface;
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Pagerfanta\PagerfantaInterface;
 
 use FSC\HateoasBundle\Factory\ContentFactoryInterface;
 use FSC\HateoasBundle\Factory\PagerLinkFactoryInterface;
-use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
 use FSC\HateoasBundle\Serializer\LinkSerializationHelper;
 
 class EmbedderEventSubscriber implements EventSubscriberInterface
@@ -53,59 +53,35 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     public function onPostSerializeXML(Event $event)
     {
-        if (null === ($relationsContent = $this->contentFactory->create($event->getObject()))) {
-            return;
-        }
-
-        if (empty($relationsContent)) {
+        if (null === ($relationsContent = $this->contentFactory->create($event->getObject())) || empty($relationsContent)) {
             return;
         }
 
         $visitor = $event->getVisitor(); /** @var $visitor XmlSerializationVisitor */
 
         foreach ($relationsContent as $rel => $relation) {
-            $elementName = 'relation';
-            if (null !== $relation['content']['serializer_xml_element_name']) {
-                $elementName = $relation['content']['serializer_xml_element_name'];
-            } else if (true === $relation['content']['serializer_xml_element_name_root_metadata']) {
-                $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($relation['content']['value']));
-                $elementName = $classMetadata->xmlRootName ?: $elementName;
-            }
-
-            $entryNode = $visitor->getDocument()->createElement($elementName);
+            $entryNode = $visitor->getDocument()->createElement($this->getRelationXmlElementName($relation));
             $visitor->getCurrentNode()->appendChild($entryNode);
             $visitor->setCurrentNode($entryNode);
 
-            $type = null !== $relation['content']['serializer_type'] ? $this->typeParser->parse($relation['content']['serializer_type']) : null;
-
             $visitor->getCurrentNode()->setAttribute('rel', $rel);
 
-            if ($relation['content']['value'] instanceof \Pagerfanta\Pagerfanta) {
-                // Add links
-
+            if ($relation['content']['value'] instanceof PagerfantaInterface) {
                 $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content']['value'], $relation);
                 $this->linkSerializationHelper->addLinksToXMLSerialization($links, $visitor);
             }
 
-            $node = $visitor->getNavigator()->accept($relation['content']['value'], $type, $visitor);
-
-            if (null === $type) {
-                if (null !== $node) {
-                    $visitor->getCurrentNode()->appendChild($node);
-                }
-
-                $visitor->revertCurrentNode();
+            if (null !== ($node = $visitor->getNavigator()->accept($relation['content']['value'], $this->getRelationType($relation), $visitor))) {
+                $visitor->getCurrentNode()->appendChild($node);
             }
+
+            $visitor->revertCurrentNode();
         }
     }
 
     public function onPostSerialize(Event $event)
     {
-        if (null === ($relationsContent = $this->contentFactory->create($event->getObject()))) {
-            return;
-        }
-
-        if (empty($relationsContent)) {
+        if (null === ($relationsContent = $this->contentFactory->create($event->getObject())) || empty($relationsContent)) {
             return;
         }
 
@@ -113,22 +89,36 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $relationsData = array();
         foreach ($relationsContent as $rel => $relation) {
-            $type = null !== $relation['content']['serializer_type'] ? $this->typeParser->parse($relation['content']['serializer_type']) : null;
-
             $relationData = array();
 
-            if ($relation['content']['value'] instanceof \Pagerfanta\Pagerfanta) {
-                // Add links
-
+            if ($relation['content']['value'] instanceof PagerfantaInterface) {
                 $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content']['value'], $relation);
                 $relationData['links'] = $this->linkSerializationHelper->createGenericLinksData($links, $visitor);
             }
 
-            $relationData = array_merge($relationData, $visitor->getNavigator()->accept($relation['content']['value'], $type, $visitor));
+            $relationData = array_merge($relationData, $visitor->getNavigator()->accept($relation['content']['value'], $this->getRelationType($relation), $visitor));
 
             $relationsData[$rel] = $relationData;
         }
 
         $event->getVisitor()->addData('relations', $relationsData);
+    }
+
+    protected function getRelationType($relation)
+    {
+        return null !== $relation['content']['serializer_type'] ? $this->typeParser->parse($relation['content']['serializer_type']) : null;
+    }
+
+    protected function getRelationXmlElementName($relation)
+    {
+        $elementName = 'relation';
+        if (null !== $relation['content']['serializer_xml_element_name']) {
+            $elementName = $relation['content']['serializer_xml_element_name'];
+        } else if (true === $relation['content']['serializer_xml_element_name_root_metadata']) {
+            $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($relation['content']['value']));
+            $elementName = $classMetadata->xmlRootName ?: $elementName;
+        }
+
+        return $elementName;
     }
 }
