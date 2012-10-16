@@ -43,6 +43,17 @@ class ParametersFactoryTest extends \PHPUnit_Framework_TestCase
                     'friend_id' => 4,
                 ),
             ),
+            array(
+                array(
+                    'id' => 1,
+                ),
+                array(
+                    'id' => '=4',
+                ),
+                array(
+                    'id' => 4,
+                ),
+            ),
         );
     }
 }
