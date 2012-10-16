@@ -34,7 +34,7 @@ class ControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(
             '<?xml version="1.0" encoding="UTF-8"?>
-<result page="1" limit="10" total="2">
+<posts page="1" limit="10" total="2">
   <link rel="self" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
   <link rel="first" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
   <link rel="last" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
@@ -46,7 +46,7 @@ class ControllerTest extends TestCase
     <title><![CDATA[Welcome on the blog!]]></title>
     <link rel="self" href="http://localhost/api/posts/1"/>
   </entry>
-</result>
+</posts>
 ',
             $response->getContent());
     }

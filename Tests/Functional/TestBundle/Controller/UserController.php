@@ -17,7 +17,7 @@ class UserController extends Controller
         $postsPager->setMaxPerPage($request->query->get('limit', $postsPager->getMaxPerPage()));
         $routeAwarePager = new RouteAwarePager($postsPager, $request->attributes->get('_route'), $request->attributes->get('_route_params'));
 
-        // $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('posts');
+        $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('posts');
 
         return new Response($this->get('serializer')->serialize($routeAwarePager, $request->get('_format')));
     }

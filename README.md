@@ -119,6 +119,8 @@ public function getListAction($page = 1, $limit = 10)
     $pager->setCurrentPage($page);
     $pager->setMaxPerPage($limit);
 
+    $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('users');
+
     return new Response($this->get('serializer')->serialize($pager, 'xml')));
 }
 ```
@@ -126,7 +128,7 @@ public function getListAction($page = 1, $limit = 10)
 `GET /list?page=3` would result in
 
 ```xml
-<result page="3" limit="10" total="234">
+<users page="3" limit="10" total="234">
   <entry/>
   <entry/>
   <entry/>
@@ -137,7 +139,7 @@ public function getListAction($page = 1, $limit = 10)
   <entry/>
   <entry/>
   <entry/>
-</result>
+</users>
 ```
 
 ## RouteAwarePagerHandler
@@ -164,6 +166,8 @@ public function getListAction(Request $request, $page = 1, $limit = 10)
 
     $routeAwarePager = new RouteAwarePager($pager, $request->attributes->get('_route'), $request->attributes->get('_route_params'));
 
+    $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('users');
+
     return new Response($this->get('serializer')->serialize($routeAwarePager, 'xml')));
 }
 ```
@@ -171,7 +175,7 @@ public function getListAction(Request $request, $page = 1, $limit = 10)
 `GET /list?page=3` would result in
 
 ```xml
-<result page="3" limit="10" total="234">
+<users page="3" limit="10" total="234">
   <link rel="self" href="http://localhost/api/users?limit=10&amp;page=3"/>
   <link rel="first" href="http://localhost/api/users?limit=10&amp;page=1"/>
   <link rel="last" href="http://localhost/api/users?limit=10&amp;page=24"/>
@@ -187,7 +191,7 @@ public function getListAction(Request $request, $page = 1, $limit = 10)
   <entry/>
   <entry/>
   <entry/>
-</result>
+</users>
 ```
 
 ## Embedding relations
@@ -219,6 +223,8 @@ class Controller extends Controller
         $pager = $this->get('acme.foo.user_manager')->getUserFriendsPager($id, $page, $limit);
 
         $routeAwarePager = new RouteAwarePager($pager, $request->attributes->get('_route'), $request->attributes->get('_route_params'));
+
+        $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('users');
 
         return new Response($this->get('serializer')->serialize($routeAwarePager, 'xml'));
     }
@@ -324,7 +330,7 @@ class UserManager
 and `GET /api/users/42/friends` would result in
 
 ```xml
-<result rel="friends" page="1" limit="20" total="134">
+<users rel="friends" page="1" limit="20" total="134">
   <link rel="self" href="http://localhost/api/users/42/friends?limit=20&amp;page=1"/>
   <link rel="first" href="http://localhost/api/users/42/friends?limit=20&amp;page=1"/>
   <link rel="last" href="http://localhost/api/users/42/friends?limit=20&amp;page=7"/>
@@ -344,5 +350,5 @@ and `GET /api/users/42/friends` would result in
   <entry>
     <link rel="self" href="..."/>
   </entry>
-</result>
+</users>
 ```
