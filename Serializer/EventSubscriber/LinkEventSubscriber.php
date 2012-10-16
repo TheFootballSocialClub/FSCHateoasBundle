@@ -38,10 +38,12 @@ class LinkEventSubscriber implements EventSubscriberInterface
      * @var LinkFactoryInterface
      */
     protected $linkFactory;
+    protected $typeParser;
 
-    public function __construct(LinkFactoryInterface $linkFactory)
+    public function __construct(LinkFactoryInterface $linkFactory, TypeParser $typeParser = null)
     {
         $this->linkFactory = $linkFactory;
+        $this->typeParser = $typeParser ?: new TypeParser();
     }
 
     public function onPostSerializeXML(Event $event)
@@ -71,19 +73,7 @@ class LinkEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $data = $event->getVisitor()->getNavigator()->accept($links, $this->getSerializerType('array<FSC\HateoasBundle\Model\Link>'), $event->getVisitor());
+        $data = $event->getVisitor()->getNavigator()->accept($links, $this->typeParser->parse('array<FSC\HateoasBundle\Model\Link>'), $event->getVisitor());
         $event->getVisitor()->addData('links', $data);
-    }
-
-    protected static function getSerializerType($type)
-    {
-        if (isset(self::$serializerTypeCache[$type])) {
-            return self::$serializerTypeCache[$type];
-        }
-
-        // Todo create a CachedTypeParser that would be wrapper
-        $typeParser = new TypeParser();
-
-        return self::$serializerTypeCache[$type] = $typeParser->parse($type);
     }
 }

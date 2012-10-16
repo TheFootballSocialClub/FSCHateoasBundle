@@ -40,13 +40,15 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
     protected $metadataFactory;
     protected $serializerMetadataFactory;
     protected $container;
+    protected $typeParser;
 
     public function __construct(MetadataFactoryInterface $metadataFactory, MetadataFactoryInterface $serializerMetadataFactory,
-                                ContainerInterface $container)
+                                ContainerInterface $container, TypeParser $typeParser = null)
     {
         $this->metadataFactory = $metadataFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->container = $container;
+        $this->typeParser = $typeParser ?: new TypeParser();
     }
 
     public function onPostSerializeXML(Event $event)
@@ -99,7 +101,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $relationsData = array();
         foreach ($relations as $rel => $relation) {
-            $type = (null !== $relation['type']) ? $this->getSerializerType($relation['type']) : $relation['type'];
+            $type = (null !== $relation['type']) ? $this->typeParser->parse($relation['type']) : $relation['type'];
             $relationsData[$rel] = $visitor->getNavigator()->accept($relation['content'], $type, $visitor);
         }
 
@@ -153,17 +155,5 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         }
 
         return $relationsContent;
-    }
-
-    protected static function getSerializerType($type)
-    {
-        if (isset(self::$serializerTypeCache[$type])) {
-            return self::$serializerTypeCache[$type];
-        }
-
-        // Todo create a CachedTypeParser that would be wrapper
-        $typeParser = new TypeParser();
-
-        return self::$serializerTypeCache[$type] = $typeParser->parse($type);
     }
 }
