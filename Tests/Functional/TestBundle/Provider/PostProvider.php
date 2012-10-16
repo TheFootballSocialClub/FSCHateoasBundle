@@ -34,9 +34,12 @@ class PostProvider
     public function getPost($id)
     {
         switch ($id) {
-            case 1: return Post::create($id, 'Welcome on the blog!');
-            case 2: return Post::create($id, 'How to create awesome symfony2 application');
-            default: return Post::create($id, '');
+            case 1:
+                return Post::create($id, 'Welcome on the blog!');
+            case 2:
+                return Post::create($id, 'How to create awesome symfony2 application');
+            default:
+                return Post::create($id, '');
         }
     }
 }

@@ -12,8 +12,10 @@ class UserProvider
     public function getUser($id)
     {
         switch ($id) {
-            case 1: return User::create($id, 'Adrien', 'Brault');
-            default: return User::create($id);
+            case 1:
+                return User::create($id, 'Adrien', 'Brault');
+            default:
+                return User::create($id);
         }
     }
 }
