@@ -12,8 +12,7 @@ For example, only yaml and annotation metadata configuration is supported.
 Some of the examples will looks weird, in particular xml elements name like "result" or "entry"; we'll work on
 features to customize/automate this!
 
-Adding links
-------------
+## Adding links
 
 With the following configuration and entity:
 
@@ -97,8 +96,7 @@ or
 }
 ```
 
-Pagerfanta Handler
-------------------
+## Pagerfanta Handler
 
 The bundle provides a Pagerfanta handler.
 
@@ -138,8 +136,7 @@ public function getListAction($page = 1, $limit = 10)
 </result>
 ```
 
-RouteAwarePagerHandler
------------------------
+## RouteAwarePagerHandler
 
 The Pagerfanta alone doesn't create links to self/next/previous/last/first pages.
 The RouteAwarePagerHandler can automatically creates links to theses pages.
@@ -189,14 +186,15 @@ public function getListAction(Request $request, $page = 1, $limit = 10)
 </result>
 ```
 
-Embedding relations
--------------------
+## Embedding relations
 
 Sometimes, your representations have embedded relations that require a service to be fetched, or need to be paginated.
 To embed a relation using this bundle, you create a simple Relation metadata (with an annotation for example),
 and add extra "content" parameters.
 
 Example:
+
+### Routing and controller
 
 ```yaml
 # routing.yml
@@ -209,6 +207,31 @@ api_favorite_get:
 api_user_favorites_list:
     pattern: /api/users/{id}/favorites
 ```
+
+```php
+<?php
+
+class Controller extends Controller
+{
+    public function getUserFriendsAction($id, $page = 1, $limit = 20)
+    {
+        $pager = $this->get('acme.foo.user_manager')->getUserFriendsPager($id, $page, $limit);
+
+        $routeAwarePager = new RouteAwarePager($pager, $request->attributes->get('_route'), $request->attributes->get('_route_params'));
+
+        return new Response($this->get('serializer')->serialize($routeAwarePager, 'xml'));
+    }
+
+    public function getUserAction($id)
+    {
+        $user = ...;
+
+        return new Response($this->get('serializer')->serialize($user, 'xml'));
+    }
+}
+```
+
+### Model and serializer/hateoas metadata
 
 ```php
 <?php
@@ -261,6 +284,8 @@ class User
 }
 ```
 
+### Define the provider service used to get the data to embed
+
 ```php
 <?php
 
@@ -280,28 +305,7 @@ class UserManager
 }
 ```
 
-```php
-<?php
-
-class Controller extends Controller
-{
-    public function getUserFriendsAction($id, $page = 1, $limit = 20)
-    {
-        $pager = $this->get('acme.foo.user_manager')->getUserFriendsPager($id, $page, $limit);
-
-        $routeAwarePager = new RouteAwarePager($pager, $request->attributes->get('_route'), $request->attributes->get('_route_params'));
-
-        return new Response($this->get('serializer')->serialize($routeAwarePager, 'xml'));
-    }
-
-    public function getUserAction($id)
-    {
-        $user = ...;
-
-        return new Response($this->get('serializer')->serialize($user, 'xml'));
-    }
-}
-```
+### Results
 
 `GET /api/users/42` would result in
 
