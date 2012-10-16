@@ -9,9 +9,6 @@ Right now, only adding links is supported.
 Even though there are some tests, be aware that this is a work in progress.
 For example, only yaml and annotation metadata configuration is supported.
 
-Some of the examples will looks weird, in particular xml elements name like "result" or "entry"; we'll work on
-features to customize/automate this!
-
 ## Adding links
 
 With the following configuration and entity:
