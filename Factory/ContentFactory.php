@@ -51,6 +51,7 @@ class ContentFactory implements ContentFactoryInterface
             $relationsContent[$relation['rel']] = array(
                 'content' => $content,
                 'type' => $relation['content']['serializer_type'],
+                'meta' => $relation,
             );
         }
 

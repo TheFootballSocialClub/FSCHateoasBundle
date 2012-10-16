@@ -27,14 +27,14 @@ class SerializationTest extends TestCase
     <title><![CDATA[How to create awesome symfony2 application]]></title>
     <link rel="self" href="http://localhost/api/posts/2"/>
   </relation>
-  <relation rel="posts" page="1" limit="10" total="2">
+  <relation rel="posts" page="1" limit="1" total="2">
+    <link rel="self" href="http://localhost/api/users/24/posts?page=1&amp;limit=1"/>
+    <link rel="first" href="http://localhost/api/users/24/posts?page=1&amp;limit=1"/>
+    <link rel="last" href="http://localhost/api/users/24/posts?page=2&amp;limit=1"/>
+    <link rel="next" href="http://localhost/api/users/24/posts?page=2&amp;limit=1"/>
     <entry id="2">
       <title><![CDATA[How to create awesome symfony2 application]]></title>
       <link rel="self" href="http://localhost/api/posts/2"/>
-    </entry>
-    <entry id="1">
-      <title><![CDATA[Welcome on the blog!]]></title>
-      <link rel="self" href="http://localhost/api/posts/1"/>
     </entry>
   </relation>
 </user>',
@@ -88,8 +88,26 @@ class SerializationTest extends TestCase
             ]
         },
         "posts": {
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "http:\/\/localhost\/api\/users\/24\/posts?page=1&limit=1"
+                },
+                {
+                    "rel": "first",
+                    "href": "http:\/\/localhost\/api\/users\/24\/posts?page=1&limit=1"
+                },
+                {
+                    "rel": "last",
+                    "href": "http:\/\/localhost\/api\/users\/24\/posts?page=2&limit=1"
+                },
+                {
+                    "rel": "next",
+                    "href": "http:\/\/localhost\/api\/users\/24\/posts?page=2&limit=1"
+                }
+            ],
             "page": 1,
-            "limit": 10,
+            "limit": 1,
             "total": 2,
             "results": [
                 {
@@ -99,16 +117,6 @@ class SerializationTest extends TestCase
                         {
                             "rel": "self",
                             "href": "http:\/\/localhost\/api\/posts\/2"
-                        }
-                    ]
-                },
-                {
-                    "id": 1,
-                    "title": "Welcome on the blog!",
-                    "links": [
-                        {
-                            "rel": "self",
-                            "href": "http:\/\/localhost\/api\/posts\/1"
                         }
                     ]
                 }

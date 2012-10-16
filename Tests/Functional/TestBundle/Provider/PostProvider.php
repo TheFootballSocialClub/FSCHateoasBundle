@@ -19,7 +19,10 @@ class PostProvider
             Post::create(1, 'Welcome on the blog!'),
         );
 
-        return new Pagerfanta(new ArrayAdapter($posts));
+        $pager = new Pagerfanta(new ArrayAdapter($posts));
+        $pager->setMaxPerPage(1);
+
+        return $pager;
     }
 
     public function getUserLastPost($id)

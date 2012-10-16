@@ -41,12 +41,12 @@ services:
         arguments:
             - @fsc_hateoas.factory.content
             - @jms_serializer.metadata_factory
+            - @fsc_hateoas.factory.link
+            - @fsc_hateoas.serializer.event_subscriber.link
         tags:
             - { name: jms_serializer.event_subscriber }
 
     fsc_hateoas.serializer.handler.pagerfanta:
         class: %fsc_hateoas.serializer.handler.pagerfanta.class%
-        arguments:
-            - @fsc_hateoas.serializer.event_subscriber.link
         tags:
             - { name: jms_serializer.subscribing_handler }
