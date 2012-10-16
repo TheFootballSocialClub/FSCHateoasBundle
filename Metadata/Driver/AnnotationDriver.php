@@ -35,23 +35,23 @@ class AnnotationDriver implements DriverInterface
                 }
 
                 if (!empty($annotation->content)) {
-                    $relationContentMetadata = new RelationContentMetadata($annotation->content['provider_id'], $annotation->content['provider_method']);
+                    $relationContentMetadata = new RelationContentMetadata($annotation->content['providerId'], $annotation->content['providerMethod']);
                     $relationMetadata->setContent($relationContentMetadata);
 
-                    if (isset($annotation->content['provider_parameters'])) {
-                        $relationContentMetadata->setProviderParameters($annotation->content['provider_parameters']);
+                    if (isset($annotation->content['providerParameters'])) {
+                        $relationContentMetadata->setProviderParameters($annotation->content['providerParameters']);
                     }
 
-                    if (isset($annotation->content['serializer_type'])) {
-                        $relationContentMetadata->setSerializerType($annotation->content['serializer_type']);
+                    if (isset($annotation->content['serializerType'])) {
+                        $relationContentMetadata->setSerializerType($annotation->content['serializerType']);
                     }
 
-                    if (isset($annotation->content['serializer_xml_element_name'])) {
-                        $relationContentMetadata->setSerializerXmlElementName($annotation->content['serializer_xml_element_name']);
+                    if (isset($annotation->content['serializerXmlElementName'])) {
+                        $relationContentMetadata->setSerializerXmlElementName($annotation->content['serializerXmlElementName']);
                     }
 
-                    if (isset($annotation->content['serializer_xml_element_name_root_metadata'])) {
-                        $relationContentMetadata->setSerializerXmlElementRootName($annotation->content['serializer_xml_element_name_root_metadata']);
+                    if (isset($annotation->content['serializerXmlElementNameRootMetadata'])) {
+                        $relationContentMetadata->setSerializerXmlElementRootName($annotation->content['serializerXmlElementNameRootMetadata']);
                     }
                 }
 

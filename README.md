@@ -260,10 +260,10 @@ use FSC\HateoasBundle\Annotation as Hateoas;
  *     route = "api_user_friends_list",
  *     parameters = { "id" = "id" },
  *     content = {
- *         "provider-id" = "acme.foo.user_manager",
- *         "provider-method" = "getUserFriendsPager",
- *         "provider-parameters" = { "userId" = "id", "limit" = "=5" },
- *         "serializer_xml_element_name" = "users"
+ *         "providerId" = "acme.foo.user_manager",
+ *         "providerMethod" = "getUserFriendsPager",
+ *         "providerParameters" = { "userId" = "id", "limit" = "=5" },
+ *         "serializerXmlElementName" = "users"
  *     }
  * )
  *

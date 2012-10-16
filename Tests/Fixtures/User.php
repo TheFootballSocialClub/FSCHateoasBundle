@@ -12,17 +12,17 @@ use FSC\HateoasBundle\Annotation as Hateoas;
  * @Hateoas\Relation("friends",
  *     route = "user_friends_list",
  *     parameters = { "id" = "id" },
- *     content = { "provider_id" = "acme.foo.user_provider", "provider_method" = "getUserFriendsPager", "serializer_xml_element_name_root_metadata" = true }
+ *     content = { "providerId" = "acme.foo.user_provider", "providerMethod" = "getUserFriendsPager", "serializerXmlElementNameRootMetadata" = true }
  * )
  * @Hateoas\Relation("favorites",
  *     route = "user_favorites_list",
  *     parameters = { "id" = "id" },
  *     content = {
- *          "provider_id" = "acme.foo.favorite_provider",
- *          "provider_method" = "getUserFavoritesPager",
- *          "provider_parameters" = { "id" = "id", "limit" = "=4" },
- *          "serializer_type" = "Pagerfanta<custom>",
- *          "serializer_xml_element_name" = "favorites"
+ *          "providerId" = "acme.foo.favorite_provider",
+ *          "providerMethod" = "getUserFavoritesPager",
+ *          "providerParameters" = { "id" = "id", "limit" = "=4" },
+ *          "serializerType" = "Pagerfanta<custom>",
+ *          "serializerXmlElementName" = "favorites"
  *     }
  * )
  */
