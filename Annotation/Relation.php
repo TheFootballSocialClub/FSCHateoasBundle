@@ -6,7 +6,7 @@ namespace FSC\HateoasBundle\Annotation;
  * @Annotation
  * @Target("CLASS")
  */
-final class Link
+final class Relation
 {
     /**
      * @Required
@@ -25,5 +25,10 @@ final class Link
     /**
      * @var array
      */
-    public $params;
+    public $parameters;
+
+    /**
+     * @var array
+     */
+    public $content;
 }

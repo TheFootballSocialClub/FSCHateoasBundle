@@ -18,22 +18,18 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $metadataFactory = $this->getMock('Metadata\MetadataFactoryInterface');
-        $linkFactory = new LinkFactory($urlGenerator, $metadataFactory);
+        $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory();
+        $linkFactory = new LinkFactory($urlGenerator, $metadataFactory, $parametersFactory);
 
         $object = (object) array('id' => $id = 3);
 
+        $relationMetadata = $this->getMock('FSC\HateoasBundle\Metadata\RelationMetadataInterface');
+        $relationMetadata->expects($this->any())->method('getRel')->will($this->returnValue($rel = 'self'));
+        $relationMetadata->expects($this->any())->method('getRoute')->will($this->returnValue($route = 'bar'));
+        $relationMetadata->expects($this->any())->method('getParams')->will($this->returnValue(array('identifier' => 'id')));
+
         $classMetadata = $this->getMock('FSC\HateoasBundle\Metadata\ClassMetadataInterface');
-        $classMetadata
-            ->expects($this->once())
-            ->method('getLinks')
-            ->will($this->returnValue($metadataLinks = array(
-                array(
-                    'rel' => $rel = 'self',
-                    'route' => $route = 'bar',
-                    'params' => array('identifier' => 'id')
-                ),
-            )))
-        ;
+        $classMetadata->expects($this->once())->method('getRelations')->will($this->returnValue(array($relationMetadata)));
 
         $urlGenerator
             ->expects($this->once())
@@ -51,44 +47,5 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('FSC\HateoasBundle\Model\Link', $link);
         $this->assertEquals($rel, $link->getRel());
         $this->assertEquals($href, $link->getHref());
-    }
-
-    /**
-     * @dataProvider getTestCreateRouteParametersData
-     */
-    public function testCreateRouteParameters($data, $params, $expectedRouteParams)
-    {
-        $this->assertEquals($expectedRouteParams, LinkFactory::createRouteParameters($params, $data));
-    }
-
-    public function getTestCreateRouteParametersData()
-    {
-        return array(
-            array(
-                array(
-                    'uuid' => 23,
-                ),
-                array(
-                    'id' => '[uuid]',
-                ),
-                array(
-                    'id' => 23,
-                ),
-            ),
-            array(
-                array(
-                    'id' => 23,
-                    'friend' => array('id' => 4),
-                ),
-                array(
-                    'id' => '[id]',
-                    'friend_id' => '[friend][id]',
-                ),
-                array(
-                    'id' => 23,
-                    'friend_id' => 4,
-                ),
-            ),
-        );
     }
 }

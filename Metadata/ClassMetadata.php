@@ -7,43 +7,24 @@ use Metadata\MergeableClassMetadata;
 class ClassMetadata extends MergeableClassMetadata implements ClassMetadataInterface
 {
     /**
-     * @var array
-     *
-     * like
-     *
-     * array(
-     *     array(
-     *         'rel' => 'xxx',
-     *         'route' => 'xxx',
-     *         'params' => array(
-     *             'name' => 'propertyPath',
-     *         )
-     *     ),
-     *     array(
-     *         'rel' => 'xxx',
-     *         'route' => 'xxx',
-     *         'params' => array(
-     *             'name' => 'propertyPath',
-     *         )
-     *     ),
-     * )
+     * @var array<RelationMetadataInterface>
      */
-    protected $links = array();
+    protected $relations = array();
 
-    public function getLinks()
+    public function getRelations()
     {
-        return $this->links;
+        return $this->relations;
     }
 
-    public function setLinks(array $links)
+    public function addRelation(RelationMetadataInterface $relation)
     {
-        $this->links = $links;
+        $this->relations[] = $relation;
     }
 
     public function serialize()
     {
         return serialize(array(
-            $this->links,
+            $this->relations,
             parent::serialize(),
         ));
     }
@@ -51,7 +32,7 @@ class ClassMetadata extends MergeableClassMetadata implements ClassMetadataInter
     public function unserialize($str)
     {
         list(
-            $this->links,
+            $this->relations,
             $parentStr
         ) = unserialize($str);
 

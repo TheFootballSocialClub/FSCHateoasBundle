@@ -37,4 +37,14 @@ class User
     {
         return $this->lastName;
     }
+
+    public static function create($id, $firstName = null, $lastName = null)
+    {
+        $user = new static();
+        $user->setId($id);
+        $user->setFirstName($firstName);
+        $user->setLastName($lastName);
+
+        return $user;
+    }
 }

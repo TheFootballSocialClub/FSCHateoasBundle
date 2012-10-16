@@ -1,10 +1,25 @@
 FSC\HateoasBundle\Tests\Fixtures\User:
-    links:
-        self:
-            route: _some_route
-            params:
-                identifier: id
-        alternate:
-            - _some_route2
-            - { route: _some_route3 }
-        home: homepage
+    relations:
+        - rel: self
+          route: _some_route
+          parameters:
+              identifier: id
+        - rel: alternate
+          route: _some_route2
+        - rel: alternate
+          route: _some_route3
+        - rel: home
+          route: homepage
+        - rel: friends
+          route: user_friends_list
+          parameters: { id: id }
+          content: { provider_id: acme.foo.user_provider, provider_method: getUserFriendsPager, serializer_xml_element_name_root_metadata: true }
+        - rel: favorites
+          route: user_favorites_list
+          parameters: { id: id }
+          content:
+              provider_id: acme.foo.favorite_provider
+              provider_method: getUserFavoritesPager
+              provider_parameters: { id: id, limit: =3 }
+              serializer_type: Pagerfanta<custom>
+              serializer_xml_element_name: favorites

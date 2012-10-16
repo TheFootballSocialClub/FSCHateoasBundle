@@ -4,8 +4,8 @@
         >
 
     <testsuites>
-        <testsuite name="FSCHateoasBundle Test Suite">
-            <directory>./Tests</directory>
+        <testsuite name="FSCHateoasBundle Functional Test Suite">
+            <directory>./Tests/Functional</directory>
         </testsuite>
     </testsuites>
 
