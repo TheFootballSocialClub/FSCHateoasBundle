@@ -60,6 +60,10 @@ class TestCase extends WebTestCase
 
     protected function assertSerializedJsonEquals($expectedSerializedValue, $value)
     {
+        if (version_compare('5.4.0', phpversion(), '>')) {
+            $this->markTestSkipped('JSON_PRETTY_PRINT is now available before PHP 5.4');
+        }
+
         $this->getKernel()->getContainer()->get('jms_serializer.json_serialization_visitor')->setOptions(JSON_PRETTY_PRINT);
         $serializedValue = $this->getSerializer()->serialize($value, 'json');
 
