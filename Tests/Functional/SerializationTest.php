@@ -27,7 +27,7 @@ class SerializationTest extends TestCase
     <title><![CDATA[How to create awesome symfony2 application]]></title>
     <link rel="self" href="http://localhost/api/posts/2"/>
   </relation>
-  <relation rel="posts">
+  <relation rel="posts" page="1" limit="10" total="2">
     <entry id="2">
       <title><![CDATA[How to create awesome symfony2 application]]></title>
       <link rel="self" href="http://localhost/api/posts/2"/>
@@ -50,67 +50,72 @@ class SerializationTest extends TestCase
         $user->setLastName('Brault');
 
         $this->assertSerializedJsonEquals(
-            '{'.
-                '"id":24,'.
-                '"first_name":"Adrien",'.
-                '"last_name":"Brault",'.
-                '"links":['.
-                    '{'.
-                        '"rel":"self",'.
-                        '"href":"http:\/\/localhost\/api\/users\/24"'.
-                    '},'.
-                    '{'.
-                        '"rel":"alternate",'.
-                        '"href":"http:\/\/localhost\/profile\/24"'.
-                    '},'.
-                    '{'.
-                        '"rel":"users",'.
-                        '"href":"http:\/\/localhost\/api\/users"'.
-                    '},'.
-                    '{'.
-                        '"rel":"last-post",'.
-                        '"href":"http:\/\/localhost\/api\/users\/24\/last-post"'.
-                    '},'.
-                    '{'.
-                        '"rel":"posts",'.
-                        '"href":"http:\/\/localhost\/api\/users\/24\/posts"'.
-                    '}'.
-                '],'.
-                '"relations":{'.
-                    '"last-post":{'.
-                        '"id":2,'.
-                        '"title":"How to create awesome symfony2 application",'.
-                        '"links":['.
-                            '{'.
-                                '"rel":"self",'.
-                                '"href":"http:\/\/localhost\/api\/posts\/2"'.
-                            '}'.
-                        ']'.
-                    '},'.
-                    '"posts":['.
-                        '{'.
-                            '"id":2,'.
-                            '"title":"How to create awesome symfony2 application",'.
-                            '"links":['.
-                                '{'.
-                                    '"rel":"self",'.
-                                    '"href":"http:\/\/localhost\/api\/posts\/2"'.
-                                '}'.
-                            ']'.
-                        '},'.
-                        '{'.
-                            '"id":1,'.
-                            '"title":"Welcome on the blog!",'.
-                            '"links":['.
-                                '{'.
-                                    '"rel":"self",'.
-                                    '"href":"http:\/\/localhost\/api\/posts\/1"'.
-                                '}'.
-                            ']'.
-                        '}'.
-                    ']'.
-                '}'.
-            '}',
+'{
+    "id": 24,
+    "first_name": "Adrien",
+    "last_name": "Brault",
+    "links": [
+        {
+            "rel": "self",
+            "href": "http:\/\/localhost\/api\/users\/24"
+        },
+        {
+            "rel": "alternate",
+            "href": "http:\/\/localhost\/profile\/24"
+        },
+        {
+            "rel": "users",
+            "href": "http:\/\/localhost\/api\/users"
+        },
+        {
+            "rel": "last-post",
+            "href": "http:\/\/localhost\/api\/users\/24\/last-post"
+        },
+        {
+            "rel": "posts",
+            "href": "http:\/\/localhost\/api\/users\/24\/posts"
+        }
+    ],
+    "relations": {
+        "last-post": {
+            "id": 2,
+            "title": "How to create awesome symfony2 application",
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "http:\/\/localhost\/api\/posts\/2"
+                }
+            ]
+        },
+        "posts": {
+            "page": 1,
+            "limit": 10,
+            "total": 2,
+            "results": [
+                {
+                    "id": 2,
+                    "title": "How to create awesome symfony2 application",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "http:\/\/localhost\/api\/posts\/2"
+                        }
+                    ]
+                },
+                {
+                    "id": 1,
+                    "title": "Welcome on the blog!",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "http:\/\/localhost\/api\/posts\/1"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}',
             $user
         );
     }

@@ -5,6 +5,7 @@ parameters:
     fsc_hateoas.resolver.arguments.class: FSC\HateoasBundle\Resolver\ArgumentsResolver
     fsc_hateoas.serializer.event_subscriber.link.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
     fsc_hateoas.serializer.event_subscriber.embedder.class: FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber
+    fsc_hateoas.serializer.handler.pagerfanta.class: FSC\HateoasBundle\Serializer\Handler\PagerfantaHandler
 
 services:
     fsc_hateoas.factory.link:
@@ -42,3 +43,10 @@ services:
             - @jms_serializer.metadata_factory
         tags:
             - { name: jms_serializer.event_subscriber }
+
+    fsc_hateoas.serializer.handler.pagerfanta:
+        class: %fsc_hateoas.serializer.handler.pagerfanta.class%
+        arguments:
+            - @fsc_hateoas.serializer.event_subscriber.link
+        tags:
+            - { name: jms_serializer.subscribing_handler }

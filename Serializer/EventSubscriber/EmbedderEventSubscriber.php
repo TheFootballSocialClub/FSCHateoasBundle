@@ -61,11 +61,17 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
                 $entryNode = $visitor->getDocument()->createElement('relation');
                 $visitor->getCurrentNode()->appendChild($entryNode);
                 $visitor->setCurrentNode($entryNode);
+            } else {
+                $relation['type'] = $this->typeParser->parse($relation['type']);
             }
 
             $visitor->getCurrentNode()->setAttribute('rel', $rel);
 
             $node = $visitor->getNavigator()->accept($relation['content'], $relation['type'], $visitor);
+
+            if ($relation['content'] instanceof \Pagerfanta\Pagerfanta) {
+                // Add links
+            }
 
             if (null === $relation['type']) {
                 if (null !== $node) {
@@ -91,7 +97,15 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $relationsData = array();
         foreach ($relationsContent as $rel => $relation) {
+            if (null !== $relation['type']) {
+                $relation['type'] = $this->typeParser->parse($relation['type']);
+            }
+
             $relationsData[$rel] = $visitor->getNavigator()->accept($relation['content'], $relation['type'], $visitor);
+
+            if ($relation['content'] instanceof \Pagerfanta\Pagerfanta) {
+                // Add links
+            }
         }
 
         $event->getVisitor()->addData('relations', $relationsData);

@@ -60,6 +60,7 @@ class TestCase extends WebTestCase
 
     protected function assertSerializedJsonEquals($expectedSerializedValue, $value)
     {
+        $this->getKernel()->getContainer()->get('jms_serializer.json_serialization_visitor')->setOptions(JSON_PRETTY_PRINT);
         $serializedValue = $this->getSerializer()->serialize($value, 'json');
 
         $this->assertEquals($expectedSerializedValue, $serializedValue);

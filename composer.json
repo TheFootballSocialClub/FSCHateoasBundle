@@ -18,7 +18,8 @@
         "symfony/framework-bundle": "2.1.*",
         "symfony/class-loader": "2.1.*",
         "symfony/yaml": "2.1.*",
-        "doctrine/common": "*"
+        "doctrine/common": "*",
+        "pagerfanta/pagerfanta": "*"
     },
     "autoload": {
         "psr-0": { "FSC\\HateoasBundle": "" }
