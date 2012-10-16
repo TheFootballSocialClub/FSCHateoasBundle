@@ -123,7 +123,7 @@ public function getListAction($page = 1, $limit = 10)
 
 `GET /list?page=3` would result in
 
-```
+```xml
 <result page="3" limit="10" total="234">
   <entry/>
   <entry/>
@@ -169,7 +169,7 @@ public function getListAction(Request $request, $page = 1, $limit = 10)
 
 `GET /list?page=3` would result in
 
-```
+```xml
 <result page="3" limit="10" total="234">
   <link rel="self" href="http://localhost/api/users?limit=10&amp;page=3"/>
   <link rel="first" href="http://localhost/api/users?limit=10&amp;page=1"/>
@@ -305,7 +305,7 @@ class Controller extends Controller
 
 `GET /api/users/42` would result in
 
-```
+```xml
 <user>
   <link rel="self" href="http://localhost/api/users/42"/>
   <link rel="friends" href="http://localhost/api/users/42/friends"/>
@@ -325,7 +325,7 @@ class Controller extends Controller
 
 and `GET /api/users/42/friends` would result in
 
-```
+```xml
 <result rel="friends" page="1" limit="20" total="134">
   <link rel="self" href="http://localhost/api/users/42/friends?limit=20&amp;page=1"/>
   <link rel="first" href="http://localhost/api/users/42/friends?limit=20&amp;page=1"/>
