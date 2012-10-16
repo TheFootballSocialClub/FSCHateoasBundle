@@ -99,13 +99,18 @@ or
 
 ## Pagerfanta Handler
 
-The bundle provides a Pagerfanta handler.
+Default configuration:
 
-By default, the handler will use the serializer's xml root name metadata to know what xml element name should be used
-for each result.
-ie: `/** @Serializer\XmlRootName("user") */ class User {} )`
+```yaml
+fsc_hateoas:
+    pagerfanta:
+        xml_elements_names_use_serializer_metadata: true
+```
 
-Example:
+With this configuration he pagerfanta handler will use the serializer's xml root name metadata to know what xml element
+name should be used for each result. (ie: `/** @Serializer\XmlRootName("user") */ class User {}`)
+
+### Example
 
 ```php
 <?php
@@ -148,7 +153,17 @@ public function getListAction($page = 1, $limit = 10)
 The Pagerfanta alone doesn't create links to self/next/previous/last/first pages.
 The RouteAwarePagerHandler can automatically creates links to theses pages.
 
-Examples:
+Default configuration:
+
+```yaml
+fsc_hateoas:
+    pagerfanta:
+        links:
+            page_parameter_name: 'page'
+            limit_parameter_name: 'limit'
+```
+
+### Example
 
 ```php
 <?php
