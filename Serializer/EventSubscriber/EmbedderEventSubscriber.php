@@ -34,11 +34,6 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         return $methods;
     }
 
-    /**
-     * @var array 'type' => ('name' => '', 'params' => array(...))
-     */
-    protected static $serializerTypeCache;
-
     protected $metadataFactory;
     protected $serializerMetadataFactory;
     protected $container;

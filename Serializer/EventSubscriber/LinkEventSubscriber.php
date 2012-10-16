@@ -29,11 +29,6 @@ class LinkEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @var array 'type' => ('name' => '', 'params' => array(...))
-     */
-    protected static $serializerTypeCache;
-
-    /**
      * @var LinkFactoryInterface
      */
     protected $linkFactory;
