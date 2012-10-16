@@ -15,8 +15,8 @@ class PostProvider
         // That would then return a pager
 
         $posts = array(
-            Post::create(2, 'How to create awesome symfony2 application'),
-            Post::create(1, 'Welcome on the blog!'),
+            $this->getPost(2),
+            $this->getPost(1),
         );
 
         $pager = new Pagerfanta(new ArrayAdapter($posts));
@@ -27,6 +27,14 @@ class PostProvider
 
     public function getUserLastPost($id)
     {
-        return Post::create(2, 'How to create awesome symfony2 application');
+        return $this->getPost(2);
+    }
+
+    public function getPost($id)
+    {
+        switch ($id) {
+            case 1: return Post::create($id, 'Welcome on the blog!');
+            case 2: return Post::create(2, 'How to create awesome symfony2 application');
+        }
     }
 }

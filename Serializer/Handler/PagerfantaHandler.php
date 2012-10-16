@@ -27,6 +27,10 @@ class PagerfantaHandler implements SubscribingHandlerInterface
 
     public function serializeToXML(XmlSerializationVisitor $visitor, Pagerfanta $pager, array $resultsType)
     {
+        if (null === $visitor->document) {
+            $visitor->document = $visitor->createDocument(null, null, true);
+        }
+
         $currentNode = $visitor->getCurrentNode(); /** @var $currentNode \DOMElement */
         $currentNode->setAttribute('page', $pager->getCurrentPage());
         $currentNode->setAttribute('limit', $pager->getMaxPerPage());

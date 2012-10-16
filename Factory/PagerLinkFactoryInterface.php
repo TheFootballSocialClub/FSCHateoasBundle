@@ -6,5 +6,5 @@ use Pagerfanta\PagerfantaInterface;
 
 interface PagerLinkFactoryInterface
 {
-    public function createPagerLinks(PagerfantaInterface $pager, $route, $routeParameters);
+    public function createPagerLinks(PagerfantaInterface $pager, $route, $defaultDefaultRouteParameters);
 }

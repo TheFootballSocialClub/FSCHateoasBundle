@@ -39,6 +39,10 @@ class RouteAwarePagerHandler implements SubscribingHandlerInterface
 
     public function serializeToXML(XmlSerializationVisitor $visitor, RouteAwarePager $routeAwarePager, array $type)
     {
+        if (null === $visitor->document) {
+            $visitor->document = $visitor->createDocument(null, null, true);
+        }
+
         $links = $this->pagerLinkFactory->createPagerLinks($routeAwarePager->getPager(), $routeAwarePager->getRoute(), $routeAwarePager->getRouteParameters());
         $this->linkSerializationHelper->addLinksToXMLSerialization($links, $visitor);
 

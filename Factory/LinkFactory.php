@@ -37,30 +37,30 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
         return $this->createLinksFromMetadata($classMetadata, $object);
     }
 
-    public function createPagerLinks(PagerfantaInterface $pager, $route, $routeParameters)
+    public function createPagerLinks(PagerfantaInterface $pager, $route, $defaultRouteParameters)
     {
-        $routeParameters = array_merge($routeParameters, array(
+        $defaultRouteParameters = array_merge($defaultRouteParameters, array(
             'page' => $pager->getCurrentPage(),
             'limit' => $pager->getMaxPerPage(),
         ));
 
         $links = array();
-        $links[] = $this->createLink('self', $this->urlGenerator->generate($route, $routeParameters, true));
+        $links[] = $this->createLink('self', $this->urlGenerator->generate($route, $defaultRouteParameters, true));
         $links[] = $this->createLink('first', $this->urlGenerator->generate(
             $route,
-            array_merge($routeParameters, array('page' => '1')),
+            array_merge($defaultRouteParameters, array('page' => '1')),
             true
         ));
         $links[] = $this->createLink('last', $this->urlGenerator->generate(
             $route,
-            array_merge($routeParameters, array('page' => $pager->getNbPages())),
+            array_merge($defaultRouteParameters, array('page' => $pager->getNbPages())),
                 true
         ));
 
         if ($pager->hasPreviousPage()) {
             $links[] = $this->createLink('next', $this->urlGenerator->generate(
                 $route,
-                array_merge($routeParameters, array('page' => $pager->getPreviousPage())),
+                array_merge($defaultRouteParameters, array('page' => $pager->getPreviousPage())),
                 true
             ));
         }
@@ -68,7 +68,7 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
         if ($pager->hasNextPage()) {
             $links[] = $this->createLink('next', $this->urlGenerator->generate(
                 $route,
-                array_merge($routeParameters, array('page' => $pager->getNextPage())),
+                array_merge($defaultRouteParameters, array('page' => $pager->getNextPage())),
                 true
             ));
         }

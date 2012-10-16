@@ -2,7 +2,6 @@
 
 namespace FSC\HateoasBundle\Tests\Functional;
 
-use FSC\HateoasBundle\Tests\Functional\TestCase;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User;
 
 class SerializationTest extends TestCase
