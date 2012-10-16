@@ -4,5 +4,11 @@ api_user_get:
 api_user_list:
     pattern: /api/users
 
+api_post_get:
+    pattern: /api/posts/{id}
+
+api_user_posts_list:
+    pattern: /api/users/{id}/posts
+
 user_profile:
     pattern: /profile/{id}
