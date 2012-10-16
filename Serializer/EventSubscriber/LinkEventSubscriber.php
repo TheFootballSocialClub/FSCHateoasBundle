@@ -6,10 +6,9 @@ use JMS\SerializerBundle\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
 use JMS\SerializerBundle\Serializer\TypeParser;
-use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
-use JMS\SerializerBundle\Serializer\GenericSerializationVisitor;
 
 use FSC\HateoasBundle\Factory\LinkFactoryInterface;
+use FSC\HateoasBundle\Serializer\LinkSerializationHelper;
 
 class LinkEventSubscriber implements EventSubscriberInterface
 {
@@ -30,16 +29,13 @@ class LinkEventSubscriber implements EventSubscriberInterface
         return $methods;
     }
 
-    /**
-     * @var LinkFactoryInterface
-     */
     protected $linkFactory;
-    protected $typeParser;
+    protected $linkSerializationHelper;
 
-    public function __construct(LinkFactoryInterface $linkFactory, TypeParser $typeParser = null)
+    public function __construct(LinkFactoryInterface $linkFactory, LinkSerializationHelper $linkSerializationHelper)
     {
         $this->linkFactory = $linkFactory;
-        $this->typeParser = $typeParser ?: new TypeParser();
+        $this->linkSerializationHelper = $linkSerializationHelper;
     }
 
     public function onPostSerializeXML(Event $event)
@@ -48,7 +44,7 @@ class LinkEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->addLinksToXMLSerialization($links, $event->getVisitor());
+        $this->linkSerializationHelper->addLinksToXMLSerialization($links, $event->getVisitor());
     }
 
     public function onPostSerialize(Event $event)
@@ -58,26 +54,6 @@ class LinkEventSubscriber implements EventSubscriberInterface
         }
 
         $visitor = $event->getVisitor();
-        $visitor->addData('links', $this->createGenericLinksData($links, $visitor));
-    }
-
-    public function addLinksToXMLSerialization(array $links, XmlSerializationVisitor $visitor)
-    {
-        foreach ($links as $link) {
-            $entryNode = $visitor->getDocument()->createElement('link');
-            $visitor->getCurrentNode()->appendChild($entryNode);
-            $visitor->setCurrentNode($entryNode);
-
-            if (null !== $node = $visitor->getNavigator()->accept($link, null, $visitor)) {
-                $visitor->getCurrentNode()->appendChild($node);
-            }
-
-            $visitor->revertCurrentNode();
-        }
-    }
-
-    public function createGenericLinksData(array $links, GenericSerializationVisitor $visitor)
-    {
-        return $visitor->getNavigator()->accept($links, $this->typeParser->parse('array<FSC\HateoasBundle\Model\Link>'), $visitor);
+        $visitor->addData('links', $this->linkSerializationHelper->createGenericLinksData($links, $visitor));
     }
 }

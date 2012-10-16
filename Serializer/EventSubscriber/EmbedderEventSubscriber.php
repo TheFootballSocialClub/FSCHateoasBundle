@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use FSC\HateoasBundle\Factory\ContentFactoryInterface;
 use FSC\HateoasBundle\Factory\PagerLinkFactoryInterface;
 use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
+use FSC\HateoasBundle\Serializer\LinkSerializationHelper;
 
 class EmbedderEventSubscriber implements EventSubscriberInterface
 {
@@ -37,16 +38,16 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
     protected $contentFactory;
     protected $serializerMetadataFactory;
     protected $pagerLinkFactory;
-    protected $linkEventSubscriber;
+    protected $linkSerializationHelper;
     protected $typeParser;
 
     public function __construct(ContentFactoryInterface $contentFactory, MetadataFactoryInterface $serializerMetadataFactory,
-        PagerLinkFactoryInterface $pagerLinkFactory, LinkEventSubscriber $linkEventSubscriber, TypeParser $typeParser = null)
+        PagerLinkFactoryInterface $pagerLinkFactory, LinkSerializationHelper $linkSerializationHelper, TypeParser $typeParser = null)
     {
         $this->contentFactory = $contentFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->pagerLinkFactory = $pagerLinkFactory;
-        $this->linkEventSubscriber = $linkEventSubscriber;
+        $this->linkSerializationHelper = $linkSerializationHelper;
         $this->typeParser = $typeParser ?: new TypeParser();
     }
 
@@ -77,7 +78,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
                 // Add links
 
                 $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content'], $relation);
-                $this->linkEventSubscriber->addLinksToXMLSerialization($links, $visitor);
+                $this->linkSerializationHelper->addLinksToXMLSerialization($links, $visitor);
             }
 
             $node = $visitor->getNavigator()->accept($relation['content'], $relation['type'], $visitor);
@@ -116,7 +117,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
                 // Add links
 
                 $links = $this->pagerLinkFactory->createPagerLinks($event->getObject(), $relation['content'], $relation);
-                $relationData['links'] = $this->linkEventSubscriber->createGenericLinksData($links, $visitor);
+                $relationData['links'] = $this->linkSerializationHelper->createGenericLinksData($links, $visitor);
             }
 
             $relationData = array_merge($relationData, $visitor->getNavigator()->accept($relation['content'], $relation['type'], $visitor));

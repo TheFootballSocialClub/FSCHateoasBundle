@@ -1,4 +1,5 @@
 parameters:
+    fsc_hateoas.serializer.link_serialization_helper.class: FSC\HateoasBundle\Serializer\LinkSerializationHelper
     fsc_hateoas.factory.link.class: FSC\HateoasBundle\Factory\LinkFactory
     fsc_hateoas.factory.parameters.class: FSC\HateoasBundle\Factory\ParametersFactory
     fsc_hateoas.factory.content.class: FSC\HateoasBundle\Factory\ContentFactory
@@ -8,6 +9,10 @@ parameters:
     fsc_hateoas.serializer.handler.pagerfanta.class: FSC\HateoasBundle\Serializer\Handler\PagerfantaHandler
 
 services:
+    fsc_hateoas.serializer.link_serialization_helper:
+        class: %fsc_hateoas.serializer.link_serialization_helper.class%
+        public: false
+
     fsc_hateoas.factory.link:
         class: %fsc_hateoas.factory.link.class%
         arguments:
@@ -33,6 +38,7 @@ services:
         class: %fsc_hateoas.serializer.event_subscriber.link.class%
         arguments:
             - @fsc_hateoas.factory.link
+            - @fsc_hateoas.serializer.link_serialization_helper
         tags:
             - { name: jms_serializer.event_subscriber }
 
@@ -42,7 +48,7 @@ services:
             - @fsc_hateoas.factory.content
             - @jms_serializer.metadata_factory
             - @fsc_hateoas.factory.link
-            - @fsc_hateoas.serializer.event_subscriber.link
+            - @fsc_hateoas.serializer.link_serialization_helper
         tags:
             - { name: jms_serializer.event_subscriber }
 
