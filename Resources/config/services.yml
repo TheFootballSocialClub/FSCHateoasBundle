@@ -1,6 +1,7 @@
 parameters:
     fsc_hateoas.serializer.link_serialization_helper.class: FSC\HateoasBundle\Serializer\LinkSerializationHelper
     fsc_hateoas.factory.link.class: FSC\HateoasBundle\Factory\LinkFactory
+    fsc_hateoas.factory.pager_link.class: FSC\HateoasBundle\Factory\PagerLinkFactory
     fsc_hateoas.factory.parameters.class: FSC\HateoasBundle\Factory\ParametersFactory
     fsc_hateoas.factory.content.class: FSC\HateoasBundle\Factory\ContentFactory
     fsc_hateoas.factory.router_aware_pager.class: FSC\HateoasBundle\Factory\RouteAwarePagerFactory
@@ -22,6 +23,11 @@ services:
             - @router
             - @fsc_hateoas.metadata.factory
             - @fsc_hateoas.factory.parameters
+
+    fsc_hateoas.factory.pager_link:
+        class: %fsc_hateoas.factory.pager_link.class%
+        arguments:
+            - @router
 
     fsc_hateoas.factory.parameters:
         class: %fsc_hateoas.factory.parameters.class%
@@ -74,7 +80,7 @@ services:
     fsc_hateoas.serializer.handler.route_aware_pager:
         class: %fsc_hateoas.serializer.handler.route_aware_pager.class%
         arguments:
-            - @fsc_hateoas.factory.link
+            - @fsc_hateoas.factory.pager_link
             - @fsc_hateoas.serializer.link_serialization_helper
         tags:
             - { name: jms_serializer.subscribing_handler }

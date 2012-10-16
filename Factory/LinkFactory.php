@@ -11,16 +11,16 @@ use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
 use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
 
-class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
+class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 {
-    protected $urlGenerator;
     protected $metadataFactory;
     protected $parametersFactory;
 
     public function __construct(UrlGeneratorInterface $urlGenerator, MetadataFactoryInterface $metadataFactory,
                                 ParametersFactoryInterface $parametersFactory)
     {
-        $this->urlGenerator = $urlGenerator;
+        parent::__construct($urlGenerator);
+
         $this->metadataFactory = $metadataFactory;
         $this->parametersFactory = $parametersFactory;
     }
@@ -36,43 +36,6 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
         }
 
         return $this->createLinksFromMetadata($classMetadata, $object);
-    }
-
-    public function createPagerLinks(PagerfantaInterface $pager, $route, $defaultRouteParameters)
-    {
-        if (!isset($defaultRouteParameters['page'])) {
-            $defaultRouteParameters['page'] = $pager->getCurrentPage();
-        }
-        if (!isset($defaultRouteParameters['limit'])) {
-            $defaultRouteParameters['limit'] = $pager->getMaxPerPage();
-        }
-
-        $links = array();
-        $links[] = $this->createLink('self', $this->generateUrl($route, $defaultRouteParameters));
-        $links[] = $this->createLink('first', $this->generateUrl(
-            $route,
-            array_merge($defaultRouteParameters, array('page' => '1'))
-        ));
-        $links[] = $this->createLink('last', $this->generateUrl(
-            $route,
-            array_merge($defaultRouteParameters, array('page' => $pager->getNbPages()))
-        ));
-
-        if ($pager->hasPreviousPage()) {
-            $links[] = $this->createLink('next', $this->generateUrl(
-                $route,
-                array_merge($defaultRouteParameters, array('page' => $pager->getPreviousPage()))
-            ));
-        }
-
-        if ($pager->hasNextPage()) {
-            $links[] = $this->createLink('next', $this->generateUrl(
-                $route,
-                array_merge($defaultRouteParameters, array('page' => $pager->getNextPage()))
-            ));
-        }
-
-        return $links;
     }
 
     public function createLinksFromMetadata(ClassMetadataInterface $classMetadata, $object)
@@ -92,22 +55,4 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
 
         return $this->createLink($relationMetadata->getRel(), $href);
     }
-
-    public static function createLink($rel, $href)
-    {
-        $link = new Link();
-        $link->setRel($rel);
-        $link->setHref($href);
-
-        return $link;
-    }
-
-    public function generateUrl($name, $parameters = array())
-    {
-        ksort($parameters); // Have consistent url query strings, for the tests
-
-        return $this->urlGenerator->generate($name, $parameters, true);
-    }
-
-
 }
