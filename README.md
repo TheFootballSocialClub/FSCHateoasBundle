@@ -16,6 +16,8 @@ features to customize/automate this!
 
 With the following configuration and entity:
 
+### Routing and serializer/hateoas metadata
+
 ```yaml
 # routing.yml
 api_user_get:
@@ -27,6 +29,8 @@ api_user_list:
 user_profile:
     pattern: /profile/{user_id}
 ```
+
+*Note that you can also configure serializer/hateoas metadatas using yaml to keep serialisation out of your model*
 
 ```php
 <?php
@@ -51,7 +55,7 @@ class User
 }
 ```
 
-Then doing:
+### Usage
 
 ```php
 <?php
@@ -63,7 +67,7 @@ $user->username = 'adrienbrault';
 $serializedUser = $container->get('serializer')->serialize($user, $format);
 ```
 
-Would result in:
+### Results
 
 ```xml
 <user id="24">
@@ -232,6 +236,8 @@ class Controller extends Controller
 ```
 
 ### Model and serializer/hateoas metadata
+
+*Note that you can also configure serializer/hateoas metadatas using yaml to keep serialisation out of your model*
 
 ```php
 <?php
