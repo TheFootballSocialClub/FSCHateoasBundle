@@ -11,9 +11,7 @@ use Metadata\MetadataFactoryInterface;
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
-use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
-use FSC\HateoasBundle\Resolver\ArgumentsResolverInterface;
+use FSC\HateoasBundle\Factory\ContentFactoryInterface;
 
 class EmbedderEventSubscriber implements EventSubscriberInterface
 {
@@ -34,39 +32,31 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         return $methods;
     }
 
-    protected $metadataFactory;
+    protected $contentFactory;
     protected $serializerMetadataFactory;
-    protected $container;
-    protected $parametersFactory;
-    protected $argumentsResolver;
     protected $typeParser;
 
-    public function __construct(MetadataFactoryInterface $metadataFactory, MetadataFactoryInterface $serializerMetadataFactory,
-                                ContainerInterface $container, ParametersFactoryInterface $parametersFactory,
-                                ArgumentsResolverInterface $argumentsResolver, TypeParser $typeParser = null)
+    public function __construct(ContentFactoryInterface $contentFactory, MetadataFactoryInterface $serializerMetadataFactory,
+                                TypeParser $typeParser = null)
     {
-        $this->metadataFactory = $metadataFactory;
+        $this->contentFactory = $contentFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
-        $this->container = $container;
-        $this->parametersFactory = $parametersFactory;
-        $this->argumentsResolver = $argumentsResolver;
         $this->typeParser = $typeParser ?: new TypeParser();
     }
 
     public function onPostSerializeXML(Event $event)
     {
-        if (null === ($classMetadata = $this->metadataFactory->getMetadataForClass(get_class($event->getObject())))) {
+        if (null === ($relationsContent = $this->contentFactory->create($event->getObject()))) {
             return;
         }
 
-        $relations = $this->getRelationsContent($classMetadata, $event->getObject());
-        if (empty($relations)) {
+        if (empty($relationsContent)) {
             return;
         }
 
         $visitor = $event->getVisitor(); /** @var $visitor XmlSerializationVisitor */
 
-        foreach ($relations as $rel => $relation) {
+        foreach ($relationsContent as $rel => $relation) {
             $type = (null !== $relation['type']) ? $this->getSerializerType($relation['type']) : $relation['type'];
             if (null === $type) {
                 $entryNode = $visitor->getDocument()->createElement('relation');
@@ -90,51 +80,22 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     public function onPostSerialize(Event $event)
     {
-        if (null === ($classMetadata = $this->metadataFactory->getMetadataForClass(get_class($event->getObject())))) {
+        if (null === ($relationsContent = $this->contentFactory->create($event->getObject()))) {
             return;
         }
 
-        $relations = $this->getRelationsContent($classMetadata, $event->getObject());
-        if (empty($relations)) {
+        if (empty($relationsContent)) {
             return;
         }
 
         $visitor = $event->getVisitor();
 
         $relationsData = array();
-        foreach ($relations as $rel => $relation) {
+        foreach ($relationsContent as $rel => $relation) {
             $type = (null !== $relation['type']) ? $this->typeParser->parse($relation['type']) : $relation['type'];
             $relationsData[$rel] = $visitor->getNavigator()->accept($relation['content'], $type, $visitor);
         }
 
         $event->getVisitor()->addData('relations', $relationsData);
-    }
-
-    protected function getRelationsContent(ClassMetadataInterface $classMetadata, $object)
-    {
-        $relationsContent = array();
-        foreach ($classMetadata->getRelations() as $relation) {
-            if (!isset($relation['content_provider'])) {
-                continue;
-            }
-
-            $provider = $this->container->get($relation['content_provider']['id']);
-            $providerClass = new \ReflectionClass(get_class($provider));
-            $providerMethod = $providerClass->getMethod($relation['content_provider']['method']);
-
-            $parameters = $this->parametersFactory->createParameters($object, $relation['params']);
-            $arguments = $this->argumentsResolver->resolve($providerMethod, $parameters);
-            $content = call_user_func_array(array($provider, $relation['content_provider']['method']), $arguments);
-
-            if (isset($relationsContent[$relation['rel']])) {
-                throw new \RuntimeException(sprintf('You cannot embed content twice for the same rel "%s".', $relation['rel']));
-            }
-            $relationsContent[$relation['rel']] = array(
-                'content' => $content,
-                'type' => null,
-            );
-        }
-
-        return $relationsContent;
     }
 }

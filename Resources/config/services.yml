@@ -1,6 +1,7 @@
 parameters:
     fsc_hateoas.factory.link.class: FSC\HateoasBundle\Factory\LinkFactory
-    fsc_hateoas.util.parameters_factory.class: FSC\HateoasBundle\Factory\ParametersFactory
+    fsc_hateoas.factory.parameters.class: FSC\HateoasBundle\Factory\ParametersFactory
+    fsc_hateoas.factory.content.class: FSC\HateoasBundle\Factory\ContentFactory
     fsc_hateoas.resolver.arguments.class: FSC\HateoasBundle\Resolver\ArgumentsResolver
     fsc_hateoas.serializer.event_subscriber.link.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
     fsc_hateoas.serializer.event_subscriber.embedder.class: FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber
@@ -11,10 +12,18 @@ services:
         arguments:
             - @router
             - @fsc_hateoas.metadata.factory
-            - @fsc_hateoas.util.parameters_factory
+            - @fsc_hateoas.factory.parameters
 
-    fsc_hateoas.util.parameters_factory:
-        class: %fsc_hateoas.util.parameters_factory.class%
+    fsc_hateoas.factory.parameters:
+        class: %fsc_hateoas.factory.parameters.class%
+
+    fsc_hateoas.factory.content:
+        class: %fsc_hateoas.factory.content.class%
+        arguments:
+            - @fsc_hateoas.metadata.factory
+            - @fsc_hateoas.factory.parameters
+            - @fsc_hateoas.resolver.arguments
+            - @service_container
 
     fsc_hateoas.resolver.arguments:
         class: %fsc_hateoas.resolver.arguments.class%
@@ -29,10 +38,7 @@ services:
     fsc_hateoas.serializer.event_subscriber.embedder:
         class: %fsc_hateoas.serializer.event_subscriber.embedder.class%
         arguments:
-            - @fsc_hateoas.metadata.factory
+            - @fsc_hateoas.factory.content
             - @jms_serializer.metadata_factory
-            - @service_container
-            - @fsc_hateoas.util.parameters_factory
-            - @fsc_hateoas.resolver.arguments
         tags:
             - { name: jms_serializer.event_subscriber }
