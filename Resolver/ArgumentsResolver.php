@@ -12,7 +12,13 @@ class ArgumentsResolver implements ArgumentsResolverInterface
         $arguments = array();
 
         foreach ($method->getParameters() as $parameter) {
-            $arguments[] = $parameters[$parameter->getName()];
+            if (!array_key_exists($name = $parameter->getName(), $parameters)) {
+                $arguments[] = $parameter->getDefaultValue();
+
+                continue;
+            }
+
+            $arguments[] = $parameters[$name];
         }
 
         return $arguments;

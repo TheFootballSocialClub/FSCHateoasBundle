@@ -21,24 +21,30 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                array('name', 'id'),
+                array('name' => null, 'id' => null),
                 array('name' => 'adrien', 'id' => 3),
                 array('adrien', 3),
             ),
             array(
-                array('id', 'name'),
+                array('id' => null, 'name' => null),
                 array('name' => 'adrien', 'id' => 3),
                 array(3, 'adrien'),
             ),
             array(
-                array('id'),
+                array('id' => null),
                 array('name' => 'adrien', 'id' => 3),
                 array(3),
             ),
             array(
-                array('name'),
+                array('name' => null),
                 array('name' => 'adrien', 'id' => 3),
                 array('adrien'),
+            ),
+
+            array(
+                array('id' => null, 'name' => 'adrien'),
+                array('id' => 3),
+                array(3, 'adrien'),
             ),
         );
     }
@@ -46,12 +52,18 @@ class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     protected function createMethod(array $argumentsNames)
     {
         $parameters = array();
-        foreach ($argumentsNames as $argumentsName) {
+        foreach ($argumentsNames as $argumentsName => $defaultValue) {
             $parameter = $this->getMock('\ReflectionParameter', array(), array(), '', false);
             $parameter
                 ->expects($this->once())
                 ->method('getName')
-                ->will($this->returnValue($argumentsName));
+                ->will($this->returnValue($argumentsName))
+            ;
+            $parameter
+                ->expects($this->any())
+                ->method('getDefaultValue')
+                ->will($this->returnValue($defaultValue))
+            ;
 
             $parameters[] = $parameter;
         }
