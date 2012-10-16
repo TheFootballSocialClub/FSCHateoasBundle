@@ -205,11 +205,8 @@ Example:
 api_user_get:
     pattern: /api/users/{id}
 
-api_favorite_get:
-    pattern: /api/favorites/{id}
-
-api_user_favorites_list:
-    pattern: /api/users/{id}/favorites
+api_user_friends_list:
+    pattern: /api/users/{id}/friends
 ```
 
 ```php
@@ -253,7 +250,7 @@ use FSC\HateoasBundle\Annotation as Hateoas;
 /**
  * @Hateoas\Relation("self", route = "api_user_get", parameters = { "id" = "id" })
  * @Hateoas\Relation("friends",
- *     route = "api_user_favorites_list",
+ *     route = "api_user_friends_list",
  *     parameters = { "id" = "id" },
  *     content = {
  *         "provider-id" = "acme.foo.user_manager",
@@ -262,25 +259,6 @@ use FSC\HateoasBundle\Annotation as Hateoas;
  *         "serializer_xml_element_name" = "users"
  *     }
  * )
- *
- * @Serializer\XmlRoot("user")
- */
-class User
-{
-    ...
-}
-```
-
-```php
-<?php
-
-// src/Acme/FooBundle/Entity/User.php
-
-use JMS\SerializerBundle\Annotation as Serializer;
-use FSC\HateoasBundle\Annotation as Hateoas;
-
-/**
- * @Hateoas\Relation("self", route = "api_favorite_get", parameters = { "id" = "id" })
  *
  * @Serializer\XmlRoot("user")
  */
@@ -324,11 +302,21 @@ class UserManager
     <link rel="first" href="http://localhost/api/users/42/friends?limit=10&amp;page=1"/>
     <link rel="last" href="http://localhost/api/users/42/friends?limit=10&amp;page=27"/>
     <link rel="next" href="http://localhost/api/users/42/friends?limit=10&amp;page=2"/>
-    <entry/>
-    <entry/>
-    <entry/>
-    <entry/>
-    <entry/>
+    <entry>
+      <link rel="self" href="..."/>
+    </entry>
+    <entry>
+      <link rel="self" href="..."/>
+    </entry>
+    <entry>
+      <link rel="self" href="..."/>
+    </entry>
+    <entry>
+      <link rel="self" href="..."/>
+    </entry>
+    <entry>
+      <link rel="self" href="..."/>
+    </entry>
   </users>
 </user>
 ```
@@ -341,10 +329,20 @@ and `GET /api/users/42/friends` would result in
   <link rel="first" href="http://localhost/api/users/42/friends?limit=20&amp;page=1"/>
   <link rel="last" href="http://localhost/api/users/42/friends?limit=20&amp;page=7"/>
   <link rel="next" href="http://localhost/api/users/42/friends?limit=20&amp;page=2"/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
-  <entry/>
+  <entry>
+    <link rel="self" href="..."/>
+  </entry>
+  <entry>
+    <link rel="self" href="..."/>
+  </entry>
+  <entry>
+    <link rel="self" href="..."/>
+  </entry>
+  <entry>
+    <link rel="self" href="..."/>
+  </entry>
+  <entry>
+    <link rel="self" href="..."/>
+  </entry>
 </result>
 ```
