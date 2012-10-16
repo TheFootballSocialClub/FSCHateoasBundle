@@ -7,30 +7,7 @@ use Metadata\MergeableClassMetadata;
 class ClassMetadata extends MergeableClassMetadata implements ClassMetadataInterface
 {
     /**
-     * @var array
-     *
-     * like
-     *
-     * array(
-     *     array(
-     *         'rel' => 'xxx',
-     *         'route' => 'xxx',
-     *         'params' => array(
-     *             'name' => 'propertyPath',
-     *         ),
-     *         'content_provider' => array(
-     *             'id' => 'some.service',
-     *             'method' => 'getSomething',
-     *         )
-     *     ),
-     *     array(
-     *         'rel' => 'xxx',
-     *         'route' => 'xxx',
-     *         'params' => array(
-     *             'name' => 'propertyPath',
-     *         )
-     *     ),
-     * )
+     * @var array<RelationMetadataInterface>
      */
     protected $relations = array();
 
@@ -39,9 +16,9 @@ class ClassMetadata extends MergeableClassMetadata implements ClassMetadataInter
         return $this->relations;
     }
 
-    public function setRelations(array $relations)
+    public function addRelation(RelationMetadataInterface $relation)
     {
-        $this->relations = $relations;
+        $this->relations[] = $relation;
     }
 
     public function serialize()

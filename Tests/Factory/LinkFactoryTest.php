@@ -23,18 +23,13 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
 
         $object = (object) array('id' => $id = 3);
 
+        $relationMetadata = $this->getMock('FSC\HateoasBundle\Metadata\RelationMetadataInterface');
+        $relationMetadata->expects($this->any())->method('getRel')->will($this->returnValue($rel = 'self'));
+        $relationMetadata->expects($this->any())->method('getRoute')->will($this->returnValue($route = 'bar'));
+        $relationMetadata->expects($this->any())->method('getParams')->will($this->returnValue(array('identifier' => 'id')));
+
         $classMetadata = $this->getMock('FSC\HateoasBundle\Metadata\ClassMetadataInterface');
-        $classMetadata
-            ->expects($this->once())
-            ->method('getRelations')
-            ->will($this->returnValue($metadataLinks = array(
-                array(
-                    'rel' => $rel = 'self',
-                    'route' => $route = 'bar',
-                    'params' => array('identifier' => 'id')
-                ),
-            )))
-        ;
+        $classMetadata->expects($this->once())->method('getRelations')->will($this->returnValue(array($relationMetadata)));
 
         $urlGenerator
             ->expects($this->once())

@@ -6,6 +6,7 @@ use Pagerfanta\PagerfantaInterface;
 use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
 
 use FSC\HateoasBundle\Model\RouteAwarePager;
+use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
 
 class RouteAwarePagerFactory implements RouteAwarePagerFactoryInterface
 {
@@ -16,10 +17,10 @@ class RouteAwarePagerFactory implements RouteAwarePagerFactoryInterface
         $this->parametersFactory = $parametersFactory;
     }
 
-    public function create(PagerfantaInterface $pager, $relationMeta, $object)
+    public function create(PagerfantaInterface $pager, RelationMetadataInterface $relationMetadata, $object)
     {
-        $parameters = $this->parametersFactory->createParameters($object, $relationMeta['params']);
+        $parameters = $this->parametersFactory->createParameters($object, $relationMetadata->getParams());
 
-        return new RouteAwarePager($pager, $relationMeta['route'], $parameters);
+        return new RouteAwarePager($pager, $relationMetadata->getRoute(), $parameters);
     }
 }

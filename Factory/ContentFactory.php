@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
 use FSC\HateoasBundle\Resolver\ArgumentsResolverInterface;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
+use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
 
 class ContentFactory implements ContentFactoryInterface
 {
@@ -38,32 +39,33 @@ class ContentFactory implements ContentFactoryInterface
     public function createRelationsContent(ClassMetadataInterface $classMetadata, $object)
     {
         $relationsContent = array();
-        foreach ($classMetadata->getRelations() as $relation) {
-            if (!isset($relation['content'])) {
+        foreach ($classMetadata->getRelations() as $relationMetadata) {
+            if (null === $relationMetadata->getContent()) {
                 continue;
             }
 
-            if (isset($relationsContent[$relation['rel']])) {
-                throw new \RuntimeException(sprintf('You cannot embed content twice for the same rel "%s".', $relation['rel']));
+            if (isset($relationsContent[$relationMetadata->getRel()])) {
+                throw new \RuntimeException(sprintf('You cannot embed content twice for the same rel "%s".', $relationMetadata['rel']));
             }
 
-            $relation['content']['value'] = $this->getContent($relation, $object);
-
-            $relationsContent[$relation['rel']] = $relation;
+            $relationsContent[$relationMetadata->getRel()] = array(
+                'metadata' => $relationMetadata,
+                'content' => $this->getContent($relationMetadata, $object),
+            );
         }
 
         return $relationsContent;
     }
 
-    protected function getContent(array $relation, $object)
+    protected function getContent(RelationMetadataInterface $relationMetadata, $object)
     {
-        $provider = $this->container->get($relation['content']['provider_id']);
+        $provider = $this->container->get($relationMetadata->getContent()->getProviderId());
         $providerClass = new \ReflectionClass(get_class($provider));
-        $providerMethod = $providerClass->getMethod($relation['content']['provider_method']);
+        $providerMethod = $providerClass->getMethod($relationMetadata->getContent()->getProviderMethod());
 
-        $parameters = $this->parametersFactory->createParameters($object, $relation['params']);
+        $parameters = $this->parametersFactory->createParameters($object, $relationMetadata->getParams());
         $arguments = $this->argumentsResolver->resolve($providerMethod, $parameters);
 
-        return call_user_func_array(array($provider, $relation['content']['provider_method']), $arguments);
+        return call_user_func_array(array($provider, $relationMetadata->getContent()->getProviderMethod()), $arguments);
     }
 }

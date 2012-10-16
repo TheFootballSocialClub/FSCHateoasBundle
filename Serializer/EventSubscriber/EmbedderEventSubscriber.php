@@ -14,6 +14,8 @@ use Pagerfanta\PagerfantaInterface;
 
 use FSC\HateoasBundle\Factory\ContentFactoryInterface;
 use FSC\HateoasBundle\Factory\RouteAwarePagerFactoryInterface;
+use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
+use FSC\HateoasBundle\Metadata\RelationContentMetadataInterface;
 
 class EmbedderEventSubscriber implements EventSubscriberInterface
 {
@@ -56,14 +58,14 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $visitor = $event->getVisitor(); /** @var $visitor XmlSerializationVisitor */
 
-        foreach ($relationsContent as $rel => $relation) {
-            $entryNode = $visitor->getDocument()->createElement($this->getRelationXmlElementName($relation));
+        foreach ($relationsContent as $rel => $relationContent) {
+            $entryNode = $visitor->getDocument()->createElement($this->getRelationXmlElementName($relationContent['metadata'], $relationContent['content']));
             $visitor->getCurrentNode()->appendChild($entryNode);
             $visitor->setCurrentNode($entryNode);
 
             $visitor->getCurrentNode()->setAttribute('rel', $rel);
 
-            if (null !== ($node = $visitor->getNavigator()->accept($this->getRelationContent($event, $relation), $this->getRelationType($relation), $visitor))) {
+            if (null !== ($node = $visitor->getNavigator()->accept($this->getRelationContent($event, $relationContent), $relationContent['metadata']->getContent()->getSerializerType(), $visitor))) {
                 $visitor->getCurrentNode()->appendChild($node);
             }
 
@@ -80,25 +82,21 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         $visitor = $event->getVisitor();
 
         $relationsData = array();
-        foreach ($relationsContent as $rel => $relation) {
-            $relationsData[$rel] = $visitor->getNavigator()->accept($this->getRelationContent($event, $relation), $this->getRelationType($relation), $visitor);
+        foreach ($relationsContent as $rel => $relationContent) {
+            $relationsData[$rel] = $visitor->getNavigator()->accept($this->getRelationContent($event, $relationContent), $relationContent['metadata']->getContent()->getSerializerType(), $visitor);
         }
 
         $event->getVisitor()->addData('relations', $relationsData);
     }
 
-    protected function getRelationType($relation)
-    {
-        return null !== $relation['content']['serializer_type'] ? $this->typeParser->parse($relation['content']['serializer_type']) : null;
-    }
-
-    protected function getRelationXmlElementName($relation)
+    protected function getRelationXmlElementName(RelationMetadataInterface $relationMetadata, $content)
     {
         $elementName = 'relation';
-        if (null !== $relation['content']['serializer_xml_element_name']) {
-            $elementName = $relation['content']['serializer_xml_element_name'];
-        } else if (true === $relation['content']['serializer_xml_element_name_root_metadata']) {
-            $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($relation['content']['value']));
+
+        if (null !== $relationMetadata->getContent()->getSerializerXmlElementName()) {
+            $elementName = $relationMetadata->getContent()->getSerializerXmlElementName();
+        } else if (null !== $relationMetadata->getContent()->getSerializerXmlElementRootName()) {
+            $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($content));
             $elementName = $classMetadata->xmlRootName ?: $elementName;
         }
 
@@ -107,10 +105,10 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     protected function getRelationContent(Event $event, $relation)
     {
-        if (!$relation['content']['value'] instanceof PagerfantaInterface) {
-            return $relation['content']['value'];
+        if (!$relation['content'] instanceof PagerfantaInterface) {
+            return $relation['content'];
         }
 
-        return $this->routeAwarePagerFactory->create($relation['content']['value'], $relation, $event->getObject());
+        return $this->routeAwarePagerFactory->create($relation['content'], $relation['metadata'], $event->getObject());
     }
 }

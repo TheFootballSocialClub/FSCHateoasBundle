@@ -9,6 +9,7 @@ use Pagerfanta\PagerfantaInterface;
 
 use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
+use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
 
 class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
 {
@@ -45,31 +46,27 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
         ));
 
         $links = array();
-        $links[] = $this->createLink('self', $this->urlGenerator->generate($route, $defaultRouteParameters, true));
-        $links[] = $this->createLink('first', $this->urlGenerator->generate(
+        $links[] = $this->createLink('self', $this->generateUrl($route, $defaultRouteParameters));
+        $links[] = $this->createLink('first', $this->generateUrl(
             $route,
-            array_merge($defaultRouteParameters, array('page' => '1')),
-            true
+            array_merge($defaultRouteParameters, array('page' => '1'))
         ));
-        $links[] = $this->createLink('last', $this->urlGenerator->generate(
+        $links[] = $this->createLink('last', $this->generateUrl(
             $route,
-            array_merge($defaultRouteParameters, array('page' => $pager->getNbPages())),
-                true
+            array_merge($defaultRouteParameters, array('page' => $pager->getNbPages()))
         ));
 
         if ($pager->hasPreviousPage()) {
-            $links[] = $this->createLink('next', $this->urlGenerator->generate(
+            $links[] = $this->createLink('next', $this->generateUrl(
                 $route,
-                array_merge($defaultRouteParameters, array('page' => $pager->getPreviousPage())),
-                true
+                array_merge($defaultRouteParameters, array('page' => $pager->getPreviousPage()))
             ));
         }
 
         if ($pager->hasNextPage()) {
-            $links[] = $this->createLink('next', $this->urlGenerator->generate(
+            $links[] = $this->createLink('next', $this->generateUrl(
                 $route,
-                array_merge($defaultRouteParameters, array('page' => $pager->getNextPage())),
-                true
+                array_merge($defaultRouteParameters, array('page' => $pager->getNextPage()))
             ));
         }
 
@@ -80,12 +77,18 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
     {
         $links = array();
 
-        foreach ($classMetadata->getRelations() as $relationMeta) {
-            $href = $this->urlGenerator->generate($relationMeta['route'], $this->parametersFactory->createParameters($object, $relationMeta['params']), true);
-            $links[] = $this->createLink($relationMeta['rel'], $href);
+        foreach ($classMetadata->getRelations() as $relationMetadata) {
+            $links[] = $this->createLinkFromMetadata($relationMetadata, $object);
         }
 
         return $links;
+    }
+
+    public function createLinkFromMetadata(RelationMetadataInterface $relationMetadata, $object)
+    {
+        $href = $this->generateUrl($relationMetadata->getRoute(), $this->parametersFactory->createParameters($object, $relationMetadata->getParams()));
+
+        return $this->createLink($relationMetadata->getRel(), $href);
     }
 
     public static function createLink($rel, $href)
@@ -96,4 +99,11 @@ class LinkFactory implements LinkFactoryInterface, PagerLinkFactoryInterface
 
         return $link;
     }
+
+    public function generateUrl($name, $parameters = array())
+    {
+        return $this->urlGenerator->generate($name, $parameters, true);
+    }
+
+
 }

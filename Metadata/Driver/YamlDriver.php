@@ -6,6 +6,8 @@ use Metadata\Driver\AbstractFileDriver;
 use Symfony\Component\Yaml\Yaml;
 
 use FSC\HateoasBundle\Metadata\ClassMetadata;
+use FSC\HateoasBundle\Metadata\RelationMetadata;
+use FSC\HateoasBundle\Metadata\RelationContentMetadata;
 
 class YamlDriver extends AbstractFileDriver
 {
@@ -25,29 +27,32 @@ class YamlDriver extends AbstractFileDriver
         $classMetadata = new ClassMetadata($name);
 
         if (isset($config['relations'])) {
-            $relations = array();
-
-            foreach ($config['relations'] as $currentRelation) {
-                $relation = array(
-                    'rel' => $currentRelation['rel'],
-                    'route' => $currentRelation['route'],
-                    'params' => isset($currentRelation['params']) ? $currentRelation['params'] : array(),
-                );
-
-                if (!empty($currentRelation['content'])) {
-                    $relation['content'] = array(
-                        'provider_id' => $currentRelation['content']['provider_id'],
-                        'provider_method' => $currentRelation['content']['provider_method'],
-                        'serializer_type' => isset($currentRelation['content']['serializer_type']) ? $currentRelation['content']['serializer_type'] : null,
-                        'serializer_xml_element_name' => isset($currentRelation['content']['serializer_xml_element_name']) ? $currentRelation['content']['serializer_xml_element_name'] : null,
-                        'serializer_xml_element_name_root_metadata' => isset($currentRelation['content']['serializer_xml_element_name_root_metadata']) ? (Boolean) $currentRelation['content']['serializer_xml_element_name_root_metadata'] : false,
-                    );
+            foreach ($config['relations'] as $relation) {
+                $relationMetadata = new RelationMetadata($relation['rel'], $relation['route']);
+                if (isset($relation['params'])) {
+                    $relationMetadata->setParams($relation['params']);
                 }
 
-                $relations[] = $relation;
-            }
+                if (!empty($relation['content'])) {
+                    $relationContent = $relation['content'];
+                    $relationContentMetadata = new RelationContentMetadata($relationContent['provider_id'], $relationContent['provider_method']);
+                    $relationMetadata->setContent($relationContentMetadata);
 
-            $classMetadata->setRelations($relations);
+                    if (isset($relationContent['serializer_type'])) {
+                        $relationContentMetadata->setSerializerType($relationContent['serializer_type']);
+                    }
+
+                    if (isset($relationContent['serializer_xml_element_name'])) {
+                        $relationContentMetadata->setSerializerXmlElementName($relationContent['serializer_xml_element_name']);
+                    }
+
+                    if (isset($relationContent['serializer_xml_element_name_root_metadata'])) {
+                        $relationContentMetadata->setSerializerXmlElementRootName($relationContent['serializer_xml_element_name_root_metadata']);
+                    }
+                }
+
+                $classMetadata->addRelation($relationMetadata);
+            }
         }
 
         return $classMetadata;

@@ -5,8 +5,10 @@ namespace FSC\HateoasBundle\Metadata\Driver;
 use Metadata\Driver\DriverInterface;
 use Doctrine\Common\Annotations\Reader;
 
-use FSC\HateoasBundle\Metadata\ClassMetadata;
 use FSC\HateoasBundle\Annotation;
+use FSC\HateoasBundle\Metadata\ClassMetadata;
+use FSC\HateoasBundle\Metadata\RelationMetadata;
+use FSC\HateoasBundle\Metadata\RelationContentMetadata;
 
 class AnnotationDriver implements DriverInterface
 {
@@ -25,29 +27,33 @@ class AnnotationDriver implements DriverInterface
         $classMetadata = new ClassMetadata($name = $class->getName());
         $classMetadata->fileResources[] = $class->getFilename();
 
-        $relations = array();
         foreach ($this->reader->getClassAnnotations($class) as $annotation) {
             if ($annotation instanceof Annotation\Relation) {
-                $relation = array(
-                    'rel' => $annotation->rel,
-                    'route' => $annotation->route,
-                    'params' => $annotation->params ?: array(),
-                );
-
-                if (!empty($annotation->content)) {
-                    $relation['content'] = array(
-                        'provider_id' => $annotation->content['provider_id'],
-                        'provider_method' => $annotation->content['provider_method'],
-                        'serializer_type' => isset($annotation->content['serializer_type']) ? $annotation->content['serializer_type'] : null,
-                        'serializer_xml_element_name' => isset($annotation->content['serializer_xml_element_name']) ? $annotation->content['serializer_xml_element_name'] : null,
-                        'serializer_xml_element_name_root_metadata' => isset($annotation->content['serializer_xml_element_name_root_metadata']) ? (Boolean) $annotation->content['serializer_xml_element_name_root_metadata'] : false,
-                    );
+                $relationMetadata = new RelationMetadata($annotation->rel, $annotation->route);
+                if (!empty($annotation->params)) {
+                    $relationMetadata->setParams($annotation->params);
                 }
 
-                $relations[] = $relation;
+                if (!empty($annotation->content)) {
+                    $relationContentMetadata = new RelationContentMetadata($annotation->content['provider_id'], $annotation->content['provider_method']);
+                    $relationMetadata->setContent($relationContentMetadata);
+
+                    if (isset($annotation->content['serializer_type'])) {
+                        $relationContentMetadata->setSerializerType($annotation->content['serializer_type']);
+                    }
+
+                    if (isset($annotation->content['serializer_xml_element_name'])) {
+                        $relationContentMetadata->setSerializerXmlElementName($annotation->content['serializer_xml_element_name']);
+                    }
+
+                    if (isset($annotation->content['serializer_xml_element_name_root_metadata'])) {
+                        $relationContentMetadata->setSerializerXmlElementRootName($annotation->content['serializer_xml_element_name_root_metadata']);
+                    }
+                }
+
+                $classMetadata->addRelation($relationMetadata);
             }
         }
-        $classMetadata->setRelations($relations);
 
         return $classMetadata;
     }
