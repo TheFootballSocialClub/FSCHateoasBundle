@@ -4,6 +4,10 @@ api_user_get:
 api_user_list:
     pattern: /api/users
 
+# would return a Location header pointing to api_post_get ...
+api_user_lastpost_get:
+    pattern: /api/users/{id}/last-post
+
 api_post_get:
     pattern: /api/posts/{id}
 

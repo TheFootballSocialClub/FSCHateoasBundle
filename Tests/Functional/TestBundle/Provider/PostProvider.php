@@ -16,4 +16,9 @@ class PostProvider
             Post::create(1, 'Welcome on the blog!'),
         );
     }
+
+    public function getUserLastPost($id)
+    {
+        return Post::create(2, 'How to create awesome symfony2 application');
+    }
 }

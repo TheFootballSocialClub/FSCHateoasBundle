@@ -21,7 +21,12 @@ class SerializationTest extends TestCase
   <link rel="self" href="http://localhost/api/users/24"/>
   <link rel="alternate" href="http://localhost/profile/24"/>
   <link rel="users" href="http://localhost/api/users"/>
+  <link rel="last-post" href="http://localhost/api/users/24/last-post"/>
   <link rel="posts" href="http://localhost/api/users/24/posts"/>
+  <relation rel="last-post" id="2">
+    <title><![CDATA[How to create awesome symfony2 application]]></title>
+    <link rel="self" href="http://localhost/api/posts/2"/>
+  </relation>
   <relation rel="posts">
     <entry id="2">
       <title><![CDATA[How to create awesome symfony2 application]]></title>
@@ -63,11 +68,25 @@ class SerializationTest extends TestCase
                         '"href":"http:\/\/localhost\/api\/users"'.
                     '},'.
                     '{'.
+                        '"rel":"last-post",'.
+                        '"href":"http:\/\/localhost\/api\/users\/24\/last-post"'.
+                    '},'.
+                    '{'.
                         '"rel":"posts",'.
                         '"href":"http:\/\/localhost\/api\/users\/24\/posts"'.
                     '}'.
                 '],'.
                 '"relations":{'.
+                    '"last-post":{'.
+                        '"id":2,'.
+                        '"title":"How to create awesome symfony2 application",'.
+                        '"links":['.
+                            '{'.
+                                '"rel":"self",'.
+                                '"href":"http:\/\/localhost\/api\/posts\/2"'.
+                            '}'.
+                        ']'.
+                    '},'.
                     '"posts":['.
                         '{'.
                             '"id":2,'.

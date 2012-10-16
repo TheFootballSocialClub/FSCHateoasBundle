@@ -10,6 +10,12 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
               id: id
         - rel: users
           route: api_user_list
+        - rel: last-post
+          route: api_user_lastpost_get
+          params: { id: id }
+          content:
+              provider_id: test.provider.post
+              provider_method: getUserLastPost
         - rel: posts
           route: api_user_posts_list
           params: { id: id }
