@@ -25,6 +25,13 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->booleanNode('xml_elements_names_use_serializer_metadata')->defaultTrue()->end()
+                    ->arrayNode('links')
+                        ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('page_parameter_name')->defaultValue('page')->end()
+                            ->scalarNode('limit_parameter_name')->defaultValue('limit')->end()
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
         ;

@@ -28,6 +28,8 @@ services:
         class: %fsc_hateoas.factory.pager_link.class%
         arguments:
             - @router
+            - null # page parameter name
+            - null # limit parameter name
 
     fsc_hateoas.factory.parameters:
         class: %fsc_hateoas.factory.parameters.class%

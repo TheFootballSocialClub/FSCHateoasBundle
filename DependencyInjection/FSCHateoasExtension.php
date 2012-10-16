@@ -23,6 +23,12 @@ class FSCHateoasExtension extends ConfigurableExtension
             ->replaceArgument(1, $config['pagerfanta']['xml_elements_names_use_serializer_metadata'])
         ;
 
+        $container
+            ->getDefinition('fsc_hateoas.factory.pager_link')
+            ->replaceArgument(1, $config['pagerfanta']['links']['page_parameter_name'])
+            ->replaceArgument(2, $config['pagerfanta']['links']['limit_parameter_name'])
+        ;
+
         $this->configureMetadata($config, $container);
     }
 
