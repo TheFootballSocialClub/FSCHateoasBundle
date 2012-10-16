@@ -7,7 +7,6 @@ use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
 use JMS\SerializerBundle\Serializer\TypeParser;
 
-use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Factory\LinkFactoryInterface;
 
 class LinkEventSubscriber implements EventSubscriberInterface

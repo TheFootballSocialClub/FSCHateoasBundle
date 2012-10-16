@@ -5,13 +5,14 @@ namespace FSC\HateoasBundle\Serializer\EventSubscriber;
 use JMS\SerializerBundle\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\SerializerBundle\Serializer\TypeParser;
 use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
-use Symfony\Component\Form\Util\PropertyPath;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
 use Metadata\MetadataFactoryInterface;
+use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
+use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
 
 class EmbedderEventSubscriber implements EventSubscriberInterface
 {
@@ -40,14 +41,17 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
     protected $metadataFactory;
     protected $serializerMetadataFactory;
     protected $container;
+    protected $parametersFactory;
     protected $typeParser;
 
     public function __construct(MetadataFactoryInterface $metadataFactory, MetadataFactoryInterface $serializerMetadataFactory,
-                                ContainerInterface $container, TypeParser $typeParser = null)
+                                ContainerInterface $container, ParametersFactoryInterface $parametersFactory,
+                                TypeParser $typeParser = null)
     {
         $this->metadataFactory = $metadataFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->container = $container;
+        $this->parametersFactory = $parametersFactory;
         $this->typeParser = $typeParser ?: new TypeParser();
     }
 
@@ -119,16 +123,6 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         return $arguments;
     }
 
-    public static function createParameters($parameters, $object)
-    {
-        array_walk($parameters, function (&$value, $key) use ($object) {
-            $propertyPath = new PropertyPath($value);
-            $value = $propertyPath->getValue($object);
-        });
-
-        return $parameters;
-    }
-
     protected function getRelationsContent(ClassMetadataInterface $classMetadata, $object)
     {
         $relationsContent = array();
@@ -141,7 +135,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
             $providerClass = new \ReflectionClass(get_class($provider));
             $providerMethod = $providerClass->getMethod($relation['content_provider']['method']);
 
-            $parameters = $this->createParameters($relation['params'], $object);
+            $parameters = $this->parametersFactory->createParameters($object, $relation['params']);
             $arguments = $this->resolveMethodArguments($providerMethod, $parameters);
             $content = call_user_func_array(array($provider, $relation['content_provider']['method']), $arguments);
 

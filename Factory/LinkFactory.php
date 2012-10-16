@@ -13,11 +13,14 @@ class LinkFactory implements LinkFactoryInterface
 {
     protected $urlGenerator;
     protected $metadataFactory;
+    protected $parametersFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, MetadataFactoryInterface $metadataFactory)
+    public function __construct(UrlGeneratorInterface $urlGenerator, MetadataFactoryInterface $metadataFactory,
+                                ParametersFactoryInterface $parametersFactory)
     {
         $this->urlGenerator = $urlGenerator;
         $this->metadataFactory = $metadataFactory;
+        $this->parametersFactory = $parametersFactory;
     }
 
     public function createLinks($object)
@@ -38,7 +41,7 @@ class LinkFactory implements LinkFactoryInterface
         $links = array();
 
         foreach ($classMetadata->getRelations() as $relationMeta) {
-            $href = $this->urlGenerator->generate($relationMeta['route'], $this->createRouteParameters($relationMeta['params'], $object), true);
+            $href = $this->urlGenerator->generate($relationMeta['route'], $this->parametersFactory->createParameters($object, $relationMeta['params']), true);
             $links[] = $this->createLink($relationMeta['rel'], $href);
         }
 
@@ -52,15 +55,5 @@ class LinkFactory implements LinkFactoryInterface
         $link->setHref($href);
 
         return $link;
-    }
-
-    public static function createRouteParameters($parameters, $object)
-    {
-        array_walk($parameters, function (&$value, $key) use ($object) {
-            $propertyPath = new PropertyPath($value);
-            $value = $propertyPath->getValue($object);
-        });
-
-        return $parameters;
     }
 }

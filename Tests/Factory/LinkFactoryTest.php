@@ -18,7 +18,8 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $metadataFactory = $this->getMock('Metadata\MetadataFactoryInterface');
-        $linkFactory = new LinkFactory($urlGenerator, $metadataFactory);
+        $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory();
+        $linkFactory = new LinkFactory($urlGenerator, $metadataFactory, $parametersFactory);
 
         $object = (object) array('id' => $id = 3);
 
@@ -51,44 +52,5 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('FSC\HateoasBundle\Model\Link', $link);
         $this->assertEquals($rel, $link->getRel());
         $this->assertEquals($href, $link->getHref());
-    }
-
-    /**
-     * @dataProvider getTestCreateRouteParametersData
-     */
-    public function testCreateRouteParameters($data, $params, $expectedRouteParams)
-    {
-        $this->assertEquals($expectedRouteParams, LinkFactory::createRouteParameters($params, $data));
-    }
-
-    public function getTestCreateRouteParametersData()
-    {
-        return array(
-            array(
-                array(
-                    'uuid' => 23,
-                ),
-                array(
-                    'id' => '[uuid]',
-                ),
-                array(
-                    'id' => 23,
-                ),
-            ),
-            array(
-                array(
-                    'id' => 23,
-                    'friend' => array('id' => 4),
-                ),
-                array(
-                    'id' => '[id]',
-                    'friend_id' => '[friend][id]',
-                ),
-                array(
-                    'id' => 23,
-                    'friend_id' => 4,
-                ),
-            ),
-        );
     }
 }
