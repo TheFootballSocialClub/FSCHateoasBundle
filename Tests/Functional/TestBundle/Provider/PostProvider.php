@@ -42,4 +42,19 @@ class PostProvider
                 return Post::create($id, '');
         }
     }
+
+    public function getPostsPager($page = 1, $limit = 10)
+    {
+        $posts = array(
+            $this->getPost(1),
+            $this->getPost(2),
+            $this->getPost(3),
+        );
+
+        $pager = new Pagerfanta(new ArrayAdapter($posts));
+        $pager->setCurrentPage($page);
+        $pager->setMaxPerPage($limit);
+
+        return $pager;
+    }
 }
