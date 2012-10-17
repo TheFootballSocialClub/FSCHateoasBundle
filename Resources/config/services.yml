@@ -1,17 +1,88 @@
 parameters:
-    fsc_hateoas.link_subscriber.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
+    fsc_hateoas.serializer.link_serialization_helper.class: FSC\HateoasBundle\Serializer\LinkSerializationHelper
     fsc_hateoas.factory.link.class: FSC\HateoasBundle\Factory\LinkFactory
+    fsc_hateoas.factory.pager_link.class: FSC\HateoasBundle\Factory\PagerLinkFactory
+    fsc_hateoas.factory.parameters.class: FSC\HateoasBundle\Factory\ParametersFactory
+    fsc_hateoas.factory.content.class: FSC\HateoasBundle\Factory\ContentFactory
+    fsc_hateoas.factory.router_aware_pager.class: FSC\HateoasBundle\Factory\RouteAwarePagerFactory
+    fsc_hateoas.resolver.arguments.class: FSC\HateoasBundle\Resolver\ArgumentsResolver
+    fsc_hateoas.serializer.event_subscriber.link.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
+    fsc_hateoas.serializer.event_subscriber.embedder.class: FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber
+    fsc_hateoas.serializer.handler.pagerfanta.class: FSC\HateoasBundle\Serializer\Handler\PagerfantaHandler
+    fsc_hateoas.serializer.handler.route_aware_pager.class: FSC\HateoasBundle\Serializer\Handler\RouteAwarePagerHandler
 
 services:
-    fsc_hateoas.link_subscriber:
-        class: %fsc_hateoas.link_subscriber.class%
-        arguments:
-            - @fsc_hateoas.factory.link
-        tags:
-            - { name: jms_serializer.event_subscriber }
+    fsc_hateoas.serializer.link_serialization_helper:
+        class: %fsc_hateoas.serializer.link_serialization_helper.class%
+        public: false
 
     fsc_hateoas.factory.link:
         class: %fsc_hateoas.factory.link.class%
+        public: false
         arguments:
             - @router
             - @fsc_hateoas.metadata.factory
+            - @fsc_hateoas.factory.parameters
+
+    fsc_hateoas.factory.pager_link:
+        class: %fsc_hateoas.factory.pager_link.class%
+        arguments:
+            - @router
+            - null # page parameter name
+            - null # limit parameter name
+
+    fsc_hateoas.factory.parameters:
+        class: %fsc_hateoas.factory.parameters.class%
+        public: false
+
+    fsc_hateoas.factory.content:
+        class: %fsc_hateoas.factory.content.class%
+        public: false
+        arguments:
+            - @fsc_hateoas.metadata.factory
+            - @fsc_hateoas.factory.parameters
+            - @fsc_hateoas.resolver.arguments
+            - @service_container
+
+    fsc_hateoas.factory.router_aware_pager:
+        class: %fsc_hateoas.factory.router_aware_pager.class%
+        public: false
+        arguments:
+            - @fsc_hateoas.factory.parameters
+
+    fsc_hateoas.resolver.arguments:
+        class: %fsc_hateoas.resolver.arguments.class%
+        public: false
+
+    fsc_hateoas.serializer.event_subscriber.link:
+        class: %fsc_hateoas.serializer.event_subscriber.link.class%
+        arguments:
+            - @fsc_hateoas.factory.link
+            - @fsc_hateoas.serializer.link_serialization_helper
+        tags:
+            - { name: jms_serializer.event_subscriber }
+
+    fsc_hateoas.serializer.event_subscriber.embedder:
+        class: %fsc_hateoas.serializer.event_subscriber.embedder.class%
+        arguments:
+            - @fsc_hateoas.factory.content
+            - @jms_serializer.metadata_factory
+            - @fsc_hateoas.factory.router_aware_pager
+        tags:
+            - { name: jms_serializer.event_subscriber }
+
+    fsc_hateoas.serializer.handler.pagerfanta:
+        class: %fsc_hateoas.serializer.handler.pagerfanta.class%
+        arguments:
+            - @jms_serializer.metadata_factory
+            - true
+        tags:
+            - { name: jms_serializer.subscribing_handler }
+
+    fsc_hateoas.serializer.handler.route_aware_pager:
+        class: %fsc_hateoas.serializer.handler.route_aware_pager.class%
+        arguments:
+            - @fsc_hateoas.factory.pager_link
+            - @fsc_hateoas.serializer.link_serialization_helper
+        tags:
+            - { name: jms_serializer.subscribing_handler }

@@ -50,27 +50,69 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('FSC\HateoasBundle\Metadata\ClassMetadata', $classMetadata);
 
-        $this->assertEquals(array(
-            array(
-                'rel' => 'self',
-                'route' => '_some_route',
-                'params' => array('identifier' => 'id')
-            ),
-            array(
-                'rel' => 'alternate',
-                'route' => '_some_route2',
-                'params' => array(),
-            ),
-            array(
-                'rel' => 'alternate',
-                'route' => '_some_route3',
-                'params' => array(),
-            ),
-            array(
-                'rel' => 'home',
-                'route' => 'homepage',
-                'params' => array(),
-            ),
-        ), $classMetadata->getLinks());
+        $relationsMetadata = $classMetadata->getRelations();
+        foreach ($relationsMetadata as $relationMetadata) {
+            $this->assertInstanceOf('FSC\HateoasBundle\Metadata\RelationMetadataInterface', $relationMetadata);
+        }
+
+        $n = 0;
+        $relationMetadata = null; /** @var $relationMetadata \FSC\HateoasBundle\Metadata\RelationMetadataInterface */
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('self', $relationMetadata->getRel());
+        $this->assertEquals('_some_route', $relationMetadata->getRoute());
+        $this->assertEquals(array('identifier' => 'id'), $relationMetadata->getParams());
+        $this->assertNull($relationMetadata->getContent());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('alternate', $relationMetadata->getRel());
+        $this->assertEquals('_some_route2', $relationMetadata->getRoute());
+        $this->assertEquals(array(), $relationMetadata->getParams());
+        $this->assertNull($relationMetadata->getContent());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('alternate', $relationMetadata->getRel());
+        $this->assertEquals('_some_route3', $relationMetadata->getRoute());
+        $this->assertEquals(array(), $relationMetadata->getParams());
+        $this->assertNull($relationMetadata->getContent());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('home', $relationMetadata->getRel());
+        $this->assertEquals('homepage', $relationMetadata->getRoute());
+        $this->assertEquals(array(), $relationMetadata->getParams());
+        $this->assertNull($relationMetadata->getContent());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('friends', $relationMetadata->getRel());
+        $this->assertEquals('user_friends_list', $relationMetadata->getRoute());
+        $this->assertEquals(array('id' => 'id'), $relationMetadata->getParams());
+        $this->assertInstanceOf('FSC\HateoasBundle\Metadata\RelationContentMetadataInterface', $relationMetadata->getContent());
+        $this->assertEquals('acme.foo.user_provider', $relationMetadata->getContent()->getProviderId());
+        $this->assertEquals('getUserFriendsPager', $relationMetadata->getContent()->getProviderMethod());
+        $this->assertNull($relationMetadata->getContent()->getSerializerType());
+        $this->assertNull($relationMetadata->getContent()->getSerializerXmlElementName());
+        $this->assertTrue($relationMetadata->getContent()->getSerializerXmlElementRootName());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('favorites', $relationMetadata->getRel());
+        $this->assertEquals('user_favorites_list', $relationMetadata->getRoute());
+        $this->assertEquals(array('id' => 'id'), $relationMetadata->getParams());
+        $this->assertInstanceOf('FSC\HateoasBundle\Metadata\RelationContentMetadataInterface', $relationMetadata->getContent());
+        $this->assertEquals('acme.foo.favorite_provider', $relationMetadata->getContent()->getProviderId());
+        $this->assertEquals('getUserFavoritesPager', $relationMetadata->getContent()->getProviderMethod());
+        $this->assertEquals('Pagerfanta<custom>', $relationMetadata->getContent()->getSerializerType());
+        $this->assertEquals('favorites', $relationMetadata->getContent()->getSerializerXmlElementName());
+        $this->assertFalse($relationMetadata->getContent()->getSerializerXmlElementRootName());
+return;
     }
 }

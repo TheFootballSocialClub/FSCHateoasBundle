@@ -5,19 +5,24 @@ namespace FSC\HateoasBundle\Factory;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Form\Util\PropertyPath;
 use Metadata\MetadataFactoryInterface;
+use Pagerfanta\PagerfantaInterface;
 
 use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
+use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
 
-class LinkFactory implements LinkFactoryInterface
+class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 {
-    protected $urlGenerator;
     protected $metadataFactory;
+    protected $parametersFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, MetadataFactoryInterface $metadataFactory)
+    public function __construct(UrlGeneratorInterface $urlGenerator, MetadataFactoryInterface $metadataFactory,
+                                ParametersFactoryInterface $parametersFactory)
     {
-        $this->urlGenerator = $urlGenerator;
+        parent::__construct($urlGenerator);
+
         $this->metadataFactory = $metadataFactory;
+        $this->parametersFactory = $parametersFactory;
     }
 
     public function createLinks($object)
@@ -37,30 +42,17 @@ class LinkFactory implements LinkFactoryInterface
     {
         $links = array();
 
-        foreach ($classMetadata->getLinks() as $linkMeta) {
-            $href = $this->urlGenerator->generate($linkMeta['route'], $this->createRouteParameters($linkMeta['params'], $object), true);
-            $links[] = $this->createLink($linkMeta['rel'], $href);
+        foreach ($classMetadata->getRelations() as $relationMetadata) {
+            $links[] = $this->createLinkFromMetadata($relationMetadata, $object);
         }
 
         return $links;
     }
 
-    public static function createLink($rel, $href)
+    public function createLinkFromMetadata(RelationMetadataInterface $relationMetadata, $object)
     {
-        $link = new Link();
-        $link->setRel($rel);
-        $link->setHref($href);
+        $href = $this->generateUrl($relationMetadata->getRoute(), $this->parametersFactory->createParameters($object, $relationMetadata->getParams()));
 
-        return $link;
-    }
-
-    public static function createRouteParameters($parameters, $object)
-    {
-        array_walk($parameters, function (&$value, $key) use ($object) {
-            $propertyPath = new PropertyPath($value);
-            $value = $propertyPath->getValue($object);
-        });
-
-        return $parameters;
+        return $this->createLink($relationMetadata->getRel(), $href);
     }
 }

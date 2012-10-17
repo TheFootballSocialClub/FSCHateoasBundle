@@ -6,6 +6,8 @@ use Metadata\Driver\AbstractFileDriver;
 use Symfony\Component\Yaml\Yaml;
 
 use FSC\HateoasBundle\Metadata\ClassMetadata;
+use FSC\HateoasBundle\Metadata\RelationMetadata;
+use FSC\HateoasBundle\Metadata\RelationContentMetadata;
 
 class YamlDriver extends AbstractFileDriver
 {
@@ -24,45 +26,40 @@ class YamlDriver extends AbstractFileDriver
 
         $classMetadata = new ClassMetadata($name);
 
-        if (isset($config['links'])) {
-            $classMetadata->setLinks($this->normalizeLinks($config['links']));
+        if (isset($config['relations'])) {
+            foreach ($config['relations'] as $relation) {
+                $relationMetadata = new RelationMetadata($relation['rel'], $relation['route']);
+                if (isset($relation['parameters'])) {
+                    $relationMetadata->setParams($relation['parameters']);
+                }
+
+                if (!empty($relation['content'])) {
+                    $relationContent = $relation['content'];
+                    $relationContentMetadata = new RelationContentMetadata($relationContent['provider_id'], $relationContent['provider_method']);
+                    $relationMetadata->setContent($relationContentMetadata);
+
+                    if (isset($relationContent['provider_parameters'])) {
+                        $relationContentMetadata->setProviderParameters($relationContent['provider_parameters']);
+                    }
+
+                    if (isset($relationContent['serializer_type'])) {
+                        $relationContentMetadata->setSerializerType($relationContent['serializer_type']);
+                    }
+
+                    if (isset($relationContent['serializer_xml_element_name'])) {
+                        $relationContentMetadata->setSerializerXmlElementName($relationContent['serializer_xml_element_name']);
+                    }
+
+                    if (isset($relationContent['serializer_xml_element_name_root_metadata'])) {
+                        $relationContentMetadata->setSerializerXmlElementRootName($relationContent['serializer_xml_element_name_root_metadata']);
+                    }
+                }
+
+                $classMetadata->addRelation($relationMetadata);
+            }
         }
 
         return $classMetadata;
-    }
-
-    protected function normalizeLinks(array $links)
-    {
-        $newLinks = array();
-
-        foreach ($links as $rel => $link) {
-            if (is_array($link) && array_keys($link) === range(0, count($link) - 1)) {
-                foreach ($link as $subLink) {
-                    $newLinks[] = $this->parseLink($rel, $subLink);
-                }
-
-                continue;
-            }
-
-            $newLinks[] = $this->parseLink($rel, $link);
-        }
-
-        return $newLinks;
-    }
-
-    protected function parseLink($rel, $link)
-    {
-        if (is_string($link)) {
-            $link = array(
-                'route' => $link,
-            );
-        }
-
-        return array(
-            'rel' => $rel,
-            'route' => $link['route'],
-            'params' => isset($link['params']) ? $link['params'] : array(),
-        );
     }
 
     /**

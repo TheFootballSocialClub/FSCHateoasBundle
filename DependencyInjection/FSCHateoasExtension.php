@@ -18,6 +18,22 @@ class FSCHateoasExtension extends ConfigurableExtension
             $loader->load($file);
         }
 
+        $container
+            ->getDefinition('fsc_hateoas.serializer.handler.pagerfanta')
+            ->replaceArgument(1, $config['pagerfanta']['xml_elements_names_use_serializer_metadata'])
+        ;
+
+        $container
+            ->getDefinition('fsc_hateoas.factory.pager_link')
+            ->replaceArgument(1, $config['pagerfanta']['links']['page_parameter_name'])
+            ->replaceArgument(2, $config['pagerfanta']['links']['limit_parameter_name'])
+        ;
+
+        $this->configureMetadata($config, $container);
+    }
+
+    protected function configureMetadata(array $config, ContainerBuilder $container)
+    {
         // The following configuration has been copied from JMS\SerializerBundle\DependencyInjection\JMSSerializerExtension
 
         if ('none' === $config['metadata']['cache']) {

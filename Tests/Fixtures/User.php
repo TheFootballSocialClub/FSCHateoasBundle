@@ -5,10 +5,26 @@ namespace FSC\HateoasBundle\Tests\Fixtures;
 use FSC\HateoasBundle\Annotation as Hateoas;
 
 /**
- * @Hateoas\Link("self", route = "_some_route", params = { "identifier" = "id"})
- * @Hateoas\Link("alternate", route = "_some_route2")
- * @Hateoas\Link("alternate", route = "_some_route3")
- * @Hateoas\Link("home", route = "homepage")
+ * @Hateoas\Relation("self", route = "_some_route", parameters = { "identifier" = "id"})
+ * @Hateoas\Relation("alternate", route = "_some_route2")
+ * @Hateoas\Relation("alternate", route = "_some_route3")
+ * @Hateoas\Relation("home",      route = "homepage")
+ * @Hateoas\Relation("friends",
+ *     route = "user_friends_list",
+ *     parameters = { "id" = "id" },
+ *     content = { "providerId" = "acme.foo.user_provider", "providerMethod" = "getUserFriendsPager", "serializerXmlElementNameRootMetadata" = true }
+ * )
+ * @Hateoas\Relation("favorites",
+ *     route = "user_favorites_list",
+ *     parameters = { "id" = "id" },
+ *     content = {
+ *          "providerId" = "acme.foo.favorite_provider",
+ *          "providerMethod" = "getUserFavoritesPager",
+ *          "providerParameters" = { "id" = "id", "limit" = "=4" },
+ *          "serializerType" = "Pagerfanta<custom>",
+ *          "serializerXmlElementName" = "favorites"
+ *     }
+ * )
  */
 class User
 {
