@@ -14,4 +14,15 @@ class PostController extends Controller
 
         return new Response($this->get('serializer')->serialize($post, $request->get('_format')));
     }
+
+    public function getCreatePostFormAction(Request $request)
+    {
+        $form = $this->get('form.factory')->createBuilder('form')
+            ->add('title', 'text')
+            ->getForm()
+        ;
+        $formView = $form->createView();
+
+        return new Response($this->get('serializer')->serialize($formView, $request->get('_format')));
+    }
 }

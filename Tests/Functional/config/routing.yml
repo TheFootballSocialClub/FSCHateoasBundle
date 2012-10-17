@@ -8,6 +8,11 @@ api_user_list:
 api_user_lastpost_get:
     pattern: /api/users/{id}/last-post
 
+api_post_create_form:
+    pattern: /api/posts/create
+    defaults:
+        _controller: TestBundle:Post:getCreatePostForm
+
 api_post_get:
     pattern: /api/posts/{id}
     defaults:
@@ -17,6 +22,7 @@ api_user_posts_list:
     pattern: /api/users/{id}/posts
     defaults:
         _controller: TestBundle:User:getUserPosts
+
 
 user_profile:
     pattern: /profile/{id}
