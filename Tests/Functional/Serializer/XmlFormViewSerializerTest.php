@@ -42,6 +42,7 @@ class XmlFormViewSerializerTest extends TestCase
         $form->setData(array(
             'towns' => array('par' => 'Paris', 'lon' => 'London'),
             'public' => true,
+            'description' => 'Desc',
         ));
 
         $formView = $form->createView();
@@ -59,7 +60,7 @@ class XmlFormViewSerializerTest extends TestCase
         $this->assertEquals(<<<XML
 <form>
     <input type="text" name="form[name]" required="required"/>
-    <textarea name="form[description]" required="required"/>
+    <textarea name="form[description]" required="required">Desc</textarea>
     <input type="email" name="form[email]" required="required"/>
     <input type="integer" name="form[age]" required="required"/>
     <input type="number" name="form[height]" required="required"/>
