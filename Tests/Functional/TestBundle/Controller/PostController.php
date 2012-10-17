@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use FSC\HateoasBundle\Model\RouteAwarePager;
+use FSC\HateoasBundle\Model\RouteAwareFormView;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\PostsCollection;
 
 class PostController extends Controller
@@ -31,9 +32,10 @@ class PostController extends Controller
     {
         $form = $this->get('form.factory')->createNamed('post', 'test_post_create');
         $formView = $form->createView();
+        $routeAwareFormView = new RouteAwareFormView($formView, 'POST', 'api_post_create');
 
         $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('form');
 
-        return new Response($this->get('serializer')->serialize($formView, $request->get('_format')));
+        return new Response($this->get('serializer')->serialize($routeAwareFormView, $request->get('_format')));
     }
 }

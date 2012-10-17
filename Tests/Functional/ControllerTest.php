@@ -86,7 +86,7 @@ XML
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<form>
+<form method="POST" action="http://localhost/api/posts">
   <input type="text" name="post[title]" required="required"/>
 </form>
 

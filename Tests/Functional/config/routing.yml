@@ -13,8 +13,13 @@ api_post_create_form:
     defaults:
         _controller: TestBundle:Post:getCreatePostForm
 
+api_post_create:
+    pattern: /api/posts
+    requirements: { _method: POST }
+
 api_post_list:
     pattern: /api/posts
+    requirements: { _method: GET }
     defaults:
         _controller: TestBundle:Post:listPosts
 
