@@ -14,21 +14,16 @@ class XmlFormViewSerializer
     );
 
     /**
-     * @param FormView     $formView
-     * @param \DOMDocument $document
-     * @return \DOMElement
+     * @param FormView    $formView
+     * @param \DOMElement $formElement
      */
-    public function serialize(FormView $formView, \DOMDocument $document)
+    public function serialize(FormView $formView, \DOMElement $formElement)
     {
-        $formElement = $document->createElement('form');
-
         $this->serializeBlock($formElement, $formView, 'rest');
 
         if ($formView->vars['multipart']) {
             $formElement->setAttribute('enctype', 'multipart/form-data');
         }
-
-        return $formElement;
     }
 
     protected function serializeBlock(\DOMElement $parentElement, FormView $view, $blockName)

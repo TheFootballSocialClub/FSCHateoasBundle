@@ -33,15 +33,9 @@ class FormViewHandler implements SubscribingHandlerInterface
     public function serializeToXML(XmlSerializationVisitor $visitor, FormView $formView, array $resultsType)
     {
         if (null === $visitor->document) {
-            $visitor->document = $visitor->createDocument(null, null, false);
+            $visitor->document = $visitor->createDocument();
         }
 
-        $formElement = $this->xmlFormViewSerializer->serialize($formView, $visitor->document);
-
-        if (null === $visitor->document->documentElement) {
-            $visitor->document->appendChild($formElement);
-        } else {
-            $visitor->getCurrentNode()->appendChild($formElement);
-        }
+        $this->xmlFormViewSerializer->serialize($formView, $visitor->getCurrentNode());
     }
 }

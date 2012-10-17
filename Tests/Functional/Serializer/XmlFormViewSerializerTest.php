@@ -50,9 +50,9 @@ class XmlFormViewSerializerTest extends TestCase
 
         $domDocument = new \DOMDocument('1.0', 'UTF-8');
         $domDocument->formatOutput = true;
-        $formElement = $xmlFormViewSerializer->serialize($formView, $domDocument);
+        $formElement = $domDocument->createElement('form');
+        $xmlFormViewSerializer->serialize($formView, $formElement);
 
-        $this->assertInstanceOf('DOMElement', $formElement);
         $xmlFormString = $domDocument->saveXML($formElement);
         $xmlFormString = preg_replace('/^[ ]+(?=<)/m','$0$0', $xmlFormString); // Increase indentation to 4 :>
 
@@ -94,9 +94,9 @@ XML
 
         $domDocument = new \DOMDocument('1.0', 'UTF-8');
         $domDocument->formatOutput = true;
-        $formElement = $xmlFormViewSerializer->serialize($formView, $domDocument);
+        $formElement = $domDocument->createElement('form');
+        $xmlFormViewSerializer->serialize($formView, $formElement);
 
-        $this->assertInstanceOf('DOMElement', $formElement);
         $xmlFormString = $domDocument->saveXML($formElement);
         $xmlFormString = preg_replace('/^[ ]+(?=<)/m','$0$0', $xmlFormString); // Increase indentation to 4 :>
 
@@ -137,9 +137,9 @@ XML
 
         $domDocument = new \DOMDocument('1.0', 'UTF-8');
         $domDocument->formatOutput = true;
-        $formElement = $xmlFormViewSerializer->serialize($formView, $domDocument);
+        $formElement = $domDocument->createElement('form');
+        $xmlFormViewSerializer->serialize($formView, $formElement);
 
-        $this->assertInstanceOf('DOMElement', $formElement);
         $xmlFormString = $domDocument->saveXML($formElement);
         $xmlFormString = preg_replace('/^[ ]+(?=<)/m','$0$0', $xmlFormString); // Increase indentation to 4 :>
 

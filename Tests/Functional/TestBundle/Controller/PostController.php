@@ -23,6 +23,8 @@ class PostController extends Controller
         ;
         $formView = $form->createView();
 
+        $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('form');
+
         return new Response($this->get('serializer')->serialize($formView, $request->get('_format')));
     }
 }
