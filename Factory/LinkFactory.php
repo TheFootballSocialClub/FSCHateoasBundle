@@ -5,7 +5,6 @@ namespace FSC\HateoasBundle\Factory;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Form\Util\PropertyPath;
 use Metadata\MetadataFactoryInterface;
-use Pagerfanta\PagerfantaInterface;
 
 use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;

@@ -7,6 +7,9 @@ use JMS\SerializerBundle\Serializer\GraphNavigator;
 use JMS\SerializerBundle\Serializer\VisitorInterface;
 use Symfony\Component\Form\Form;
 
+/**
+ * FormInterface -> FormView
+ */
 class FormHandler implements SubscribingHandlerInterface
 {
     public static function getSubscribingMethods()

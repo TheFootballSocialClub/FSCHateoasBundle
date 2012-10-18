@@ -10,12 +10,12 @@ use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
 use Metadata\MetadataFactoryInterface;
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Pagerfanta\PagerfantaInterface;
 
 use FSC\HateoasBundle\Factory\ContentFactoryInterface;
-use FSC\HateoasBundle\Factory\RouteAwarePagerFactoryInterface;
+use FSC\HateoasBundle\Factory\LinksAwareWrapperFactoryInterface;
 use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
 use FSC\HateoasBundle\Metadata\RelationContentMetadataInterface;
+use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
 
 class EmbedderEventSubscriber implements EventSubscriberInterface
 {
@@ -38,15 +38,17 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     protected $contentFactory;
     protected $serializerMetadataFactory;
-    protected $routeAwarePagerFactory;
+    protected $linksAwareWrapperFactory;
+    protected $parametersFactory;
     protected $typeParser;
 
     public function __construct(ContentFactoryInterface $contentFactory, MetadataFactoryInterface $serializerMetadataFactory,
-        RouteAwarePagerFactoryInterface $routeAwarePagerFactory, TypeParser $typeParser = null)
+        LinksAwareWrapperFactoryInterface $linksAwareWrapperFactory, ParametersFactoryInterface $parametersFactory, TypeParser $typeParser = null)
     {
         $this->contentFactory = $contentFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
-        $this->routeAwarePagerFactory = $routeAwarePagerFactory;
+        $this->linksAwareWrapperFactory = $linksAwareWrapperFactory;
+        $this->parametersFactory = $parametersFactory;
         $this->typeParser = $typeParser ?: new TypeParser();
     }
 
@@ -58,14 +60,21 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $visitor = $event->getVisitor(); /** @var $visitor XmlSerializationVisitor */
 
-        foreach ($relationsContent as $rel => $relationContent) {
-            $entryNode = $visitor->getDocument()->createElement($this->getRelationXmlElementName($relationContent['metadata'], $relationContent['content']));
+        foreach ($relationsContent as $relationMetadata) {
+            $relationContent = $relationsContent[$relationMetadata];
+
+            $entryNode = $visitor->getDocument()->createElement($this->getRelationXmlElementName($relationMetadata, $relationContent));
             $visitor->getCurrentNode()->appendChild($entryNode);
             $visitor->setCurrentNode($entryNode);
 
-            $visitor->getCurrentNode()->setAttribute('rel', $rel);
+            $visitor->getCurrentNode()->setAttribute('rel', $relationMetadata->getRel());
 
-            if (null !== ($node = $visitor->getNavigator()->accept($this->getRelationContent($event, $relationContent), $relationContent['metadata']->getContent()->getSerializerType(), $visitor))) {
+            $node = $visitor->getNavigator()->accept(
+                $this->getRelationContent($event, $relationContent, $relationMetadata),
+                $this->getContentType($relationMetadata->getContent()),
+                $visitor
+            );
+            if (null !== $node) {
                 $visitor->getCurrentNode()->appendChild($node);
             }
 
@@ -82,8 +91,13 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         $visitor = $event->getVisitor();
 
         $relationsData = array();
-        foreach ($relationsContent as $rel => $relationContent) {
-            $relationsData[$rel] = $visitor->getNavigator()->accept($this->getRelationContent($event, $relationContent), $relationContent['metadata']->getContent()->getSerializerType(), $visitor);
+        foreach ($relationsContent as $relationMetadata) {
+            $relationContent = $relationsContent[$relationMetadata];
+            $relationsData[$relationMetadata->getRel()] = $visitor->getNavigator()->accept(
+                $this->getRelationContent($event, $relationContent, $relationMetadata),
+                $this->getContentType($relationMetadata->getContent()),
+                $visitor
+            );
         }
 
         $event->getVisitor()->addData('relations', $relationsData);
@@ -103,12 +117,23 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         return $elementName;
     }
 
-    protected function getRelationContent(Event $event, $relation)
+    protected function getRelationContent(Event $event, $content, RelationMetadataInterface $relationMetadata)
     {
-        if (!$relation['content'] instanceof PagerfantaInterface) {
-            return $relation['content'];
+        $linksAwareWrapper = $this->linksAwareWrapperFactory->create(
+            $content,
+            $relationMetadata->getRoute(),
+            $this->parametersFactory->createParameters($event->getObject(), $relationMetadata->getParams())
+        );
+
+        return $linksAwareWrapper ?: $content;
+    }
+
+    protected function getContentType(RelationContentMetadataInterface $relationContentMetadata)
+    {
+        if (null === $relationContentMetadata->getSerializerType()) {
+            return null;
         }
 
-        return $this->routeAwarePagerFactory->create($relation['content'], $relation['metadata'], $event->getObject());
+        return $this->typeParser->parse($relationContentMetadata->getSerializerType());
     }
 }

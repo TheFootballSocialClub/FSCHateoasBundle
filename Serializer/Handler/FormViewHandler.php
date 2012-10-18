@@ -9,6 +9,9 @@ use Symfony\Component\Form\FormView;
 
 use FSC\HateoasBundle\Serializer\XmlFormViewSerializer;
 
+/**
+ * Serializer a FormView
+ */
 class FormViewHandler implements SubscribingHandlerInterface
 {
     public static function getSubscribingMethods()

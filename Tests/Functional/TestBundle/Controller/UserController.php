@@ -15,10 +15,10 @@ class UserController extends Controller
         $postsPager = $this->get('test.provider.post')->getUserPostsPager($id);
         $postsPager->setCurrentPage($request->query->get('page', $postsPager->getCurrentPage()));
         $postsPager->setMaxPerPage($request->query->get('limit', $postsPager->getMaxPerPage()));
-        $routeAwarePager = new RouteAwarePager($postsPager, $request->attributes->get('_route'), $request->attributes->get('_route_params'));
+        $linksAwareWrapper = $this->get('fsc_hateoas.factory.links_aware_wrapper')->create($postsPager);
 
         $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('posts');
 
-        return new Response($this->get('serializer')->serialize($routeAwarePager, $request->get('_format')));
+        return new Response($this->get('serializer')->serialize($linksAwareWrapper, $request->get('_format')));
     }
 }

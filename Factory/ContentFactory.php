@@ -38,23 +38,17 @@ class ContentFactory implements ContentFactoryInterface
 
     public function createRelationsContent(ClassMetadataInterface $classMetadata, $object)
     {
-        $relationsContent = array();
+        $relationsContent = new \SplObjectStorage();
+
         foreach ($classMetadata->getRelations() as $relationMetadata) {
             if (null === $relationMetadata->getContent()) {
                 continue;
             }
 
-            if (isset($relationsContent[$relationMetadata->getRel()])) {
-                throw new \RuntimeException(sprintf('You cannot embed content twice for the same rel "%s".', $relationMetadata['rel']));
-            }
-
-            $relationsContent[$relationMetadata->getRel()] = array(
-                'metadata' => $relationMetadata,
-                'content' => $this->getContent($relationMetadata, $object),
-            );
+            $relationsContent->attach($relationMetadata, $this->getContent($relationMetadata, $object));
         }
 
-        return $relationsContent;
+        return $relationsContent->count() === 0 ? null : $relationsContent;
     }
 
     protected function getContent(RelationMetadataInterface $relationMetadata, $object)
