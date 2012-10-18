@@ -49,15 +49,9 @@ class XmlFormViewSerializerTest extends TestCase
 
         $xmlFormViewSerializer = new XmlFormViewSerializer();
 
-        $domDocument = new \DOMDocument('1.0', 'UTF-8');
-        $domDocument->formatOutput = true;
-        $formElement = $domDocument->createElement('form');
-        $xmlFormViewSerializer->serialize($formView, $formElement);
+        $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
 
-        $xmlFormString = $domDocument->saveXML($formElement);
-        $xmlFormString = preg_replace('/^[ ]+(?=<)/m','$0$0', $xmlFormString); // Increase indentation to 4 :>
-
-        $this->assertEquals(<<<XML
+        $this->assertXmlElementEquals(<<<XML
 <form>
     <input type="text" name="form[name]" required="required"/>
     <textarea name="form[description]" required="required">Desc</textarea>
@@ -78,8 +72,7 @@ class XmlFormViewSerializerTest extends TestCase
     <input type="checkbox" value="1" checked="1" name="form[public]"/>
 </form>
 XML
-        ,
-            $xmlFormString);
+        , $formElement);
     }
 
     public function testFileType()
@@ -93,21 +86,14 @@ XML
 
         $xmlFormViewSerializer = new XmlFormViewSerializer();
 
-        $domDocument = new \DOMDocument('1.0', 'UTF-8');
-        $domDocument->formatOutput = true;
-        $formElement = $domDocument->createElement('form');
-        $xmlFormViewSerializer->serialize($formView, $formElement);
+        $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
 
-        $xmlFormString = $domDocument->saveXML($formElement);
-        $xmlFormString = preg_replace('/^[ ]+(?=<)/m','$0$0', $xmlFormString); // Increase indentation to 4 :>
-
-        $this->assertEquals(<<<XML
+        $this->assertXmlElementEquals(<<<XML
 <form enctype="multipart/form-data">
     <input type="file" name="form[avatar]" required="required"/>
 </form>
 XML
-            ,
-            $xmlFormString);
+            , $formElement);
     }
 
     public function testDateFields()
@@ -136,15 +122,9 @@ XML
 
         $xmlFormViewSerializer = new XmlFormViewSerializer();
 
-        $domDocument = new \DOMDocument('1.0', 'UTF-8');
-        $domDocument->formatOutput = true;
-        $formElement = $domDocument->createElement('form');
-        $xmlFormViewSerializer->serialize($formView, $formElement);
+        $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
 
-        $xmlFormString = $domDocument->saveXML($formElement);
-        $xmlFormString = preg_replace('/^[ ]+(?=<)/m','$0$0', $xmlFormString); // Increase indentation to 4 :>
-
-        $this->assertEquals(<<<XML
+        $this->assertXmlElementEquals(<<<XML
 <form>
     <select name="form[publishedAt][year]" required="required">
         <option value="2007">2007</option>
@@ -360,7 +340,48 @@ XML
     </select>
 </form>
 XML
-            ,
-            $xmlFormString);
+            , $formElement);
+    }
+
+    public function testActionMethod()
+    {
+        $formFactory = $this->getKernel()->getContainer()->get('form.factory');
+        $form = $formFactory
+            ->createBuilder('form')
+            ->add('name', 'text')
+            ->getForm()
+        ;
+
+        $formView = $form->createView();
+
+        $formView->vars['method'] = 'POST';
+        $formView->vars['action'] = 'http://localhost/hey';
+
+        $xmlFormViewSerializer = new XmlFormViewSerializer();
+
+        $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
+
+        $this->assertXmlElementEquals(<<<XML
+<form method="POST" action="http://localhost/hey">
+    <input type="text" name="form[name]" required="required"/>
+</form>
+XML
+            , $formElement);
+    }
+
+    protected function assertXmlElementEquals($expectedString, \DOMElement $element)
+    {
+        $elementString = $element->ownerDocument->saveXML($element);
+        $elementString = preg_replace('/^[ ]+(?=<)/m','$0$0', $elementString); // Increase indentation to 4 :>
+
+        $this->assertEquals($expectedString, $elementString);
+    }
+
+    protected function createFormElement()
+    {
+        $domDocument = new \DOMDocument('1.0', 'UTF-8');
+        $domDocument->formatOutput = true;
+
+        return $domDocument->createElement('form');
     }
 }

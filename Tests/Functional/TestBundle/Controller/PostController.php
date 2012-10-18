@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-use FSC\HateoasBundle\Model\RouteAwareFormView;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\PostsCollection;
 
 class PostController extends Controller
@@ -30,11 +29,9 @@ class PostController extends Controller
 
     public function getCreatePostFormAction(Request $request)
     {
-        $routeAwareFormView = $this
-            ->get('fsc_hateoas.factory.route_aware_form_view')
-            ->formFactoryCreateNamed(array('post', 'test_post_create'), 'POST', 'api_post_create')
-        ;
-        $linksAwareWrapper = $this->get('fsc_hateoas.factory.links_aware_wrapper')->create($routeAwareFormView);
+        $form = $this->get('form.factory')->createNamed('post', 'test_post_create');
+        $formView = $this->get('fsc_hateoas.factory.form_view')->create($form, 'POST', 'api_post_create');
+        $linksAwareWrapper = $this->get('fsc_hateoas.factory.links_aware_wrapper')->create($formView);
 
         $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('form');
 
