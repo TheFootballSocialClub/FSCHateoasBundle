@@ -10,6 +10,9 @@ use JMS\SerializerBundle\Serializer\TypeParser;
 use FSC\HateoasBundle\Factory\LinkFactoryInterface;
 use FSC\HateoasBundle\Serializer\LinkSerializationHelper;
 
+/**
+ * Adds links to serialized objects based on hateoas metadata
+ */
 class LinkEventSubscriber implements EventSubscriberInterface
 {
     /**

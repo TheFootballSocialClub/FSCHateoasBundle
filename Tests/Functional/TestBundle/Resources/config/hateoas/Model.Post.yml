@@ -2,4 +2,4 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\Post:
     relations:
         - rel: self
           route: api_post_get
-          parameters: { id: id }
+          parameters: { id: .id }

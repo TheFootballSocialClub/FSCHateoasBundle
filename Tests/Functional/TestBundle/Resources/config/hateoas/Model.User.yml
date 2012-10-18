@@ -3,26 +3,26 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
         - rel: self
           route: api_user_get
           parameters:
-              identifier: id
+              identifier: .id
         - rel: alternate
           route: user_profile
           parameters:
-              id: id
+              id: .id
         - rel: users
           route: api_user_list
         - rel: last-post
           route: api_user_lastpost_get
-          parameters: { id: id }
+          parameters: { id: .id }
           content:
               provider_id: test.provider.post
               provider_method: getUserLastPost
-              provider_parameters: { id: id }
+              provider_arguments: [ .id ]
               serializer_xml_element_name_root_metadata: true
         - rel: posts
           route: api_user_posts_list
-          parameters: { id: id }
+          parameters: { id: .id }
           content:
               provider_id: test.provider.post
               provider_method: getUserPostsPager
-              provider_parameters: { id: id, limit: =1 }
+              provider_arguments: [ .id, 1, 1 ]
               serializer_xml_element_name: posts

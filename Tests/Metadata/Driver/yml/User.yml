@@ -20,6 +20,6 @@ FSC\HateoasBundle\Tests\Fixtures\User:
           content:
               provider_id: acme.foo.favorite_provider
               provider_method: getUserFavoritesPager
-              provider_parameters: { id: id, limit: =3 }
+              provider_arguments: [ id, =3 ]
               serializer_type: Pagerfanta<custom>
               serializer_xml_element_name: favorites

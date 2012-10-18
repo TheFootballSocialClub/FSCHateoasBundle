@@ -17,7 +17,7 @@ interface RelationContentMetadataInterface
     /**
      * @return string
      */
-    public function getProviderParameters();
+    public function getProviderArguments();
 
     /**
      * @return string

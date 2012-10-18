@@ -8,6 +8,21 @@ api_user_list:
 api_user_lastpost_get:
     pattern: /api/users/{id}/last-post
 
+api_post_create_form:
+    pattern: /api/posts/create
+    defaults:
+        _controller: TestBundle:Post:getCreatePostForm
+
+api_post_create:
+    pattern: /api/posts
+    requirements: { _method: POST }
+
+api_post_list:
+    pattern: /api/posts
+    requirements: { _method: GET }
+    defaults:
+        _controller: TestBundle:Post:listPosts
+
 api_post_get:
     pattern: /api/posts/{id}
     defaults:

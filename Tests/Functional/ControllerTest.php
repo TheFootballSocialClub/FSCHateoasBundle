@@ -14,14 +14,15 @@ class ControllerTest extends TestCase
         $response = $client->getResponse(); /**  */
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals(
-'<?xml version="1.0" encoding="UTF-8"?>
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
 <post id="2">
   <title><![CDATA[How to create awesome symfony2 application]]></title>
   <link rel="self" href="http://localhost/api/posts/2"/>
 </post>
-',
-        $response->getContent());
+
+XML
+        , $response->getContent());
     }
 
     public function testGetUserPostsXml()
@@ -32,8 +33,8 @@ class ControllerTest extends TestCase
         $response = $client->getResponse(); /**  */
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals(
-            '<?xml version="1.0" encoding="UTF-8"?>
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
 <posts page="1" limit="10" total="2">
   <link rel="self" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
   <link rel="first" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
@@ -47,8 +48,9 @@ class ControllerTest extends TestCase
     <link rel="self" href="http://localhost/api/posts/1"/>
   </post>
 </posts>
-',
-            $response->getContent());
+
+XML
+        , $response->getContent());
     }
 
     public function testGetMixedElementNamesXml()
@@ -72,5 +74,61 @@ class ControllerTest extends TestCase
 
         $nodeList = $xpath->query('/result/*');
         $this->assertEquals(3, $nodeList->length);
+    }
+
+    public function testGetCreatePostFormXml()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/posts/create?_format=xml');
+
+        $response = $client->getResponse(); /** @var $response Response */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<form method="POST" action="http://localhost/api/posts">
+  <link rel="self" href="http://localhost/api/posts/create"/>
+  <input type="text" name="post[title]" required="required"/>
+</form>
+
+XML
+        , $response->getContent());
+    }
+
+    public function testListPostsXml()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/posts?_format=xml');
+
+        $response = $client->getResponse(); /** @var $response Response */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<posts page="1" limit="10" total="3">
+  <link rel="self" href="http://localhost/api/posts?limit=10&amp;page=1"/>
+  <link rel="first" href="http://localhost/api/posts?limit=10&amp;page=1"/>
+  <link rel="last" href="http://localhost/api/posts?limit=10&amp;page=1"/>
+  <post id="1">
+    <title><![CDATA[Welcome on the blog!]]></title>
+    <link rel="self" href="http://localhost/api/posts/1"/>
+  </post>
+  <post id="2">
+    <title><![CDATA[How to create awesome symfony2 application]]></title>
+    <link rel="self" href="http://localhost/api/posts/2"/>
+  </post>
+  <post id="3">
+    <title><![CDATA[]]></title>
+    <link rel="self" href="http://localhost/api/posts/3"/>
+  </post>
+  <link rel="create" href="http://localhost/api/posts/create"/>
+  <form rel="create" method="POST" action="http://localhost/api/posts">
+    <link rel="self" href="http://localhost/api/posts/create"/>
+    <input type="text" name="post[title]" required="required"/>
+  </form>
+</posts>
+
+XML
+            , $response->getContent());
     }
 }

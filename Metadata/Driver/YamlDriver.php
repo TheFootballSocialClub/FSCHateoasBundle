@@ -38,8 +38,8 @@ class YamlDriver extends AbstractFileDriver
                     $relationContentMetadata = new RelationContentMetadata($relationContent['provider_id'], $relationContent['provider_method']);
                     $relationMetadata->setContent($relationContentMetadata);
 
-                    if (isset($relationContent['provider_parameters'])) {
-                        $relationContentMetadata->setProviderParameters($relationContent['provider_parameters']);
+                    if (isset($relationContent['provider_arguments'])) {
+                        $relationContentMetadata->setProviderArguments($relationContent['provider_arguments']);
                     }
 
                     if (isset($relationContent['serializer_type'])) {

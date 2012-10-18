@@ -1,0 +1,9 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\PostsCollection:
+    relations:
+        - rel: create
+          route: api_post_create_form
+          content:
+              provider_id: fsc_hateoas.factory.form_view
+              provider_method: formFactoryCreateNamed
+              provider_arguments: [ [post, test_post_create], POST, api_post_create ]
+              serializer_xml_element_name: form
