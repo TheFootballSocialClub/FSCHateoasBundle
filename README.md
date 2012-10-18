@@ -277,7 +277,7 @@ use FSC\HateoasBundle\Annotation as Hateoas;
  *     content = {
  *         "providerId" = "acme.foo.user_manager",
  *         "providerMethod" = "getUserFriendsPager",
- *         "providerParameters" = { "userId" = "id", "limit" = "=5" },
+ *         "providerArguments" = { "id", =1, "=5" },
  *         "serializerXmlElementName" = "users"
  *     }
  * )

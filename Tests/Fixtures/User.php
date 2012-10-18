@@ -20,7 +20,7 @@ use FSC\HateoasBundle\Annotation as Hateoas;
  *     content = {
  *          "providerId" = "acme.foo.favorite_provider",
  *          "providerMethod" = "getUserFavoritesPager",
- *          "providerParameters" = { "id" = "id", "limit" = "=4" },
+ *          "providerArguments" = { "id", "=3" },
  *          "serializerType" = "Pagerfanta<custom>",
  *          "serializerXmlElementName" = "favorites"
  *     }

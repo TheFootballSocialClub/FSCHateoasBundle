@@ -5,7 +5,6 @@ parameters:
     fsc_hateoas.factory.content.class: FSC\HateoasBundle\Factory\ContentFactory
     fsc_hateoas.factory.links_aware_wrapper.class: FSC\HateoasBundle\Factory\LinksAwareWrapperFactory
     fsc_hateoas.factory.route_aware_form_view.class: FSC\HateoasBundle\Factory\RouteAwareFormViewFactory
-    fsc_hateoas.resolver.arguments.class: FSC\HateoasBundle\Resolver\ArgumentsResolver
     fsc_hateoas.serializer.xml_form_view.class: FSC\HateoasBundle\Serializer\XmlFormViewSerializer
     fsc_hateoas.serializer.event_subscriber.link.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
     fsc_hateoas.serializer.event_subscriber.embedder.class: FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber
@@ -38,7 +37,6 @@ services:
         arguments:
             - @fsc_hateoas.metadata.factory
             - @fsc_hateoas.factory.parameters
-            - @fsc_hateoas.resolver.arguments
             - @service_container
 
     fsc_hateoas.factory.links_aware_wrapper:
@@ -52,10 +50,6 @@ services:
         class: %fsc_hateoas.factory.route_aware_form_view.class%
         arguments:
             - @form.factory
-
-    fsc_hateoas.resolver.arguments:
-        class: %fsc_hateoas.resolver.arguments.class%
-        public: false
 
     fsc_hateoas.serializer.xml_form_view:
         class: %fsc_hateoas.serializer.xml_form_view.class%

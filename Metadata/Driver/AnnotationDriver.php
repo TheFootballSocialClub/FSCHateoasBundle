@@ -38,8 +38,8 @@ class AnnotationDriver implements DriverInterface
                     $relationContentMetadata = new RelationContentMetadata($annotation->content['providerId'], $annotation->content['providerMethod']);
                     $relationMetadata->setContent($relationContentMetadata);
 
-                    if (isset($annotation->content['providerParameters'])) {
-                        $relationContentMetadata->setProviderParameters($annotation->content['providerParameters']);
+                    if (isset($annotation->content['providerArguments'])) {
+                        $relationContentMetadata->setProviderArguments($annotation->content['providerArguments']);
                     }
 
                     if (isset($annotation->content['serializerType'])) {

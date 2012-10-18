@@ -14,15 +14,13 @@ class ContentFactory implements ContentFactoryInterface
 {
     protected $metadataFactory;
     protected $parametersFactory;
-    protected $argumentsResolver;
     protected $container;
 
     public function __construct(MetadataFactoryInterface $metadataFactory, ParametersFactoryInterface $parametersFactory,
-                                ArgumentsResolverInterface $argumentsResolver, ContainerInterface $container)
+                                ContainerInterface $container)
     {
         $this->metadataFactory = $metadataFactory;
         $this->parametersFactory = $parametersFactory;
-        $this->argumentsResolver = $argumentsResolver;
         $this->container = $container;
     }
 
@@ -54,11 +52,7 @@ class ContentFactory implements ContentFactoryInterface
     protected function getContent(RelationMetadataInterface $relationMetadata, $object)
     {
         $provider = $this->container->get($relationMetadata->getContent()->getProviderId());
-        $providerClass = new \ReflectionClass(get_class($provider));
-        $providerMethod = $providerClass->getMethod($relationMetadata->getContent()->getProviderMethod());
-
-        $parameters = $this->parametersFactory->createParameters($object, $relationMetadata->getContent()->getProviderParameters());
-        $arguments = $this->argumentsResolver->resolve($providerMethod, $parameters);
+        $arguments = $this->parametersFactory->createParameters($object, $relationMetadata->getContent()->getProviderArguments());
 
         return call_user_func_array(array($provider, $relationMetadata->getContent()->getProviderMethod()), $arguments);
     }
