@@ -14,8 +14,8 @@ class PostController extends Controller
     {
         $postsPager = $this->get('test.provider.post')->getPostsPager();
 
-        $linksAwareWrapper = $this->get('fsc_hateoas.factory.links_aware_wrapper')->create($postsPager);
-        $postsCollection = new PostsCollection($linksAwareWrapper);
+        $linksAwareWrapper = $this->get('fsc_hateoas.factory.links_aware_wrapper')->create($postsPager); // Automatically add self/first/last/prev/next links
+        $postsCollection = new PostsCollection($linksAwareWrapper); // Class that holds relations data (ie: create form relation)
 
         return new Response($this->get('serializer')->serialize($postsCollection, $request->get('_format')));
     }
@@ -30,8 +30,8 @@ class PostController extends Controller
     public function getCreatePostFormAction(Request $request)
     {
         $form = $this->get('form.factory')->createNamed('post', 'test_post_create');
-        $formView = $this->get('fsc_hateoas.factory.form_view')->create($form, 'POST', 'api_post_create');
-        $linksAwareWrapper = $this->get('fsc_hateoas.factory.links_aware_wrapper')->create($formView);
+        $formView = $this->get('fsc_hateoas.factory.form_view')->create($form, 'POST', 'api_post_create'); // Add method/action data to the FormView
+        $linksAwareWrapper = $this->get('fsc_hateoas.factory.links_aware_wrapper')->create($formView); // Automatically add self links to the form
 
         $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('form');
 

@@ -3,7 +3,9 @@
 namespace FSC\HateoasBundle\Model;
 
 /**
- * This class is used for data that can't have relations (links) metadata
+ * This class is used to hold links for data that can't have relations (links) metadata.
+ *
+ * The LinksAwareWrapperHandler handles this class during serialization.
  */
 class LinksAwareWrapper
 {

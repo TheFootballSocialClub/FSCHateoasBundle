@@ -2,6 +2,9 @@
 
 namespace FSC\HateoasBundle\Model;
 
+/**
+ * This is serialized by the serializer.
+ */
 class Link
 {
     private $rel;
