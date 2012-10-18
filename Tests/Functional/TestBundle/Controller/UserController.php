@@ -6,8 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use FSC\HateoasBundle\Model\RouteAwarePager;
-
 class UserController extends Controller
 {
     public function getUserPostsAction(Request $request, $id)

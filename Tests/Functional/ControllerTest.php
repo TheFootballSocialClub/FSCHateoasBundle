@@ -122,7 +122,7 @@ XML
     <link rel="self" href="http://localhost/api/posts/3"/>
   </post>
   <link rel="create" href="http://localhost/api/posts/create"/>
-  <form rel="create">
+  <form rel="create" method="POST" action="http://localhost/api/posts">
     <link rel="self" href="http://localhost/api/posts/create"/>
     <input type="text" name="post[title]" required="required"/>
   </form>
