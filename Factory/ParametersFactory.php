@@ -12,7 +12,7 @@ class ParametersFactory implements ParametersFactoryInterface
     public function createParameters($data, $parameters)
     {
         array_walk($parameters, function (&$value, $key) use ($data) {
-            if (in_array(substr($value, 0, 1), array('.', '['))) {
+            if (is_string($value) && in_array(substr($value, 0, 1), array('.', '['))) {
                 $propertyPath = new PropertyPath(preg_replace('/^\./', '', $value));
                 $value = $propertyPath->getValue($data);
 

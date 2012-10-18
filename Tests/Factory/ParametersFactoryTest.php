@@ -49,9 +49,11 @@ class ParametersFactoryTest extends \PHPUnit_Framework_TestCase
                 ),
                 array(
                     'id' => '4',
+                    'arguments' => array('1')
                 ),
                 array(
                     'id' => 4,
+                    'arguments' => array('1')
                 ),
             ),
         );
