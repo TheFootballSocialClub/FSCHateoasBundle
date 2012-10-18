@@ -16,23 +16,23 @@ class RouteAwareFormViewFactory
         $this->formFactory = $formFactory;
     }
 
-    public function create($type, $method, $route, $routeParameters = array())
+    public function formFactoryCreate(array $createArguments, $method, $route, $routeParameters = array())
     {
-        $form = $this->formFactory->create($type);
+        $form = call_user_func_array(array($this->formFactory, 'create'), $createArguments);
         $formView = $form->createView();
 
-        return $this->createRouteAwareFormView($formView, $method, $route, $routeParameters);
+        return $this->create($formView, $method, $route, $routeParameters);
     }
 
-    public function createNamed($name, $type, $method, $route, $routeParameters = array())
+    public function formFactoryCreateNamed($createArguments, $method, $route, $routeParameters = array())
     {
-        $form = $this->formFactory->createNamed($name, $type);
+        $form = call_user_func_array(array($this->formFactory, 'createNamed'), $createArguments);
         $formView = $form->createView();
 
-        return $this->createRouteAwareFormView($formView, $method, $route, $routeParameters);
+        return $this->create($formView, $method, $route, $routeParameters);
     }
 
-    public function createRouteAwareFormView(FormView $formView, $method, $route, $routeParameters)
+    public function create(FormView $formView, $method, $route, $routeParameters)
     {
         return new RouteAwareFormView($formView, $method, $route, $routeParameters);
     }

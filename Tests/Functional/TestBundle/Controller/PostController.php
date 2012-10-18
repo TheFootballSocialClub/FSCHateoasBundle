@@ -30,7 +30,10 @@ class PostController extends Controller
 
     public function getCreatePostFormAction(Request $request)
     {
-        $routeAwareFormView = $this->get('fsc_hateoas.factory.route_aware_form_view')->createNamed('post', 'test_post_create', 'POST', 'api_post_create');
+        $routeAwareFormView = $this
+            ->get('fsc_hateoas.factory.route_aware_form_view')
+            ->formFactoryCreateNamed(array('post', 'test_post_create'), 'POST', 'api_post_create')
+        ;
         $linksAwareWrapper = $this->get('fsc_hateoas.factory.links_aware_wrapper')->create($routeAwareFormView);
 
         $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('form');
