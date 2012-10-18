@@ -38,8 +38,8 @@ use JMS\SerializerBundle\Annotation as Serializer;
 use FSC\HateoasBundle\Annotation as Hateoas;
 
 /**
- * @Hateoas\Relation("self",      route = "api_user_get", parameters = { "id" = "id" })
- * @Hateoas\Relation("alternate", route = "user_profile", parameters = { "user_id" = "id" })
+ * @Hateoas\Relation("self",      route = "api_user_get", parameters = { "id" = ".id" })
+ * @Hateoas\Relation("alternate", route = "user_profile", parameters = { "user_id" = ".id" })
  * @Hateoas\Relation("users",     route = "api_user_list")
  *
  * @Serializer\XmlRoot("user")
@@ -270,14 +270,14 @@ use FSC\HateoasBundle\Annotation as Hateoas;
 // automatically wraps it in a RouteAwarePager using the links' route/params
 
 /**
- * @Hateoas\Relation("self", route = "api_user_get", parameters = { "id" = "id" })
+ * @Hateoas\Relation("self", route = "api_user_get", parameters = { "id" = ".id" })
  * @Hateoas\Relation("friends",
  *     route = "api_user_friends_list",
- *     parameters = { "id" = "id" },
+ *     parameters = { "id" = ".id" },
  *     content = {
  *         "providerId" = "acme.foo.user_manager",
  *         "providerMethod" = "getUserFriendsPager",
- *         "providerArguments" = { "id", =1, "=5" },
+ *         "providerArguments" = { ".id", 1, 5 },
  *         "serializerXmlElementName" = "users"
  *     }
  * )

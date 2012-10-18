@@ -12,14 +12,12 @@ class ParametersFactory implements ParametersFactoryInterface
     public function createParameters($data, $parameters)
     {
         array_walk($parameters, function (&$value, $key) use ($data) {
-            if ('=' === substr($value, 0, 1)) {
-                $value = substr($value, 1);
+            if (in_array(substr($value, 0, 1), array('.', '['))) {
+                $propertyPath = new PropertyPath(preg_replace('/^\./', '', $value));
+                $value = $propertyPath->getValue($data);
 
                 return;
             }
-
-            $propertyPath = new PropertyPath($value);
-            $value = $propertyPath->getValue($data);
         });
 
         return $parameters;

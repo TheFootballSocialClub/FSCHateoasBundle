@@ -5,5 +5,5 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\PostsCollection:
           content:
               provider_id: fsc_hateoas.factory.route_aware_form_view
               provider_method: createNamed
-              provider_arguments: [ =post, =test_post_create, =POST, =api_post_create ]
+              provider_arguments: [ post, test_post_create, POST, api_post_create ]
               serializer_xml_element_name: form
