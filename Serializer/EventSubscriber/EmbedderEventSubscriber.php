@@ -119,13 +119,9 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     protected function getRelationContent(Event $event, $content, RelationMetadataInterface $relationMetadata)
     {
-        $linksAwareWrapper = $this->linksAwareWrapperFactory->create(
-            $content,
-            $relationMetadata->getRoute(),
-            $this->parametersFactory->createParameters($event->getObject(), $relationMetadata->getParams())
-        );
+        $parameters = $this->parametersFactory->createParameters($event->getObject(), $relationMetadata->getParams());
 
-        return $linksAwareWrapper ?: $content;
+        return $this->linksAwareWrapperFactory->create($content, $relationMetadata->getRoute(), $parameters) ?: $content;
     }
 
     protected function getContentType(RelationContentMetadataInterface $relationContentMetadata)
