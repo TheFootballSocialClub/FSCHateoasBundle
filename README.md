@@ -35,12 +35,12 @@ user_profile:
 // src/Acme/FooBundle/Entity/User.php
 
 use JMS\SerializerBundle\Annotation as Serializer;
-use FSC\HateoasBundle\Annotation as Hateoas;
+use FSC\HateoasBundle\Annotation as Rest;
 
 /**
- * @Hateoas\Relation("self",      route = "api_user_get", parameters = { "id" = ".id" })
- * @Hateoas\Relation("alternate", route = "user_profile", parameters = { "user_id" = ".id" })
- * @Hateoas\Relation("users",     route = "api_user_list")
+ * @Rest\Relation("self",      href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }))
+ * @Rest\Relation("alternate", href = @Rest\Route("user_profile", parameters = { "user_id" = ".id" }))
+ * @Rest\Relation("users",     href = @Rest\Route("api_user_list"))
  *
  * @Serializer\XmlRoot("user")
  */
@@ -264,22 +264,20 @@ class Controller extends Controller
 // src/Acme/FooBundle/Entity/User.php
 
 use JMS\SerializerBundle\Annotation as Serializer;
-use FSC\HateoasBundle\Annotation as Hateoas;
+use FSC\HateoasBundle\Annotation as Rest;
 
 // The embedded content being a PagerfantaInterface instance, the bundle will
 // automatically wraps it in a RouteAwarePager using the links' route/params
 
 /**
- * @Hateoas\Relation("self", route = "api_user_get", parameters = { "id" = ".id" })
- * @Hateoas\Relation("friends",
- *     route = "api_user_friends_list",
- *     parameters = { "id" = ".id" },
- *     content = {
- *         "providerId" = "acme.foo.user_manager",
- *         "providerMethod" = "getUserFriendsPager",
- *         "providerArguments" = { ".id", 1, 5 },
- *         "serializerXmlElementName" = "users"
- *     }
+ * @Rest\Relation("self", href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }))
+ * @Rest\Relation("friends",
+ *     href =  @Rest\Route("api_user_friends_list", parameters = { "id" = ".id" }),
+ *     embed = @Rest\Content(
+ *         provider = {"acme.foo.user_manager", "getUserFriendsPager"},
+ *         providerArguments = { ".id", 1, 5 },
+ *         serializerXmlElementName = "users"
+ *     )
  * )
  *
  * @Serializer\XmlRoot("user")

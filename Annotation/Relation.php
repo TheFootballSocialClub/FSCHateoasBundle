@@ -18,17 +18,12 @@ final class Relation
     /**
      * @Required
      *
-     * @var string
+     * @var \FSC\HateoasBundle\Annotation\Route
      */
-    public $route;
+    public $href;
 
     /**
-     * @var array
+     * @var \FSC\HateoasBundle\Annotation\Content
      */
-    public $parameters;
-
-    /**
-     * @var array
-     */
-    public $content;
+    public $embed;
 }

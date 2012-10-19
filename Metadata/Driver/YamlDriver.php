@@ -28,9 +28,17 @@ class YamlDriver extends AbstractFileDriver
 
         if (isset($config['relations'])) {
             foreach ($config['relations'] as $relation) {
-                $relationMetadata = new RelationMetadata($relation['rel'], $relation['route']);
-                if (isset($relation['parameters'])) {
-                    $relationMetadata->setParams($relation['parameters']);
+                if (!isset($relation['href'])) {
+                    throw new \RuntimeException('The "href" relation parameter is required.');
+                } else if (is_string($relation['href'])) {
+                    $relation['href'] = array(
+                        'route' => $relation['href'],
+                    );
+                }
+
+                $relationMetadata = new RelationMetadata($relation['rel'], $relation['href']['route']);
+                if (isset($relation['href']['parameters'])) {
+                    $relationMetadata->setParams($relation['href']['parameters']);
                 }
 
                 if (!empty($relation['content'])) {

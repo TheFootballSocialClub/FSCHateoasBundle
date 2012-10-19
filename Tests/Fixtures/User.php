@@ -2,28 +2,25 @@
 
 namespace FSC\HateoasBundle\Tests\Fixtures;
 
-use FSC\HateoasBundle\Annotation as Hateoas;
+use FSC\HateoasBundle\Annotation as Rest;
 
 /**
- * @Hateoas\Relation("self", route = "_some_route", parameters = { "identifier" = "id"})
- * @Hateoas\Relation("alternate", route = "_some_route2")
- * @Hateoas\Relation("alternate", route = "_some_route3")
- * @Hateoas\Relation("home",      route = "homepage")
- * @Hateoas\Relation("friends",
- *     route = "user_friends_list",
- *     parameters = { "id" = "id" },
- *     content = { "providerId" = "acme.foo.user_provider", "providerMethod" = "getUserFriendsPager", "serializerXmlElementNameRootMetadata" = true }
+ * @Rest\Relation("self",      href = @Rest\Route("_some_route", parameters = { "identifier" = "id"}))
+ * @Rest\Relation("alternate", href = @Rest\Route("_some_route2"))
+ * @Rest\Relation("alternate", href = @Rest\Route("_some_route3"))
+ * @Rest\Relation("home",      href = @Rest\Route("homepage"))
+ * @Rest\Relation("friends",
+ *     href =  @Rest\Route("user_friends_list", parameters = { "id" = "id" }),
+ *     embed = @Rest\Content(provider = { "acme.foo.user_provider", "getUserFriendsPager" }, serializerXmlElementNameRootMetadata = true)
  * )
- * @Hateoas\Relation("favorites",
- *     route = "user_favorites_list",
- *     parameters = { "id" = "id" },
- *     content = {
- *          "providerId" = "acme.foo.favorite_provider",
- *          "providerMethod" = "getUserFavoritesPager",
- *          "providerArguments" = { "id", "=3" },
- *          "serializerType" = "Pagerfanta<custom>",
- *          "serializerXmlElementName" = "favorites"
- *     }
+ * @Rest\Relation("favorites",
+ *     href =  @Rest\Route("user_favorites_list", parameters = { "id" = "id" }),
+ *     embed = @Rest\Content(
+ *          provider = {"acme.foo.favorite_provider", "getUserFavoritesPager"},
+ *          providerArguments = { "id", "=3" },
+ *          serializerType = "Pagerfanta<custom>",
+ *          serializerXmlElementName = "favorites"
+ *     )
  * )
  */
 class User
