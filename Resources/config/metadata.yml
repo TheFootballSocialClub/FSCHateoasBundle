@@ -20,7 +20,7 @@ services:
         arguments:
             -
                 - @fsc_hateoas.metadata.driver.yaml
-                # - @fsc_hateoas.metadata.driver.annotation
+                - @fsc_hateoas.metadata.driver.annotation
 
     fsc_hateoas.metadata.driver.lazy_loading:
         class: %fsc_hateoas.metadata.driver.lazy_loading.class%
