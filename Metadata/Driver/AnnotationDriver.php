@@ -24,10 +24,16 @@ class AnnotationDriver implements DriverInterface
      */
     public function loadMetadataForClass(\ReflectionClass $class)
     {
+        $annotations = $this->reader->getClassAnnotations($class);
+
+        if (0 == count($annotations)) {
+            return null;
+        }
+
         $classMetadata = new ClassMetadata($name = $class->getName());
         $classMetadata->fileResources[] = $class->getFilename();
 
-        foreach ($this->reader->getClassAnnotations($class) as $annotation) {
+        foreach ($annotations as $annotation) {
             if ($annotation instanceof Annotation\Relation) {
                 $relationMetadata = new RelationMetadata($annotation->rel, $annotation->href->value);
                 if (!empty($annotation->href->parameters)) {
