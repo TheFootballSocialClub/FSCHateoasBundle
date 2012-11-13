@@ -21,8 +21,10 @@ class FormViewFactory
     {
         $formView = $form->createView();
 
-        $formView->vars['method'] = strtoupper($method);
-        $formView->vars['action'] = $this->urlGenerator->generate($route, $routeParameters, true);
+        $formView->vars['attr'] = array(
+            'method' => strtoupper($method),
+            'action' => $this->urlGenerator->generate($route, $routeParameters, true),
+        );
 
         return $formView;
     }

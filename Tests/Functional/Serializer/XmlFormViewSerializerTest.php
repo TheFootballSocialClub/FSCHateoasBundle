@@ -343,7 +343,7 @@ XML
             , $formElement);
     }
 
-    public function testActionMethod()
+    public function testAttributes()
     {
         $formFactory = $this->getKernel()->getContainer()->get('form.factory');
         $form = $formFactory
@@ -354,15 +354,18 @@ XML
 
         $formView = $form->createView();
 
-        $formView->vars['method'] = 'POST';
-        $formView->vars['action'] = 'http://localhost/hey';
+        $formView->vars['attr'] = array(
+            'method' => 'POST',
+            'action' => 'http://localhost/hey',
+            'rel'    => 'create',
+        );
 
         $xmlFormViewSerializer = new XmlFormViewSerializer();
 
         $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
 
         $this->assertXmlElementEquals(<<<XML
-<form method="POST" action="http://localhost/hey">
+<form method="POST" action="http://localhost/hey" rel="create">
     <input type="text" name="form[name]" required="required"/>
 </form>
 XML

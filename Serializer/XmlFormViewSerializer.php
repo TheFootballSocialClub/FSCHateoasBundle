@@ -21,16 +21,14 @@ class XmlFormViewSerializer
     {
         $this->serializeBlock($formElement, $formView, 'rest');
 
-        if (isset($formView->vars['method'])) {
-            $formElement->setAttribute('method', $formView->vars['method']);
-        }
-
-        if (isset($formView->vars['action'])) {
-            $formElement->setAttribute('action', $formView->vars['action']);
-        }
-
         if ($formView->vars['multipart']) {
             $formElement->setAttribute('enctype', 'multipart/form-data');
+        }
+
+        if (isset($formView->vars['attr'])) {
+            foreach ($formView->vars['attr'] as $name => $value) {
+                $formElement->setAttribute($name, $value);
+            }
         }
     }
 
