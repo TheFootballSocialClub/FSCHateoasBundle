@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
                     ->booleanNode('xml_elements_names_use_serializer_metadata')->defaultTrue()->end()
                 ->end()
             ->end()
+            ->booleanNode('form_handler')->defaultValue(false)->end()
         ;
 
         $this->addMetadataSection($root);

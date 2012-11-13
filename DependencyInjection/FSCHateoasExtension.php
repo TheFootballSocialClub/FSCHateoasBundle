@@ -23,6 +23,13 @@ class FSCHateoasExtension extends ConfigurableExtension
             ->replaceArgument(1, $config['pagerfanta']['xml_elements_names_use_serializer_metadata'])
         ;
 
+        if ($config['form_handler']) {
+            $container
+                ->getDefinition('fsc_hateoas.serializer.handler.form')
+                ->addTag('jms_serializer.subscribing_handler')
+            ;
+        }
+
         $this->configureMetadata($config, $container);
     }
 

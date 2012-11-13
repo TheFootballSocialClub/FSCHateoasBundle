@@ -97,4 +97,5 @@ services:
     fsc_hateoas.serializer.handler.form:
         class: %fsc_hateoas.serializer.handler.form.class%
         tags:
-            - { name: jms_serializer.subscribing_handler }
+            # Added by DI extension
+            #- { name: jms_serializer.subscribing_handler }
