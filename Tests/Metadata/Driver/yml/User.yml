@@ -29,3 +29,8 @@ FSC\HateoasBundle\Tests\Fixtures\User:
               provider_arguments: [ id, =3 ]
               serializer_type: Pagerfanta<custom>
               serializer_xml_element_name: favorites
+        - rel: disclosure
+          href:
+            route: homepage
+          content:
+            property: .property

@@ -5,7 +5,6 @@ namespace FSC\HateoasBundle\Serializer\EventSubscriber;
 use JMS\SerializerBundle\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
-use JMS\SerializerBundle\Serializer\TypeParser;
 
 use FSC\HateoasBundle\Factory\LinkFactoryInterface;
 use FSC\HateoasBundle\Serializer\LinkSerializationHelper;
@@ -34,11 +33,13 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     protected $linkFactory;
     protected $linkSerializationHelper;
+    protected $linksCollectionName;
 
-    public function __construct(LinkFactoryInterface $linkFactory, LinkSerializationHelper $linkSerializationHelper)
+    public function __construct(LinkFactoryInterface $linkFactory, LinkSerializationHelper $linkSerializationHelper, array $jsonOptions = array())
     {
         $this->linkFactory = $linkFactory;
         $this->linkSerializationHelper = $linkSerializationHelper;
+        $this->linksCollectionName = !empty($jsonOptions['links']) ? $jsonOptions['links'] : 'links';
     }
 
     public function onPostSerializeXML(Event $event)
@@ -56,7 +57,7 @@ class LinkEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->getVisitor()->addData('links', $links);
+        $event->getVisitor()->addData($this->linksCollectionName, $links);
     }
 
     public function getOnPostSerializeData(Event $event)

@@ -191,4 +191,136 @@ XML
 XML
             , $response->getContent());
     }
+
+    public function testGetPostJsonHal()
+    {
+        $client = $this->createClient(array('env' => 'hal'));
+        $client->request('GET', '/api/posts/2?_format=json');
+
+        $response = $client->getResponse();
+        $unserialized = (array) json_decode($response->getContent(), true);
+
+        $expected = array(
+          'id'     => '2',
+          'title'  => "How to create awesome symfony2 application",
+          '_links' => array(
+            array(
+              'rel'  => 'self',
+              'href' => 'http://localhost/api/posts/2'
+            )
+          )
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals($expected, $unserialized);
+    }
+
+    public function testGetRelationsJsonHal()
+    {
+        $client = $this->createClient(array('env' => 'hal'));
+        $client->request('GET', '/api/mixed?_format=json');
+
+        $response = $client->getResponse();
+        $unserialized = (array) json_decode($response->getContent(), true);
+
+        $expected = array(
+          array(
+            'id'     => '1',
+            'title'  => "Welcome on the blog!",
+            '_links' => array(
+              array(
+                'rel'  => 'self',
+                'href' => 'http://localhost/api/posts/1'
+              )
+            )
+          ),
+          array(
+            'id'     => '2',
+            'title'  => "How to create awesome symfony2 application",
+            '_links' => array(
+              array(
+                'rel'  => 'self',
+                'href' => 'http://localhost/api/posts/2'
+              )
+            )
+          ),
+          array(
+            'id' => 1,
+            'first_name' => 'Adrien',
+            'last_name' => 'Brault',
+            '_links' => array(
+              array(
+                'rel'  => 'self',
+                'href' => 'http://localhost/api/users/1'
+              ),
+              array(
+                'rel'  => 'alternate',
+                'href' => 'http://localhost/profile/1'
+              ),
+              array(
+                'rel'  => 'users',
+                'href' => 'http://localhost/api/users'
+              ),
+              array(
+                'rel'  => 'last-post',
+                'href' => 'http://localhost/api/users/1/last-post'
+              ),
+              array(
+                'rel'  => 'posts',
+                'href' => 'http://localhost/api/users/1/posts'
+              ),
+            ),
+            '_embedded' => array(
+              'last-post' => array(
+                'id'     => '2',
+                'title'  => "How to create awesome symfony2 application",
+                '_links' => array(
+                  array(
+                    'rel'  => 'self',
+                    'href' => 'http://localhost/api/posts/2'
+                  )
+                ),
+              ),
+              'posts' => array(
+                'page'    => 1,
+                'limit'   => 1,
+                'total'   => 2,
+                'results' => array(
+                  array(
+                    'id'     => '2',
+                    'title'  => "How to create awesome symfony2 application",
+                    '_links' => array(
+                      array(
+                        'rel'  => 'self',
+                        'href' => 'http://localhost/api/posts/2'
+                      )
+                    ),
+                  ),
+                ),
+                '_links' => array(
+                  array(
+                    'rel'  => 'self',
+                    'href' => 'http://localhost/api/users/1/posts?limit=1&page=1'
+                  ),
+                  array(
+                    'rel'  => 'first',
+                    'href' => 'http://localhost/api/users/1/posts?limit=1&page=1'
+                  ),
+                  array(
+                    'rel'  => 'last',
+                    'href' => 'http://localhost/api/users/1/posts?limit=1&page=2'
+                  ),
+                  array(
+                    'rel'  => 'next',
+                    'href' => 'http://localhost/api/users/1/posts?limit=1&page=2'
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals($expected, $unserialized);
+    }
 }
