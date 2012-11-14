@@ -41,14 +41,28 @@ class AnnotationDriver implements DriverInterface
                 }
 
                 if (null !== $annotation->embed && $annotation->embed instanceof Annotation\Content) {
-                    if (2 !== count($annotation->embed->provider)) {
-                        throw new \RuntimeException('The @Content provider paremeters should be an array of 2 values, a service id and a method.');
+                    if (empty($annotation->embed->provider) && empty($annotation->embed->property)) {
+                        throw new \RuntimeException("The @Content annotation needs either a provider or a property.");
                     }
 
-                    $relationContentMetadata = new RelationContentMetadata($annotation->embed->provider[0], $annotation->embed->provider[1]);
-                    $relationMetadata->setContent($relationContentMetadata);
+                    if (!empty($annotation->embed->provider) && !empty($annotation->embed->property)) {
+                        throw new \RuntimeException("The @Content annotation can only have either a provider or a property.");
+                    }
 
-                    $relationContentMetadata->setProviderArguments($annotation->embed->providerArguments ?: array());
+                    if (!empty($annotation->embed->provider)) {
+                        if (2 !== count($annotation->embed->provider)) {
+                            throw new \RuntimeException('The @Content provider parameters should be an array of 2 values, a service id and a method.');
+                        }
+
+                        $relationContentMetadata = new RelationContentMetadata($annotation->embed->provider[0], $annotation->embed->provider[1]);
+                        $relationMetadata->setContent($relationContentMetadata);
+                        $relationContentMetadata->setProviderArguments($annotation->embed->providerArguments ?: array());
+                    } else {
+                        $relationContentMetadata = new RelationContentMetadata("fsc_hateoas.factory.property", "retrieveProperty");
+                        $relationMetadata->setContent($relationContentMetadata);
+                        $relationContentMetadata->setProviderArguments(array('property' => $annotation->embed->property));
+                    }
+
                     $relationContentMetadata->setSerializerType($annotation->embed->serializerType);
                     $relationContentMetadata->setSerializerXmlElementName($annotation->embed->serializerXmlElementName);
                     $relationContentMetadata->setSerializerXmlElementRootName($annotation->embed->serializerXmlElementNameRootMetadata);

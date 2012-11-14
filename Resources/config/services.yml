@@ -10,6 +10,9 @@ parameters:
     fsc_hateoas.serializer.handler.pagerfanta.class: FSC\HateoasBundle\Serializer\Handler\PagerfantaHandler
     fsc_hateoas.serializer.handler.form_view.class: FSC\HateoasBundle\Serializer\Handler\FormViewHandler
     fsc_hateoas.serializer.handler.form.class: FSC\HateoasBundle\Serializer\Handler\FormHandler
+    fsc_hateoas.json_options: ~
+    fsc_hateoas.factory.property.class: FSC\HateoasBundle\Factory\PropertyFactory
+    fsc_hateoas.event_subscriber.typeparser: ~
 
 services:
     fsc_hateoas.serializer.link_serialization_helper:
@@ -50,6 +53,7 @@ services:
         arguments:
             - @fsc_hateoas.factory.link
             - @fsc_hateoas.serializer.link_serialization_helper
+            - %fsc_hateoas.json_options%
         tags:
             - { name: jms_serializer.event_subscriber }
 
@@ -60,6 +64,8 @@ services:
             - @jms_serializer.metadata_factory
             - @fsc_hateoas.metadata.relations_manager
             - @fsc_hateoas.factory.parameters
+            - %fsc_hateoas.event_subscriber.typeparser%
+            - %fsc_hateoas.json_options%
         tags:
             - { name: jms_serializer.event_subscriber }
 
@@ -87,3 +93,6 @@ services:
         tags:
             # Added by DI extension
             #- { name: jms_serializer.subscribing_handler }
+
+    fsc_hateoas.factory.property:
+        class: %fsc_hateoas.factory.property.class%

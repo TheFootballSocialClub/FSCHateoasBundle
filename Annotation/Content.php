@@ -9,8 +9,6 @@ namespace FSC\HateoasBundle\Annotation;
 final class Content
 {
     /**
-     * @Required
-     *
      * @var array<string>
      */
     public $provider;
@@ -34,4 +32,9 @@ final class Content
      * @var boolean
      */
     public $serializerXmlElementNameRootMetadata;
+
+    /**
+     * @var string
+     */
+    public $property;
 }
