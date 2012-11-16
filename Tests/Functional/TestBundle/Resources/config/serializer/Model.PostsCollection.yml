@@ -1,0 +1,5 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\PostsCollection:
+    xml_root_name: posts
+    properties:
+        pager:
+            inline: true

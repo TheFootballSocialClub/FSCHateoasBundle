@@ -2,9 +2,6 @@
 
 namespace FSC\HateoasBundle\Tests\Functional\TestBundle\Provider;
 
-use Pagerfanta\Pagerfanta;
-use Pagerfanta\Adapter\ArrayAdapter;
-
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User;
 
 class UserProvider

@@ -4,3 +4,8 @@ services:
 
     test.provider.user:
         class: FSC\HateoasBundle\Tests\Functional\TestBundle\Provider\UserProvider
+
+    test.form.type.post_create:
+        class: FSC\HateoasBundle\Tests\Functional\TestBundle\Form\Type\PostCreateType
+        tags:
+            - { name: form.type, alias: test_post_create }
