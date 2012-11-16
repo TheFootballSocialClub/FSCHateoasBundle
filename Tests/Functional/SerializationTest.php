@@ -7,6 +7,9 @@ use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User;
 
 class SerializationTest extends TestCase
 {
+    /**
+     * @group functional
+     */
     public function testXML()
     {
         $user = new User();
@@ -42,6 +45,9 @@ class SerializationTest extends TestCase
         );
     }
 
+    /**
+     * @group functional
+     */
     public function testJSON()
     {
         $user = new User();
