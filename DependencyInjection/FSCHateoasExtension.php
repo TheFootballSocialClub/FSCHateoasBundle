@@ -30,6 +30,21 @@ class FSCHateoasExtension extends ConfigurableExtension
             ;
         }
 
+        $container
+            ->getDefinition('fsc_hateoas.serializer.event_subscriber.link')
+            ->replaceArgument(2, $config['json'])
+        ;
+
+        $container
+            ->getDefinition('fsc_hateoas.serializer.event_subscriber.embedder')
+            ->replaceArgument(4, null)
+        ;
+
+        $container
+            ->getDefinition('fsc_hateoas.serializer.event_subscriber.embedder')
+            ->replaceArgument(5, $config['json'])
+        ;
+
         $this->configureMetadata($config, $container);
     }
 
