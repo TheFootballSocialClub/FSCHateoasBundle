@@ -297,7 +297,7 @@ api_user_friends_list:
 ```php
 <?php
 
-class Controller extends Controller
+class UserController extends Controller
 {
     public function getUserFriendsAction($id, $page = 1, $limit = 20)
     {
@@ -429,4 +429,51 @@ and `GET /api/users/42/friends` would result in
     <link rel="self" href="..."/>
   </user>
 </users>
+```
+
+## FormView handler
+
+You can serialize FormView. (Available only in XML, if you need this in JSON, feel try to make a PR :) )
+
+Telling your client developers to build requests based on forms, has many advantages, and remove some logic from clients.
+It is also really easy to test your api, because you only have to follow links to the form, then use the symfony DomCrawler to
+fill and then submit the form.
+
+```php
+<?php
+
+class UserController extends Controller
+{
+    public function getEditFormAction(User $user)
+    {
+        $formFactory = $this->getKernel()->getContainer()->get('form.factory');
+        $form = $formFactory->createBuilder('user')
+            ->add('name', 'text')
+            ->add('email', 'email')
+            ->add('gender', 'choice', array(
+                'choices' => array('m' => 'male', 'f' => 'female')
+            ))
+            ->getForm();
+        $formView = $this->get('fsc_hateoas.factory.form_view')->create($form, 'PUT', 'api_user_edit'); // Create form view and add method/action data to the FormView
+
+        $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($formView); // Automatically add self links to the form
+
+        $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('form');
+
+        return new Response($this->get('serializer')->serialize($formView, $request->get('_format')));
+    }
+}
+```
+
+### Results
+
+```xml
+<form method="PUT" action="http://localhost/api/users/25">
+    <input type="text" name="form[name]" required="required" value="Adrien"/>
+    <input type="email" name="form[email]" required="required" value="monsti@gmail.com"/>
+    <select name="form[gender]" required="required">
+        <option value="m" selected="selected">male</option>
+        <option value="f">female</option>
+    </select>
+</form>
 ```
