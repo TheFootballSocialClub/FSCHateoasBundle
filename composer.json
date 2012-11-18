@@ -15,7 +15,6 @@
         "jms/serializer-bundle": "1.0.x"
     },
     "require-dev": {
-        "symfony/framework-bundle": "*",
         "symfony/class-loader": "*",
         "symfony/yaml": "*",
         "symfony/browser-kit": "*",
