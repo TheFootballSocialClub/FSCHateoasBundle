@@ -13,9 +13,10 @@ class PostController extends Controller
     public function listPostsAction(Request $request)
     {
         $postsPager = $this->get('test.provider.post')->getPostsPager();
-        $postsCollection = new PostsCollection($postsPager); // Class that holds relations data (ie: create form relation)
 
-        $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($postsCollection); // Automatically add self/first/last/prev/next links
+        $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($postsPager); // Automatically add self/first/last/prev/next links
+
+        $postsCollection = new PostsCollection($postsPager); // Class that holds relations data (ie: create form relation)
 
         return new Response($this->get('serializer')->serialize($postsCollection, $request->get('_format')));
     }
