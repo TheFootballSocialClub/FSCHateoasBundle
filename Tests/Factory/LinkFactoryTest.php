@@ -17,7 +17,7 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateLinksFromMetadata()
     {
         $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
-        $metadataFactory = $this->getMock('Metadata\MetadataFactoryInterface');
+        $metadataFactory = $this->getMock('FSC\HateoasBundle\Metadata\MetadataFactoryInterface');
         $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory();
         $linkFactory = new LinkFactory($urlGenerator, $metadataFactory, $parametersFactory);
 

@@ -140,4 +140,43 @@ XML
 XML
             , $response->getContent());
     }
+
+    public function testRootControllerXml()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/?_format=xml');
+
+        $response = $client->getResponse(); /** @var $response Response */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <link rel="users" href="http://localhost/api/users"/>
+  <link rel="posts" href="http://localhost/api/posts"/>
+</root>
+
+XML
+            , $response->getContent());
+    }
+
+    public function testRootRuntimeMetadataControllerXml()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/?_format=xml&user_id=1');
+
+        $response = $client->getResponse(); /** @var $response Response */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <link rel="users" href="http://localhost/api/users"/>
+  <link rel="posts" href="http://localhost/api/posts"/>
+  <link rel="me" href="http://localhost/api/users/1"/>
+</root>
+
+XML
+            , $response->getContent());
+    }
 }

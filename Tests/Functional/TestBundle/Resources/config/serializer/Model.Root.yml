@@ -1,0 +1,2 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\Root:
+    xml_root_name: root

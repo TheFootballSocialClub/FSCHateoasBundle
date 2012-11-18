@@ -2,7 +2,7 @@
 
 namespace FSC\HateoasBundle\Metadata\Builder;
 
-interface RelationsMetadataBuilderInterface
+interface RelationsBuilderInterface
 {
     public function add($rel, array $href, array $embed = null);
     public function build();

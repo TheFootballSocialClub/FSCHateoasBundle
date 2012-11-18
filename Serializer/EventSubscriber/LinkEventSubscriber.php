@@ -52,11 +52,21 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     public function onPostSerialize(Event $event)
     {
+        if (null === ($links = $this->getOnPostSerializeData($event))) {
+            return;
+        }
+
+        $event->getVisitor()->addData('links', $links);
+    }
+
+    public function getOnPostSerializeData(Event $event)
+    {
         if (null === ($links = $this->linkFactory->createLinks($event->getObject()))) {
             return;
         }
 
         $visitor = $event->getVisitor();
-        $visitor->addData('links', $this->linkSerializationHelper->createGenericLinksData($links, $visitor));
+
+        return $this->linkSerializationHelper->createGenericLinksData($links, $visitor);
     }
 }

@@ -3,11 +3,15 @@
 namespace FSC\HateoasBundle\Serializer\Handler;
 
 use JMS\SerializerBundle\Serializer\Handler\SubscribingHandlerInterface;
+use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
 use JMS\SerializerBundle\Serializer\GraphNavigator;
 use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
 use JMS\SerializerBundle\Serializer\GenericSerializationVisitor;
 use Metadata\MetadataFactoryInterface;
 use Pagerfanta\Pagerfanta;
+
+use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
+use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
 
 class PagerfantaHandler implements SubscribingHandlerInterface
 {
@@ -27,26 +31,35 @@ class PagerfantaHandler implements SubscribingHandlerInterface
     }
 
     protected $serializerMetadataFactory;
+    protected $embedderEventSubscriber;
+    protected $linkEventSubscriber;
     protected $xmlElementsNamesUseSerializerMetadata;
 
-    public function __construct(MetadataFactoryInterface $serializerMetadataFactory, $xmlElementsNamesUseSerializerMetadata = true)
+    public function __construct(MetadataFactoryInterface $serializerMetadataFactory,
+        EmbedderEventSubscriber $embedderEventSubscriber, LinkEventSubscriber $linkEventSubscriber,
+        $xmlElementsNamesUseSerializerMetadata = true)
     {
         $this->serializerMetadataFactory = $serializerMetadataFactory;
+        $this->embedderEventSubscriber = $embedderEventSubscriber;
+        $this->linkEventSubscriber = $linkEventSubscriber;
         $this->xmlElementsNamesUseSerializerMetadata = $xmlElementsNamesUseSerializerMetadata;
     }
 
-    public function serializeToXML(XmlSerializationVisitor $visitor, Pagerfanta $pager, array $resultsType)
+    public function serializeToXML(XmlSerializationVisitor $visitor, Pagerfanta $pager, array $type)
     {
         if (null === $visitor->document) {
             $visitor->document = $visitor->createDocument(null, null, true);
         }
+
+        $this->embedderEventSubscriber->onPostSerializeXML(new Event($visitor, $pager, $type));
+        $this->linkEventSubscriber->onPostSerializeXML(new Event($visitor, $pager, $type));
 
         $currentNode = $visitor->getCurrentNode(); /** @var $currentNode \DOMElement */
         $currentNode->setAttribute('page', $pager->getCurrentPage());
         $currentNode->setAttribute('limit', $pager->getMaxPerPage());
         $currentNode->setAttribute('total', $pager->getNbResults());
 
-        $resultsType = isset($resultsType['params'][0]) ? $resultsType['params'][0] : null;
+        $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
 
         if (!$this->xmlElementsNamesUseSerializerMetadata) {
             return $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
@@ -80,6 +93,14 @@ class PagerfantaHandler implements SubscribingHandlerInterface
             'total' => $pager->getNbResults(),
             'results' => $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor),
         );
+
+        if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
+            $data['links'] = $links;
+        }
+
+        if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
+            $data['relations'] = $relations;
+        }
 
         return $data;
     }

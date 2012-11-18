@@ -2,26 +2,26 @@
 
 namespace FSC\Tests\Metadata\Builder;
 
-use FSC\HateoasBundle\Metadata\Builder\RelationsMetadataBuilder;
+use FSC\HateoasBundle\Metadata\Builder\RelationsBuilder;
 
-class RelationMetadatasBuilderTest extends \PHPUnit_Framework_TestCase
+class RelationBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testEmpty()
     {
-        $RelationsMetadataBuilder = new RelationsMetadataBuilder();
+        $RelationsBuilder = new RelationsBuilder();
 
-        $relationsMetadata = $RelationsMetadataBuilder->build();
+        $relationsMetadata = $RelationsBuilder->build();
 
         $this->assertInternalType('array', $relationsMetadata);
     }
 
     public function testAddSimpleRouteRelation()
     {
-        $RelationsMetadataBuilder = new RelationsMetadataBuilder();
+        $RelationsBuilder = new RelationsBuilder();
 
-        $RelationsMetadataBuilder->add('self', array('route' => $route = '_some_route'));
+        $RelationsBuilder->add('self', array('route' => $route = '_some_route'));
 
-        $relationsMetadata = $RelationsMetadataBuilder->build();
+        $relationsMetadata = $RelationsBuilder->build();
 
         $this->assertInternalType('array', $relationsMetadata);
 
@@ -31,12 +31,12 @@ class RelationMetadatasBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAdd2SimpleRouteRelation()
     {
-        $RelationsMetadataBuilder = new RelationsMetadataBuilder();
+        $RelationsBuilder = new RelationsBuilder();
 
-        $RelationsMetadataBuilder->add('self', array('route' => $route = '_some_route'));
-        $RelationsMetadataBuilder->add('self', array('route' => $route2 = '_some_route2'));
+        $RelationsBuilder->add('self', array('route' => $route = '_some_route'));
+        $RelationsBuilder->add('self', array('route' => $route2 = '_some_route2'));
 
-        $relationsMetadata = $RelationsMetadataBuilder->build();
+        $relationsMetadata = $RelationsBuilder->build();
 
         $this->assertInternalType('array', $relationsMetadata);
 
@@ -47,14 +47,14 @@ class RelationMetadatasBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAddSimpleRouteRelationWithParams()
     {
-        $RelationsMetadataBuilder = new RelationsMetadataBuilder();
+        $RelationsBuilder = new RelationsBuilder();
 
-        $RelationsMetadataBuilder->add('self', array(
+        $RelationsBuilder->add('self', array(
             'route' => $route = '_some_route',
             'parameters' => $params = array('id' => 1),
         ));
 
-        $relationsMetadata = $RelationsMetadataBuilder->build();
+        $relationsMetadata = $RelationsBuilder->build();
 
         $this->assertInternalType('array', $relationsMetadata);
 
@@ -65,9 +65,9 @@ class RelationMetadatasBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAddEmbeddedRelation()
     {
-        $RelationsMetadataBuilder = new RelationsMetadataBuilder();
+        $RelationsBuilder = new RelationsBuilder();
 
-        $RelationsMetadataBuilder->add('self',
+        $RelationsBuilder->add('self',
             array(
                 'route' => '_some_route',
             ), array(
@@ -79,7 +79,7 @@ class RelationMetadatasBuilderTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $relationsMetadata = $RelationsMetadataBuilder->build();
+        $relationsMetadata = $RelationsBuilder->build();
 
         $this->assertInternalType('array', $relationsMetadata);
 

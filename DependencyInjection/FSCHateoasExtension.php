@@ -20,7 +20,7 @@ class FSCHateoasExtension extends ConfigurableExtension
 
         $container
             ->getDefinition('fsc_hateoas.serializer.handler.pagerfanta')
-            ->replaceArgument(1, $config['pagerfanta']['xml_elements_names_use_serializer_metadata'])
+            ->replaceArgument(3, $config['pagerfanta']['xml_elements_names_use_serializer_metadata'])
         ;
 
         if ($config['form_handler']) {
@@ -54,7 +54,7 @@ class FSCHateoasExtension extends ConfigurableExtension
         }
 
         $container
-            ->getDefinition('fsc_hateoas.metadata.factory')
+            ->getDefinition('fsc_hateoas.metadata.base_factory')
             ->replaceArgument(2, $config['metadata']['debug'])
         ;
 

@@ -4,9 +4,9 @@ namespace FSC\HateoasBundle\Factory;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Form\Util\PropertyPath;
-use Metadata\MetadataFactoryInterface;
 
 use FSC\HateoasBundle\Model\Link;
+use FSC\HateoasBundle\Metadata\MetadataFactoryInterface;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
 use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
 
@@ -30,7 +30,7 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
             return;
         }
 
-        if (null === ($classMetadata = $this->metadataFactory->getMetadataForClass(get_class($object)))) {
+        if (null === ($classMetadata = $this->metadataFactory->getMetadata($object))) {
             return;
         }
 

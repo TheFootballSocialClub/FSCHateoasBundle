@@ -5,7 +5,7 @@ namespace FSC\HateoasBundle\Metadata\Builder;
 use FSC\HateoasBundle\Metadata\RelationMetadata;
 use FSC\HateoasBundle\Metadata\RelationContentMetadata;
 
-class RelationsMetadataBuilder implements RelationsMetadataBuilderInterface
+class RelationsBuilder implements RelationsBuilderInterface
 {
     /**
      * @var array<RelationMetadataInterface>

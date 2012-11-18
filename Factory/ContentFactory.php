@@ -2,11 +2,10 @@
 
 namespace FSC\HateoasBundle\Factory;
 
-use Metadata\MetadataFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
-use FSC\HateoasBundle\Resolver\ArgumentsResolverInterface;
+use FSC\HateoasBundle\Metadata\MetadataFactoryInterface;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
 use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
 
@@ -26,7 +25,7 @@ class ContentFactory implements ContentFactoryInterface
 
     public function create($object)
     {
-        $classMetadata = $this->metadataFactory->getMetadataForClass(get_class($object));
+        $classMetadata = $this->metadataFactory->getMetadata($object);
         if (null === $classMetadata) {
             return;
         }

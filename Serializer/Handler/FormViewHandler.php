@@ -3,6 +3,9 @@
 namespace FSC\HateoasBundle\Serializer\Handler;
 
 use JMS\SerializerBundle\Serializer\Handler\SubscribingHandlerInterface;
+use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
+use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
+use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
 use JMS\SerializerBundle\Serializer\GraphNavigator;
 use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
 use Symfony\Component\Form\FormView;
@@ -27,17 +30,25 @@ class FormViewHandler implements SubscribingHandlerInterface
     }
 
     protected $xmlFormViewSerializer;
+    protected $embedderEventSubscriber;
+    protected $linkEventSubscriber;
 
-    public function __construct(XmlFormViewSerializer $xmlFormViewSerializer)
+    public function __construct(XmlFormViewSerializer $xmlFormViewSerializer,
+        EmbedderEventSubscriber $embedderEventSubscriber, LinkEventSubscriber $linkEventSubscriber)
     {
         $this->xmlFormViewSerializer = $xmlFormViewSerializer;
+        $this->embedderEventSubscriber = $embedderEventSubscriber;
+        $this->linkEventSubscriber = $linkEventSubscriber;
     }
 
-    public function serializeToXML(XmlSerializationVisitor $visitor, FormView $formView, array $resultsType)
+    public function serializeToXML(XmlSerializationVisitor $visitor, FormView $formView, array $type)
     {
         if (null === $visitor->document) {
             $visitor->document = $visitor->createDocument();
         }
+
+        $this->embedderEventSubscriber->onPostSerializeXML(new Event($visitor, $formView, $type));
+        $this->linkEventSubscriber->onPostSerializeXML(new Event($visitor, $formView, $type));
 
         $this->xmlFormViewSerializer->serialize($formView, $visitor->getCurrentNode());
     }

@@ -1,3 +1,8 @@
+api_root:
+    pattern: /api/
+    defaults:
+        _controller: TestBundle:Root:index
+
 api_user_get:
     pattern: /api/users/{identifier}
 

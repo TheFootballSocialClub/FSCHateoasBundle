@@ -1,0 +1,6 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\Root:
+    relations:
+        - rel: users
+          href: { route: api_user_list }
+        - rel: posts
+          href: { route: api_post_list }

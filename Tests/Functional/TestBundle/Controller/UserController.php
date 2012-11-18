@@ -14,10 +14,10 @@ class UserController extends Controller
         $postsPager->setCurrentPage($request->query->get('page', $postsPager->getCurrentPage()));
         $postsPager->setMaxPerPage($request->query->get('limit', $postsPager->getMaxPerPage()));
 
-        $linksAwareWrapper = $this->get('fsc_hateoas.factory.links_aware_wrapper')->create($postsPager); // Automatically add self/first/last/prev/next links
+        $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($postsPager); // Automatically add self/first/last/prev/next links
 
         $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('posts');
 
-        return new Response($this->get('serializer')->serialize($linksAwareWrapper, $request->get('_format')));
+        return new Response($this->get('serializer')->serialize($postsPager, $request->get('_format')));
     }
 }
