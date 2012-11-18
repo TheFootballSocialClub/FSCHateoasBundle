@@ -6,6 +6,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ControllerTest extends TestCase
 {
+    /**
+     * @group functional
+     */
     public function testGetPostXml()
     {
         $client = $this->createClient();
@@ -25,6 +28,9 @@ XML
         , $response->getContent());
     }
 
+    /**
+     * @group functional
+     */
     public function testGetUserPostsXml()
     {
         $client = $this->createClient();
@@ -53,6 +59,9 @@ XML
         , $response->getContent());
     }
 
+    /**
+     * @group functional
+     */
     public function testGetMixedElementNamesXml()
     {
         $client = $this->createClient();

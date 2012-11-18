@@ -14,18 +14,19 @@
         "jms/serializer-bundle": "1.0.x"
     },
     "require-dev": {
-        "symfony/framework-bundle": "2.1.*",
-        "symfony/class-loader": "2.1.*",
-        "symfony/yaml": "2.1.*",
-        "symfony/browser-kit": "2.1.*",
-        "symfony/form": "2.1.*",
-        "symfony/validator": "2.1.*",
-        "doctrine/common": "*",
+        "symfony/framework-bundle": ">=2.1,<2.3-dev",
+        "symfony/class-loader": ">=2.1,<2.3-dev",
+        "symfony/yaml": ">=2.1,<2.3-dev",
+        "symfony/browser-kit": ">=2.1,<2.3-dev",
+        "symfony/form": ">=2.1,<2.3-dev",
+        "symfony/validator": ">=2.1,<2.3-dev",
+        "jms/serializer-bundle": "1.0.x",
         "pagerfanta/pagerfanta": "*"
     },
     "suggest": {
-        "symfony/form": "2.1.*",
-        "symfony/validator": "2.1.*"
+        "symfony/form": ">=2.1,<2.3-dev",
+        "symfony/validator": ">=2.1,<2.3-dev",
+        "pagerfanta/pagerfanta": "*"
     },
     "autoload": {
         "psr-0": { "FSC\\HateoasBundle": "" }

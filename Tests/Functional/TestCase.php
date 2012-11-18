@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use JMS\SerializerBundle\Serializer\Serializer;
 
-class TestCase extends WebTestCase
+abstract class TestCase extends WebTestCase
 {
     protected static function createKernel(array $options = array())
     {
