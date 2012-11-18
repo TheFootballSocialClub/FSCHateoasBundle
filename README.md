@@ -97,6 +97,83 @@ or
 }
 ```
 
+## Add relations on objects at runtime
+
+In some cases you want to add relations on objects at runtime. For example, if you want a root controller with links
+to your different collection, you would create a Root object with hateoas metadata. But what if you want to create a
+"me" relation to the current connected, only if a user is connected ?
+
+We'll use this example.
+
+```php
+<?php
+
+// src/Acme/FooBundle/Model/Model.php
+
+use JMS\SerializerBundle\Annotation as Serializer;
+use FSC\HateoasBundle\Annotation as Rest;
+
+/**
+ * @Rest\Relation("users", href = @Rest\Route("api_user_list"))
+ * @Rest\Relation("posts", href = @Rest\Route("api_post_list"))
+ *
+ * @Serializer\XmlRoot("root")
+ */
+class Root
+{
+
+}
+```
+
+```php
+<?php
+
+class RootController extends Controller
+{
+    public function indexAction()
+    {
+        $root = new Root();
+
+        if (null !== ($user = $this->getUser())) {
+            $relationsBuilder = $this->get('fsc_hateoas.metadata.relation_builder.factory')->create();
+            $relationsBuilder->add('me', array(
+                'route' => 'api_user_get',
+                'parameters' => array('id' => $user->getId())
+            ));
+
+            $this->get('fsc_hateoas.metadata.factory')->addObjectRelations($root, $relationsBuilder->build());
+        }
+
+        return new Response($this->get('serializer')->serialize($root, $request->get('_format')));
+    }
+}
+```
+
+### Results
+
+#### No user connected
+
+`GET /api` would result in
+
+```xml
+<root>
+  <link rel="users" href="http://localhost/api/users"/>
+  <link rel="posts" href="http://localhost/api/posts"/>
+</root>
+```
+
+#### User 32 connected
+
+`GET /api` would result in
+
+```xml
+<root>
+  <link rel="users" href="http://localhost/api/users"/>
+  <link rel="posts" href="http://localhost/api/posts"/>
+  <link rel="me" href="http://localhost/api/users/32"/>
+</root>
+```
+
 ## Pagerfanta Handler
 
 Default configuration:
@@ -148,20 +225,9 @@ public function getListAction($page = 1, $limit = 10)
 </users>
 ```
 
-## RouteAwarePagerHandler
+## Add pagerfanta navigation links
 
-The Pagerfanta alone doesn't create links to self/next/previous/last/first pages.
-The RouteAwarePagerHandler can automatically creates links to theses pages.
-
-Default configuration:
-
-```yaml
-fsc_hateoas:
-    pagerfanta:
-        links:
-            page_parameter_name: 'page'
-            limit_parameter_name: 'limit'
-```
+The Pagerfanta alone doesn't create links to self/next/previous/last/first pages (only when embedded in relations).
 
 ### Example
 
@@ -171,7 +237,6 @@ fsc_hateoas:
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
-use FSC\HateoasBundle\Model\RouteAwarePager;
 
 public function getListAction(Request $request, $page = 1, $limit = 10)
 {
@@ -180,11 +245,11 @@ public function getListAction(Request $request, $page = 1, $limit = 10)
     $pager->setCurrentPage($page);
     $pager->setMaxPerPage($limit);
 
-    $routeAwarePager = new RouteAwarePager($pager, $request->attributes->get('_route'), $request->attributes->get('_route_params'));
+    $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($postsPager); // Automatically add self/first/last/prev/next links
 
     $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('users');
 
-    return new Response($this->get('serializer')->serialize($routeAwarePager, 'xml')));
+    return new Response($this->get('serializer')->serialize($pager, 'xml')));
 }
 ```
 
@@ -238,11 +303,11 @@ class Controller extends Controller
     {
         $pager = $this->get('acme.foo.user_manager')->getUserFriendsPager($id, $page, $limit);
 
-        $routeAwarePager = new RouteAwarePager($pager, $request->attributes->get('_route'), $request->attributes->get('_route_params'));
+        $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($postsPager); // Automatically add self/first/last/prev/next links
 
         $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('users');
 
-        return new Response($this->get('serializer')->serialize($routeAwarePager, 'xml'));
+        return new Response($this->get('serializer')->serialize($pager, 'xml'));
     }
 
     public function getUserAction($id)
@@ -266,8 +331,7 @@ class Controller extends Controller
 use JMS\SerializerBundle\Annotation as Serializer;
 use FSC\HateoasBundle\Annotation as Rest;
 
-// The embedded content being a PagerfantaInterface instance, the bundle will
-// automatically wraps it in a RouteAwarePager using the links' route/params
+// The bundle will automatically add navigation links to the embedded pagerfanta using the correct route
 
 /**
  * @Rest\Relation("self", href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }))
