@@ -8,8 +8,6 @@ use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
 use Metadata\MetadataFactoryInterface;
-use Symfony\Component\Form\Util\PropertyPath;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use FSC\HateoasBundle\Factory\ContentFactoryInterface;
 use FSC\HateoasBundle\Factory\LinksAwareWrapperFactoryInterface;
@@ -116,7 +114,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         if (null !== $relationMetadata->getContent()->getSerializerXmlElementName()) {
             $elementName = $relationMetadata->getContent()->getSerializerXmlElementName();
-        } else if (null !== $relationMetadata->getContent()->getSerializerXmlElementRootName()) {
+        } elseif (null !== $relationMetadata->getContent()->getSerializerXmlElementRootName()) {
             $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($content));
             $elementName = $classMetadata->xmlRootName ?: $elementName;
         }

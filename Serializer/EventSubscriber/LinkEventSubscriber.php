@@ -5,7 +5,6 @@ namespace FSC\HateoasBundle\Serializer\EventSubscriber;
 use JMS\SerializerBundle\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
-use JMS\SerializerBundle\Serializer\TypeParser;
 
 use FSC\HateoasBundle\Factory\LinkFactoryInterface;
 use FSC\HateoasBundle\Serializer\LinkSerializationHelper;
