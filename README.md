@@ -9,6 +9,19 @@ Right now, only adding links is supported.
 Even though there are some tests, be aware that this is a work in progress.
 For example, only yaml and annotation metadata configuration is supported.
 
+## Installation
+
+composer.json
+
+```json
+{
+    "require": {
+        "fsc/hateoas-bundle": "0.1.x-dev"
+    },
+    "minimum-stability": "dev"
+}
+```
+
 ## Adding links
 
 With the following configuration and entity:
