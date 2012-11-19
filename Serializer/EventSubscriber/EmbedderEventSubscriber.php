@@ -46,8 +46,8 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     public function __construct(
         ContentFactoryInterface $contentFactory,
-	JMSMetadataFactoryInterface $serializerMetadataFactory,
-	RelationsManagerInterface $relationsManager,
+	    JMSMetadataFactoryInterface $serializerMetadataFactory,
+	    RelationsManagerInterface $relationsManager,
         ParametersFactoryInterface $parametersFactory,
         TypeParser $typeParser = null,
         array $jsonOptions
@@ -97,7 +97,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->getVisitor()->addData('relations', $relationsData);
+        $event->getVisitor()->addData($this->embeddedCollectionName, $relationsData);
     }
 
     public function getOnPostSerializeData(Event $event)

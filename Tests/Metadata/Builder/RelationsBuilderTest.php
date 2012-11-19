@@ -93,7 +93,7 @@ class RelationBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAddEmbeddedRelationProperty()
     {
-        $RelationsMetadataBuilder = new RelationsMetadataBuilder();
+        $RelationsMetadataBuilder = new RelationsBuilder();
 
         $RelationsMetadataBuilder->add('self',
             array(

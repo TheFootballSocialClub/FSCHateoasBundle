@@ -297,7 +297,7 @@ XML
                     ),
                   ),
                 ),
-                'links' => array(
+                '_links' => array(
                   array(
                     'rel'  => 'self',
                     'href' => 'http://localhost/api/users/1/posts?limit=1&page=1'

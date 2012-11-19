@@ -58,7 +58,7 @@ class LinkEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->getVisitor()->addData('links', $links);
+        $event->getVisitor()->addData($this->linksCollectionName, $links);
     }
 
     public function getOnPostSerializeData(Event $event)
@@ -70,6 +70,5 @@ class LinkEventSubscriber implements EventSubscriberInterface
         $visitor = $event->getVisitor();
 
         return $this->linkSerializationHelper->createGenericLinksData($links, $visitor);
-        // $visitor->addData($this->linksCollectionName, $this->linkSerializationHelper->createGenericLinksData($links, $visitor));
     }
 }

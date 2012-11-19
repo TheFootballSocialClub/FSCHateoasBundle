@@ -76,6 +76,7 @@ services:
             - @fsc_hateoas.serializer.event_subscriber.embedder
             - @fsc_hateoas.serializer.event_subscriber.link
             - true
+            - %fsc_hateoas.json_options%
         tags:
             - { name: jms_serializer.subscribing_handler }
 
