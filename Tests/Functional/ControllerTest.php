@@ -199,11 +199,11 @@ XML
 
         $response = $client->getResponse(); /**  */
         $expected = array(
-          'id' => 2,
-          'title' => "How to create awesome symfony2 application",
+          'id'     => 2,
+          'title'  => "How to create awesome symfony2 application",
           '_links' => array(
             array(
-              'rel' => 'self',
+              'rel'  => 'self',
               'href' => 'http:\/\/localhost\/api\/posts\/2'
             )
           )
