@@ -22,11 +22,16 @@ use FSC\HateoasBundle\Annotation as Rest;
  *          serializerXmlElementName = "favorites"
  *     )
  * )
+ * @Rest\Relation("disclosure",
+ *     href = @Rest\Route("homepage"),
+ *     embed = @Rest\Content(property = ".property")
+ * )
  */
 class User
 {
     private $id;
     private $username;
+    private $property;
 
     public function setId($id)
     {
