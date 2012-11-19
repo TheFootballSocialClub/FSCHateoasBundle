@@ -43,11 +43,30 @@ class YamlDriver extends AbstractFileDriver
 
                 if (!empty($relation['content'])) {
                     $relationContent = $relation['content'];
-                    $relationContentMetadata = new RelationContentMetadata($relationContent['provider_id'], $relationContent['provider_method']);
+
+                    if (!empty($relationContent['provider_id']) && !empty($relationContent['property'])) {
+                        throw new \RuntimeException("The content configuration can only have either a provider or a property.");
+                    }
+
+                    if (!empty($relationContent['provider_id']) && !empty($relationContent['provider_method'])) {
+                        $providerId     = $relationContent['provider_id'];
+                        $providerMethod = $relationContent['provider_method'];
+                    } elseif (!empty($relationContent['property'])) {
+                        $providerId     = "fsc_hateoas.factory.property";
+                        $providerMethod = "retrieveProperty";
+                    } else {
+                        throw new \RuntimeException("The content configuration needs either a provider or a property.");
+                    }
+
+                    $relationContentMetadata = new RelationContentMetadata($providerId, $providerMethod);
                     $relationMetadata->setContent($relationContentMetadata);
 
                     if (isset($relationContent['provider_arguments'])) {
                         $relationContentMetadata->setProviderArguments($relationContent['provider_arguments']);
+                    }
+
+                    if (isset($relationContent['property'])) {
+                        $relationContentMetadata->setProviderArguments(array($relationContent['property']));
                     }
 
                     if (isset($relationContent['serializer_type'])) {
