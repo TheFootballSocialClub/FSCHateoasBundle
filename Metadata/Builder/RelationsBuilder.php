@@ -42,8 +42,8 @@ class RelationsBuilder implements RelationsBuilderInterface
                 $providerId     = $embed['provider'][0];
                 $providerMethod = $embed['provider'][1];
             } else {
-                $providerId     = "fsc_hateoas.factory.property";
-                $providerMethod = "retrieveProperty";
+                $providerId     = 'fsc_hateoas.factory.identity';
+                $providerMethod = 'get';
             }
 
             $contentMetadata = new RelationContentMetadata($providerId, $providerMethod);

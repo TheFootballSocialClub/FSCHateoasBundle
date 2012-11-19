@@ -11,7 +11,7 @@ parameters:
     fsc_hateoas.serializer.handler.form_view.class: FSC\HateoasBundle\Serializer\Handler\FormViewHandler
     fsc_hateoas.serializer.handler.form.class: FSC\HateoasBundle\Serializer\Handler\FormHandler
     fsc_hateoas.json_options: ~
-    fsc_hateoas.factory.property.class: FSC\HateoasBundle\Factory\PropertyFactory
+    fsc_hateoas.factory.identity.class: FSC\HateoasBundle\Factory\IdentityFactory
     fsc_hateoas.event_subscriber.typeparser: ~
 
 services:
@@ -95,5 +95,5 @@ services:
             # Added by DI extension
             #- { name: jms_serializer.subscribing_handler }
 
-    fsc_hateoas.factory.property:
-        class: %fsc_hateoas.factory.property.class%
+    fsc_hateoas.factory.identity:
+        class: %fsc_hateoas.factory.identity.class%

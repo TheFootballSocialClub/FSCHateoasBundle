@@ -2,14 +2,14 @@
 
 namespace FSC\HateoasBundle\Factory;
 
-class PropertyFactory
+class IdentityFactory
 {
     /**
      * Returns the property
      * @param  mixed $property
      * @return mixed
      */
-    public function retrieveProperty($property)
+    public function get($property)
     {
         return $property;
     }

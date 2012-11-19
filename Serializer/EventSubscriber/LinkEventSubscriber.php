@@ -35,12 +35,11 @@ class LinkEventSubscriber implements EventSubscriberInterface
     protected $linkSerializationHelper;
     protected $linksCollectionName;
 
-    public function __construct(LinkFactoryInterface $linkFactory, LinkSerializationHelper $linkSerializationHelper, array $jsonOptions)
+    public function __construct(LinkFactoryInterface $linkFactory, LinkSerializationHelper $linkSerializationHelper, array $jsonOptions = array())
     {
         $this->linkFactory = $linkFactory;
         $this->linkSerializationHelper = $linkSerializationHelper;
-        $this->jsonOptions = $jsonOptions;
-        $this->linksCollectionName = $jsonOptions['links'];
+        $this->linksCollectionName = !empty($jsonOptions['links']) ? $jsonOptions['links'] : 'links';
     }
 
     public function onPostSerializeXML(Event $event)

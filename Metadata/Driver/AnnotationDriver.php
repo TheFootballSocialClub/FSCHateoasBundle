@@ -58,7 +58,7 @@ class AnnotationDriver implements DriverInterface
                         $relationMetadata->setContent($relationContentMetadata);
                         $relationContentMetadata->setProviderArguments($annotation->embed->providerArguments ?: array());
                     } else {
-                        $relationContentMetadata = new RelationContentMetadata("fsc_hateoas.factory.property", "retrieveProperty");
+                        $relationContentMetadata = new RelationContentMetadata('fsc_hateoas.factory.identity', 'get');
                         $relationMetadata->setContent($relationContentMetadata);
                         $relationContentMetadata->setProviderArguments(array($annotation->embed->property));
                     }

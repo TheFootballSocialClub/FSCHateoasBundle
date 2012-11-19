@@ -52,8 +52,8 @@ class YamlDriver extends AbstractFileDriver
                         $providerId     = $relationContent['provider_id'];
                         $providerMethod = $relationContent['provider_method'];
                     } elseif (!empty($relationContent['property'])) {
-                        $providerId     = "fsc_hateoas.factory.property";
-                        $providerMethod = "retrieveProperty";
+                        $providerId     = 'fsc_hateoas.factory.identity';
+                        $providerMethod = 'get';
                     } else {
                         throw new \RuntimeException("The content configuration needs either a provider or a property.");
                     }

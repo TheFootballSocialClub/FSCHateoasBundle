@@ -50,14 +50,14 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 	    RelationsManagerInterface $relationsManager,
         ParametersFactoryInterface $parametersFactory,
         TypeParser $typeParser = null,
-        array $jsonOptions
+        array $jsonOptions = array()
     ) {
         $this->contentFactory = $contentFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->relationsManager = $relationsManager;
         $this->parametersFactory = $parametersFactory;
         $this->typeParser = $typeParser ?: new TypeParser();
-        $this->embeddedCollectionName = $jsonOptions['relations'];
+        $this->embeddedCollectionName = !empty($jsonOptions['relations']) ? $jsonOptions['relations'] : 'relations';
     }
 
     public function onPostSerializeXML(Event $event)
