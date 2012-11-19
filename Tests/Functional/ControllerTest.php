@@ -191,4 +191,27 @@ XML
 XML
             , $response->getContent());
     }
+
+    public function testGetPostJsonHal()
+    {
+        $client = $this->createClient(array('env' => 'hal'));
+        $client->request('GET', '/api/posts/2?_format=json');
+
+        $response = $client->getResponse(); /**  */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSerializedJsonEquals('
+          {
+            "id":"2",
+            "title":"How to create awesome symfony2 application",
+            "_links":[
+              {
+                "rel":"self",
+                "href":"http:\/\/localhost\/api\/posts\/2"
+              }
+            ]
+          }',
+          $response->getContent()
+        );
+    }
 }
