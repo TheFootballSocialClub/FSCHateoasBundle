@@ -7,6 +7,9 @@ use FSC\HateoasBundle\Serializer\XmlFormViewSerializer;
 
 class XmlFormViewSerializerTest extends TestCase
 {
+    /**
+     * @group functional
+     */
     public function test()
     {
         $formFactory = $this->getKernel()->getContainer()->get('form.factory');
@@ -75,6 +78,9 @@ XML
         , $formElement);
     }
 
+    /**
+     * @group functional
+     */
     public function testFileType()
     {
         $formFactory = $this->getKernel()->getContainer()->get('form.factory');
@@ -96,6 +102,9 @@ XML
             , $formElement);
     }
 
+    /**
+     * @group functional
+     */
     public function testDateFields()
     {
         $formFactory = $this->getKernel()->getContainer()->get('form.factory');
@@ -343,6 +352,9 @@ XML
             , $formElement);
     }
 
+    /**
+     * @group functional
+     */
     public function testAttributes()
     {
         $formFactory = $this->getKernel()->getContainer()->get('form.factory');
