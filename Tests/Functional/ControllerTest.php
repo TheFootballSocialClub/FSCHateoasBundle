@@ -198,20 +198,19 @@ XML
         $client->request('GET', '/api/posts/2?_format=json');
 
         $response = $client->getResponse(); /**  */
+        $expected = array(
+          'id' => 2,
+          'title' => "How to create awesome symfony2 application",
+          '_links' => array(
+            array(
+              'rel' => 'self',
+              'href' => 'http:\/\/localhost\/api\/posts\/2'
+            )
+          )
+        );
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertSerializedJsonEquals('
-          {
-            "id":"2",
-            "title":"How to create awesome symfony2 application",
-            "_links":[
-              {
-                "rel":"self",
-                "href":"http:\/\/localhost\/api\/posts\/2"
-              }
-            ]
-          }',
-          $response->getContent()
-        );
+        $unserialized = json_decode($response->getContent());
+        $this->assertEquals($expected, $unserialized);
     }
 }
