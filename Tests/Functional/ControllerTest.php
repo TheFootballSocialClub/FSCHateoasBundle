@@ -85,6 +85,9 @@ XML
         $this->assertEquals(3, $nodeList->length);
     }
 
+    /**
+     * @group functional
+     */
     public function testGetCreatePostFormXml()
     {
         $client = $this->createClient();
@@ -104,6 +107,9 @@ XML
         , $response->getContent());
     }
 
+    /**
+     * @group functional
+     */
     public function testListPostsXml()
     {
         $client = $this->createClient();
@@ -141,6 +147,9 @@ XML
             , $response->getContent());
     }
 
+    /**
+     * @group functional
+     */
     public function testRootControllerXml()
     {
         $client = $this->createClient();
@@ -160,6 +169,9 @@ XML
             , $response->getContent());
     }
 
+    /**
+     * @group functional
+     */
     public function testRootRuntimeMetadataControllerXml()
     {
         $client = $this->createClient();
