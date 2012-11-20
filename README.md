@@ -460,7 +460,6 @@ and `GET /api/users/42/friends` would result in
 </users>
 ```
 
-<<<<<<< HEAD
 ## FormView handler
 
 You can serialize FormView. (Available only in XML, if you need this in JSON, feel try to make a PR :) )
@@ -468,17 +467,10 @@ You can serialize FormView. (Available only in XML, if you need this in JSON, fe
 Telling your client developers to build requests based on forms, has many advantages, and remove some logic from clients.
 It is also really easy to test your api, because you only have to follow links to the form, then use the symfony DomCrawler to
 fill and then submit the form.
-=======
-### Embedding relations from properties
-
-Instead of defining a service to embed resources you can also embed resources, that are properties of your main
-resource.
->>>>>>> Updated README
 
 ```php
 <?php
 
-<<<<<<< HEAD
 class UserController extends Controller
 {
     public function getEditFormAction(User $user)
@@ -514,7 +506,14 @@ class UserController extends Controller
     </select>
 </form>
 ```
-=======
+
+### Embedding relations from properties
+
+Instead of defining a service to embed resources you can also embed resources, that are properties of your main
+resource.
+
+```php
+<?php
 // src/Acme/FooBundle/Entity/User.php
 
 use JMS\SerializerBundle\Annotation as Serializer;
@@ -543,6 +542,3 @@ class User
 ```
 
 This will serialize the `friends` property and embed it as a relation.
-
-
->>>>>>> Updated README
