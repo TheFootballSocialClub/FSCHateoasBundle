@@ -460,6 +460,42 @@ and `GET /api/users/42/friends` would result in
 </users>
 ```
 
+### Embedding relations from properties
+
+Instead of defining a service to embed resources you can also embed resources, that are properties of your main
+resource.
+
+```php
+<?php
+// src/Acme/FooBundle/Entity/User.php
+
+use JMS\SerializerBundle\Annotation as Serializer;
+use FSC\HateoasBundle\Annotation as Rest;
+
+/**
+ * @Rest\Relation("self", href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }))
+ * @Rest\Relation("friends",
+ *     href =  @Rest\Route("api_user_friends_list", parameters = { "id" = ".id" }),
+ *     embed = @Rest\Content(
+ *         property = ".friends"
+ *     )
+ * )
+ *
+ * @Serializer\XmlRoot("user")
+ */
+class User
+{
+    ...
+
+    /**
+     * @var array<User>
+     */
+    private $friends;
+}
+```
+
+This will serialize the `friends` property and embed it as a relation.
+
 ## FormView handler
 
 You can serialize FormView. (Available only in XML, if you need this in JSON, feel try to make a PR :) )
@@ -506,39 +542,3 @@ class UserController extends Controller
     </select>
 </form>
 ```
-
-### Embedding relations from properties
-
-Instead of defining a service to embed resources you can also embed resources, that are properties of your main
-resource.
-
-```php
-<?php
-// src/Acme/FooBundle/Entity/User.php
-
-use JMS\SerializerBundle\Annotation as Serializer;
-use FSC\HateoasBundle\Annotation as Rest;
-
-/**
- * @Rest\Relation("self", href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }))
- * @Rest\Relation("friends",
- *     href =  @Rest\Route("api_user_friends_list", parameters = { "id" = ".id" }),
- *     embed = @Rest\Content(
- *         property = ".friends"
- *     )
- * )
- *
- * @Serializer\XmlRoot("user")
- */
-class User
-{
-    ...
-
-    /**
-     * @var array<User>
-     */
-    private $friends;
-}
-```
-
-This will serialize the `friends` property and embed it as a relation.
