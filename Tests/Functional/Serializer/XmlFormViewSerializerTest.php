@@ -26,6 +26,11 @@ class XmlFormViewSerializerTest extends TestCase
             ->add('gender', 'choice', array(
                 'choices' => array('m' => 'male', 'f' => 'female')
             ))
+            ->add('genderRadio', 'choice', array(
+                'choices' => array('m' => 'male', 'f' => 'female'),
+                'expanded' => true,
+                'multiple' => false,
+            ))
             ->add('limit', 'hidden')
             ->add('towns', 'collection', array(
                 // each item in the array will be an "email" field
@@ -69,6 +74,8 @@ class XmlFormViewSerializerTest extends TestCase
         <option value="m">male</option>
         <option value="f">female</option>
     </select>
+    <input type="radio" value="m" name="form[genderRadio]" required="required"/>
+    <input type="radio" value="f" name="form[genderRadio]" required="required"/>
     <input type="hidden" name="form[limit]"/>
     <input type="email" value="Paris" name="form[towns][par]" class="email-box"/>
     <input type="email" value="London" name="form[towns][lon]" class="email-box"/>

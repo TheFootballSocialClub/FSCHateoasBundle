@@ -10,7 +10,7 @@ class XmlFormViewSerializer
 {
     static protected $baseTypes = array(
         'text', 'textarea', 'email', 'integer', 'money', 'number', 'password', 'percent', 'search', 'url', 'hidden',
-        'collection', 'choice', 'checkbox', 'datetime', 'date',
+        'collection', 'choice', 'checkbox', 'radio', 'datetime', 'date',
     );
 
     /**
@@ -89,6 +89,9 @@ class XmlFormViewSerializer
                     break;
                 case 'checkbox':
                     $this->serializeCheckboxWidget($parentElement, $view, $variables);
+                    break;
+                case 'radio':
+                    $this->serializeRadioWidget($parentElement, $view, $variables);
                     break;
                 case 'datetime':
                     $this->serializeDatetimeWidget($parentElement, $view, $variables);
@@ -495,6 +498,27 @@ class XmlFormViewSerializer
     {
         $inputElement = $parentElement->ownerDocument->createElement('input');
         $inputElement->setAttribute('type', 'checkbox');
+
+        if (isset($variables['value'])) {
+            $inputElement->setAttribute('value', $variables['value']);
+        }
+
+        if (isset($variables['checked']) && $variables['checked']) {
+            $inputElement->setAttribute('checked', $variables['checked']);
+        }
+
+        $this->addWidgetAttributes($inputElement, $view, $variables);
+
+        $parentElement->appendChild($inputElement);
+    }
+
+    /*
+        <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    */
+    protected function serializeRadioWidget(\DOMElement $parentElement, FormView $view, $variables)
+    {
+        $inputElement = $parentElement->ownerDocument->createElement('input');
+        $inputElement->setAttribute('type', 'radio');
 
         if (isset($variables['value'])) {
             $inputElement->setAttribute('value', $variables['value']);
