@@ -28,6 +28,13 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
             ->booleanNode('form_handler')->defaultValue(false)->end()
+            ->arrayNode('json')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('links')->defaultValue('links')->end()
+                    ->scalarNode('relations')->defaultValue('relations')->end()
+                ->end()
+            ->end()
         ;
 
         $this->addMetadataSection($root);

@@ -187,6 +187,22 @@ class RootController extends Controller
 </root>
 ```
 
+## Json Format
+
+The bundle supports customizing the keys of links and embedded relations when serializing to Json. They are
+controlled by the following configuration:
+
+```yml
+# app/config/config.yml
+
+fsc_hateoas:
+    json:
+        links: _links         # default: links
+        relations: _embedded  # default: relations
+```
+
+The above configuration will result in serialization to valid [hal+json](http://stateless.co/hal_specification.html).
+
 ## Pagerfanta Handler
 
 Default configuration:
@@ -292,7 +308,7 @@ public function getListAction(Request $request, $page = 1, $limit = 10)
 
 Sometimes, your representations have embedded relations that require a service to be fetched, or need to be paginated.
 To embed a relation using this bundle, you create a simple Relation metadata (with an annotation for example),
-and add extra "content" parameters.
+and add extra "content" parameter.
 
 Example:
 
@@ -334,7 +350,7 @@ class UserController extends Controller
 
 ### Model and serializer/hateoas metadata
 
-*Note that you can also configure serializer/hateoas metadatas using yaml to keep serialisation out of your model*
+*Note that you can also configure serializer/hateoas metadata using yaml to keep serialisation out of your model*
 
 ```php
 <?php
@@ -443,6 +459,42 @@ and `GET /api/users/42/friends` would result in
   </user>
 </users>
 ```
+
+### Embedding relations from properties
+
+Instead of defining a service to embed resources you can also embed resources, that are properties of your main
+resource.
+
+```php
+<?php
+// src/Acme/FooBundle/Entity/User.php
+
+use JMS\SerializerBundle\Annotation as Serializer;
+use FSC\HateoasBundle\Annotation as Rest;
+
+/**
+ * @Rest\Relation("self", href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }))
+ * @Rest\Relation("friends",
+ *     href =  @Rest\Route("api_user_friends_list", parameters = { "id" = ".id" }),
+ *     embed = @Rest\Content(
+ *         property = ".friends"
+ *     )
+ * )
+ *
+ * @Serializer\XmlRoot("user")
+ */
+class User
+{
+    ...
+
+    /**
+     * @var array<User>
+     */
+    private $friends;
+}
+```
+
+This will serialize the `friends` property and embed it as a relation.
 
 ## FormView handler
 

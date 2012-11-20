@@ -114,6 +114,17 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Pagerfanta<custom>', $relationMetadata->getContent()->getSerializerType());
         $this->assertEquals('favorites', $relationMetadata->getContent()->getSerializerXmlElementName());
         $this->assertFalse($relationMetadata->getContent()->getSerializerXmlElementRootName());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('disclosure', $relationMetadata->getRel());
+        $this->assertEquals('homepage', $relationMetadata->getRoute());
+        $this->assertInstanceOf('FSC\HateoasBundle\Metadata\RelationContentMetadataInterface', $relationMetadata->getContent());
+        $this->assertEquals('fsc_hateoas.factory.identity', $relationMetadata->getContent()->getProviderId());
+        $this->assertEquals('get', $relationMetadata->getContent()->getProviderMethod());
+        $this->assertEquals(array('.property'), $relationMetadata->getContent()->getProviderArguments());
+
 return;
     }
 }

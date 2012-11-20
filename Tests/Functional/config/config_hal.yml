@@ -1,0 +1,8 @@
+imports:
+    - { resource: config_test.yml }
+
+# Hateoas Bundle Hal+Json configuration
+fsc_hateoas:
+    json:
+        links: _links
+        relations: _embedded

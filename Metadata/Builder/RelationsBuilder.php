@@ -30,14 +30,30 @@ class RelationsBuilder implements RelationsBuilderInterface
         }
 
         if (null !== $embed) {
-            if (!isset($embed['provider']) || 2 !== count($embed['provider'])) {
+            if (!empty($embed['provider']) && !empty($embed['property'])) {
+                throw new \RuntimeException("content configuration can only have either a provider or a property.");
+            } elseif (empty($embed['provider']) && empty($embed['property'])) {
+                throw new \RuntimeException("The content configuration needs either a provider or a property.");
+            } elseif (isset($embed['provider']) && 2 !== count($embed['provider'])) {
                 throw new \RuntimeException('content "provider" is required, and should be an array of 2 values. [service, method]');
             }
 
-            $contentMetadata = new RelationContentMetadata($embed['provider'][0], $embed['provider'][1]);
+            if (!empty($embed['provider'])) {
+                $providerId     = $embed['provider'][0];
+                $providerMethod = $embed['provider'][1];
+            } else {
+                $providerId     = 'fsc_hateoas.factory.identity';
+                $providerMethod = 'get';
+            }
+
+            $contentMetadata = new RelationContentMetadata($providerId, $providerMethod);
 
             if (isset($embed['providerArguments'])) {
                 $contentMetadata->setProviderArguments($embed['providerArguments']);
+            }
+
+            if (isset($embed['property'])) {
+                $contentMetadata->setProviderArguments(array($embed['property']));
             }
 
             if (isset($embed['serializerType'])) {

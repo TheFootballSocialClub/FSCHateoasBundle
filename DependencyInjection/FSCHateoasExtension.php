@@ -30,6 +30,8 @@ class FSCHateoasExtension extends ConfigurableExtension
             ;
         }
 
+        $container->setParameter('fsc_hateoas.json_options', $config['json']);
+
         $this->configureMetadata($config, $container);
     }
 
