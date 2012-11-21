@@ -15,13 +15,10 @@ class RootController extends Controller
         $root = new Root();
 
         if ($request->query->has('user_id')) {
-            $relationsBuilder = $this->get('fsc_hateoas.metadata.relation_builder.factory')->create();
-            $relationsBuilder->add('me', array(
+            $this->get('fsc_hateoas.metadata.relations_manager')->addRelation($root, 'me', array(
                 'route' => 'api_user_get',
                 'parameters' => array('identifier' => $request->query->get('user_id'))
             ));
-
-            $this->get('fsc_hateoas.metadata.factory')->addObjectRelations($root, $relationsBuilder->build());
         }
 
         return new Response($this->get('serializer')->serialize($root, $request->get('_format')));

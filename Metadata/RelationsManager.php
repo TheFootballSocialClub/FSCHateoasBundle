@@ -58,6 +58,15 @@ class RelationsManager implements RelationsManagerInterface
         $this->metadataFactory->addObjectRelations($object, $relations);
     }
 
+    public function addRelation($object)
+    {
+        $relationsBuilder = $this->relationsBuilderFactory->create();
+        call_user_func_array(array($relationsBuilder, 'add'), array_slice(func_get_args(), 1));
+        $relations = $relationsBuilder->build();
+
+        $this->metadataFactory->addObjectRelations($object, $relations);
+    }
+
     protected function getRequestRoute()
     {
         return $this->container->get('request')->attributes->get('_route');
