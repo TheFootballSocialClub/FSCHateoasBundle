@@ -46,8 +46,8 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     public function __construct(
         ContentFactoryInterface $contentFactory,
-	    JMSMetadataFactoryInterface $serializerMetadataFactory,
-	    RelationsManagerInterface $relationsManager,
+        JMSMetadataFactoryInterface $serializerMetadataFactory,
+        RelationsManagerInterface $relationsManager,
         ParametersFactoryInterface $parametersFactory,
         TypeParser $typeParser = null,
         array $jsonOptions = array()
