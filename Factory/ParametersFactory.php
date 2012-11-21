@@ -18,7 +18,9 @@ class ParametersFactory implements ParametersFactoryInterface
                 $value = $propertyPath->getValue($data);
 
                 return;
-            } else if (is_array($value)) {
+            } elseif ('@' === $value) {
+                $value = $data;
+            } elseif (is_array($value)) {
                 $value = $self->createParameters($data, $value);
             }
         });
