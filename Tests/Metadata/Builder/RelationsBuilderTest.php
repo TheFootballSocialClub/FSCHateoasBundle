@@ -1,6 +1,6 @@
 <?php
 
-namespace FSC\Tests\Metadata\Builder;
+namespace FSC\HateoasBundle\Tests\Metadata\Builder;
 
 use FSC\HateoasBundle\Metadata\Builder\RelationsBuilder;
 
