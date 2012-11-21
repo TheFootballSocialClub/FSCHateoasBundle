@@ -1,0 +1,8 @@
+imports:
+    - { resource: config_test.yml }
+
+fsc_hateoas:
+    pagerfanta:
+        parameters_name:
+            page: pagination[page]
+            limit: pagination[limit]

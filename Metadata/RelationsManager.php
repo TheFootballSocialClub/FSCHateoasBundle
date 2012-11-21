@@ -16,13 +16,18 @@ class RelationsManager implements RelationsManagerInterface
     protected $metadataFactory;
     protected $container;
     protected $relationsBuilderFactory;
+    protected $defaultPageParameterName;
+    protected $defaultLimitParameterName;
 
     public function __construct(MetadataFactoryInterface $metadataFactory,
-        RelationsBuilderFactory $relationsBuilderFactory, ContainerInterface $container)
+        RelationsBuilderFactory $relationsBuilderFactory, ContainerInterface $container,
+        $defaultPageParameterName = 'page', $defaultLimitParameterName = 'limit')
     {
         $this->metadataFactory = $metadataFactory;
         $this->relationsBuilderFactory = $relationsBuilderFactory;
         $this->container = $container;
+        $this->defaultPageParameterName = $defaultPageParameterName;
+        $this->defaultLimitParameterName = $defaultLimitParameterName;
     }
 
     /**
@@ -63,8 +68,15 @@ class RelationsManager implements RelationsManagerInterface
         return $this->container->get('request')->attributes->get('_route_params');
     }
 
-    protected function createPagerNavigationRelations(PagerfantaInterface $pager, $route, $routeParameters = array(), $pageParameterName = 'page', $limitParameterName = 'limit')
+    protected function createPagerNavigationRelations(PagerfantaInterface $pager, $route, $routeParameters = array(), $pageParameterName = null, $limitParameterName = null)
     {
+        if (null === $pageParameterName) {
+            $pageParameterName = $this->defaultPageParameterName;
+        }
+        if (null === $limitParameterName) {
+            $limitParameterName = $this->defaultLimitParameterName;
+        }
+
         if (!isset($routeParameters[$pageParameterName])) {
             $routeParameters[$pageParameterName] = $pager->getCurrentPage();
         }

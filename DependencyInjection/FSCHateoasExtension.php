@@ -30,6 +30,10 @@ class FSCHateoasExtension extends ConfigurableExtension
             ;
         }
 
+        $relationsManagerDefinition = $container->getDefinition('fsc_hateoas.metadata.relations_manager');
+        $relationsManagerDefinition->addArgument($config['pagerfanta']['parameters_name']['page']);
+        $relationsManagerDefinition->addArgument($config['pagerfanta']['parameters_name']['limit']);
+
         $this->configureMetadata($config, $container);
     }
 

@@ -10,7 +10,7 @@ abstract class TestCase extends WebTestCase
 {
     protected static function createKernel(array $options = array())
     {
-        $env = @$options['env'] ?: 'test';
+        $env = @$options['environment'] ?: 'test';
 
         return new AppKernel($env, true);
     }
