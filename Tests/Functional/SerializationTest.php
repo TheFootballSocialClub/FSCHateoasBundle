@@ -5,11 +5,11 @@ namespace FSC\HateoasBundle\Tests\Functional;
 use FSC\HateoasBundle\Tests\Functional\TestCase;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User;
 
+/**
+ * @group functional
+ */
 class SerializationTest extends TestCase
 {
-    /**
-     * @group functional
-     */
     public function testXML()
     {
         $user = new User();
@@ -45,9 +45,6 @@ class SerializationTest extends TestCase
         );
     }
 
-    /**
-     * @group functional
-     */
     public function testJSON()
     {
         $user = new User();

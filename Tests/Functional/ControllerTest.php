@@ -4,11 +4,11 @@ namespace FSC\HateoasBundle\Tests\Functional;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @group functional
+ */
 class ControllerTest extends TestCase
 {
-    /**
-     * @group functional
-     */
     public function testGetPostXml()
     {
         $client = $this->createClient();
@@ -28,9 +28,6 @@ XML
         , $response->getContent());
     }
 
-    /**
-     * @group functional
-     */
     public function testGetUserPostsXml()
     {
         $client = $this->createClient();
@@ -59,9 +56,6 @@ XML
         , $response->getContent());
     }
 
-    /**
-     * @group functional
-     */
     public function testGetMixedElementNamesXml()
     {
         $client = $this->createClient();
@@ -85,9 +79,6 @@ XML
         $this->assertEquals(3, $nodeList->length);
     }
 
-    /**
-     * @group functional
-     */
     public function testGetCreatePostFormXml()
     {
         $client = $this->createClient();
@@ -107,9 +98,6 @@ XML
         , $response->getContent());
     }
 
-    /**
-     * @group functional
-     */
     public function testListPostsXml()
     {
         $client = $this->createClient();
@@ -147,9 +135,6 @@ XML
             , $response->getContent());
     }
 
-    /**
-     * @group functional
-     */
     public function testRootControllerXml()
     {
         $client = $this->createClient();
@@ -169,9 +154,6 @@ XML
             , $response->getContent());
     }
 
-    /**
-     * @group functional
-     */
     public function testRootRuntimeMetadataControllerXml()
     {
         $client = $this->createClient();
