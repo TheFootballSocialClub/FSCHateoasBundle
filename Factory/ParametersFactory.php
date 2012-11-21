@@ -11,12 +11,15 @@ class ParametersFactory implements ParametersFactoryInterface
      */
     public function createParameters($data, $parameters)
     {
-        array_walk($parameters, function (&$value, $key) use ($data) {
+        $self = $this;
+        array_walk($parameters, function (&$value, $key) use ($data, $self) {
             if (is_string($value) && in_array(substr($value, 0, 1), array('.', '['))) {
                 $propertyPath = new PropertyPath(preg_replace('/^\./', '', $value));
                 $value = $propertyPath->getValue($data);
 
                 return;
+            } else if (is_array($value)) {
+                $value = $self->createParameters($data, $value);
             }
         });
 
