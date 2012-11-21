@@ -8,8 +8,10 @@ use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
 use Metadata\MetadataFactoryInterface as JMSMetadataFactoryInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Pagerfanta\PagerfantaInterface;
 
 use FSC\HateoasBundle\Factory\ContentFactoryInterface;
 use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
@@ -117,16 +119,22 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     protected function getRelationXmlElementName(RelationMetadataInterface $relationMetadata, $content)
     {
-        $elementName = 'relation';
+        $elementName = null;
 
         if (null !== $relationMetadata->getContent()->getSerializerXmlElementName()) {
             $elementName = $relationMetadata->getContent()->getSerializerXmlElementName();
-        } else if (null !== $relationMetadata->getContent()->getSerializerXmlElementRootName()) {
+        } elseif (null !== $relationMetadata->getContent()->getSerializerXmlElementRootName()) {
             $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($content));
             $elementName = $classMetadata->xmlRootName ?: $elementName;
         }
 
-        return $elementName;
+        if (null === $elementName && ('Pagerfanta\\PagerfantaInterface') && $content instanceof PagerfantaInterface) {
+            $elementName = 'collection';
+        } elseif (null === $elementName && ('Symfony\\Component\\Form\\FormView') && $content instanceof FormView) {
+            $elementName = 'form';
+        }
+
+        return $elementName ?: 'relation';
     }
 
     protected function addRelationRelations(Event $event, $content, RelationMetadataInterface $relationMetadata)

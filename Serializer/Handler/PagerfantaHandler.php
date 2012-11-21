@@ -48,7 +48,14 @@ class PagerfantaHandler implements SubscribingHandlerInterface
     public function serializeToXML(XmlSerializationVisitor $visitor, Pagerfanta $pager, array $type)
     {
         if (null === $visitor->document) {
-            $visitor->document = $visitor->createDocument(null, null, true);
+            $visitorClass = new \ReflectionClass(get_class($visitor));
+            $defaultRootNameProperty = $visitorClass->getProperty('defaultRootName');
+            $defaultRootNameProperty->setAccessible(true);
+            if ('result' === $defaultRootNameProperty->getValue($visitor)) {
+                $visitor->setDefaultRootName('collection');
+            }
+
+            $visitor->document = $visitor->createDocument();
         }
 
         $this->embedderEventSubscriber->onPostSerializeXML(new Event($visitor, $pager, $type));

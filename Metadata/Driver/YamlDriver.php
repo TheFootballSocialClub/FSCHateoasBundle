@@ -58,7 +58,7 @@ class YamlDriver extends AbstractFileDriver
                         $relationContentMetadata->setSerializerXmlElementName($relationContent['serializer_xml_element_name']);
                     }
 
-                    if (isset($relationContent['serializer_xml_element_name_root_metadata'])) {
+                    if (array_key_exists('serializer_xml_element_name_root_metadata', $relationContent)) {
                         $relationContentMetadata->setSerializerXmlElementRootName($relationContent['serializer_xml_element_name_root_metadata']);
                     }
                 }

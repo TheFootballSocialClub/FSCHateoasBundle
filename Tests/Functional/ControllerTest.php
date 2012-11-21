@@ -38,7 +38,7 @@ XML
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<posts page="1" limit="10" total="2">
+<collection page="1" limit="10" total="2">
   <link rel="self" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
   <link rel="first" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
   <link rel="last" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
@@ -50,7 +50,7 @@ XML
     <title><![CDATA[Welcome on the blog!]]></title>
     <link rel="self" href="http://localhost/api/posts/1"/>
   </post>
-</posts>
+</collection>
 
 XML
         , $response->getContent());
@@ -66,7 +66,7 @@ XML
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<posts page="1" limit="10" total="2">
+<collection page="1" limit="10" total="2">
   <link rel="self" href="http://localhost/api/users/42/posts?pagination%5Blimit%5D=10&amp;pagination%5Bpage%5D=1"/>
   <link rel="first" href="http://localhost/api/users/42/posts?pagination%5Blimit%5D=10&amp;pagination%5Bpage%5D=1"/>
   <link rel="last" href="http://localhost/api/users/42/posts?pagination%5Blimit%5D=10&amp;pagination%5Bpage%5D=1"/>
@@ -78,7 +78,7 @@ XML
     <title><![CDATA[Welcome on the blog!]]></title>
     <link rel="self" href="http://localhost/api/posts/1"/>
   </post>
-</posts>
+</collection>
 
 XML
             , $response->getContent());
@@ -97,13 +97,13 @@ XML
         $document->loadXML($response->getContent());
         $xpath = new \DOMXPath($document);
 
-        $nodeList = $xpath->query('/result/post');
+        $nodeList = $xpath->query('/*/post');
         $this->assertEquals(2, $nodeList->length);
 
-        $nodeList = $xpath->query('/result/user');
+        $nodeList = $xpath->query('/*/user');
         $this->assertEquals(1, $nodeList->length);
 
-        $nodeList = $xpath->query('/result/*');
+        $nodeList = $xpath->query('/*/*');
         $this->assertEquals(3, $nodeList->length);
     }
 

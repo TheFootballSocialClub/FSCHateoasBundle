@@ -16,8 +16,6 @@ class UserController extends Controller
 
         $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($postsPager); // Automatically add self/first/last/prev/next links
 
-        $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('posts');
-
         return new Response($this->get('serializer')->serialize($postsPager, $request->get('_format')));
     }
 }

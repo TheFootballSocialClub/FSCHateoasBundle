@@ -17,7 +17,7 @@ class RelationContentMetadata implements RelationContentMetadataInterface
         $this->providerMethod = $providerMethod;
 
         $this->providerArguments = array();
-        $this->serializerXmlElementRootName = false;
+        $this->serializerXmlElementRootName = true;
     }
 
     public function setProviderId($providerId)

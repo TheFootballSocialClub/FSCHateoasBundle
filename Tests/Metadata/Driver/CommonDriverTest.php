@@ -113,7 +113,6 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('id', '=3'), $relationMetadata->getContent()->getProviderArguments());
         $this->assertEquals('Pagerfanta<custom>', $relationMetadata->getContent()->getSerializerType());
         $this->assertEquals('favorites', $relationMetadata->getContent()->getSerializerXmlElementName());
-        $this->assertFalse($relationMetadata->getContent()->getSerializerXmlElementRootName());
-return;
+        $this->assertTrue($relationMetadata->getContent()->getSerializerXmlElementRootName());
     }
 }

@@ -30,7 +30,7 @@ class SerializationTest extends TestCase
     <title><![CDATA[How to create awesome symfony2 application]]></title>
     <link rel="self" href="http://localhost/api/posts/2"/>
   </post>
-  <posts rel="posts" page="1" limit="1" total="2">
+  <collection rel="posts" page="1" limit="1" total="2">
     <link rel="self" href="http://localhost/api/users/24/posts?limit=1&amp;page=1"/>
     <link rel="first" href="http://localhost/api/users/24/posts?limit=1&amp;page=1"/>
     <link rel="last" href="http://localhost/api/users/24/posts?limit=1&amp;page=2"/>
@@ -39,7 +39,7 @@ class SerializationTest extends TestCase
       <title><![CDATA[How to create awesome symfony2 application]]></title>
       <link rel="self" href="http://localhost/api/posts/2"/>
     </post>
-  </posts>
+  </collection>
 </user>',
             $user
         );

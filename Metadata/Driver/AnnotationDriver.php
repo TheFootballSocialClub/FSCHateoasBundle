@@ -51,7 +51,10 @@ class AnnotationDriver implements DriverInterface
                     $relationContentMetadata->setProviderArguments($annotation->embed->providerArguments ?: array());
                     $relationContentMetadata->setSerializerType($annotation->embed->serializerType);
                     $relationContentMetadata->setSerializerXmlElementName($annotation->embed->serializerXmlElementName);
-                    $relationContentMetadata->setSerializerXmlElementRootName($annotation->embed->serializerXmlElementNameRootMetadata);
+
+                    if (null !== $annotation->embed->serializerXmlElementNameRootMetadata) {
+                        $relationContentMetadata->setSerializerXmlElementRootName($annotation->embed->serializerXmlElementNameRootMetadata);
+                    }
                 }
 
                 $classMetadata->addRelation($relationMetadata);

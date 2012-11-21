@@ -35,8 +35,6 @@ class PostController extends Controller
 
         $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($formView); // Automatically add self links to the form
 
-        $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('form');
-
         return new Response($this->get('serializer')->serialize($formView, $request->get('_format')));
     }
 }
