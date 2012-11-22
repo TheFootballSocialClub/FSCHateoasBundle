@@ -22,6 +22,10 @@ composer.json
 }
 ```
 
+## Example application
+
+You can find a symfony 2.1 example application using this bundle at [https://github.com/adrienbrault/symfony-hateoas-sandbox](https://github.com/adrienbrault/symfony-hateoas-sandbox).
+
 ## Adding links
 
 With the following configuration and entity:
