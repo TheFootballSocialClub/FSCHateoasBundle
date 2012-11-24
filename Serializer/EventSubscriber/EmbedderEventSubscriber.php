@@ -7,6 +7,7 @@ use JMS\SerializerBundle\Serializer\TypeParser;
 use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
 use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
+
 use Metadata\MetadataFactoryInterface as JMSMetadataFactoryInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Util\PropertyPath;
@@ -43,16 +44,22 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
     protected $relationsManager;
     protected $parametersFactory;
     protected $typeParser;
+    protected $embeddedCollectionName;
 
-    public function __construct(ContentFactoryInterface $contentFactory, JMSMetadataFactoryInterface $serializerMetadataFactory,
-        RelationsManagerInterface $relationsManager, ParametersFactoryInterface $parametersFactory,
-        TypeParser $typeParser = null)
-    {
+    public function __construct(
+        ContentFactoryInterface $contentFactory,
+        JMSMetadataFactoryInterface $serializerMetadataFactory,
+        RelationsManagerInterface $relationsManager,
+        ParametersFactoryInterface $parametersFactory,
+        TypeParser $typeParser = null,
+        array $jsonOptions = array()
+    ) {
         $this->contentFactory = $contentFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->relationsManager = $relationsManager;
         $this->parametersFactory = $parametersFactory;
         $this->typeParser = $typeParser ?: new TypeParser();
+        $this->embeddedCollectionName = !empty($jsonOptions['relations']) ? $jsonOptions['relations'] : 'relations';
     }
 
     public function onPostSerializeXML(Event $event)
@@ -92,7 +99,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->getVisitor()->addData('relations', $relationsData);
+        $event->getVisitor()->addData($this->embeddedCollectionName, $relationsData);
     }
 
     public function getOnPostSerializeData(Event $event)

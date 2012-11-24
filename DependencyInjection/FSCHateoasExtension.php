@@ -34,6 +34,8 @@ class FSCHateoasExtension extends ConfigurableExtension
         $relationsManagerDefinition->addArgument($config['pagerfanta']['parameters_name']['page']);
         $relationsManagerDefinition->addArgument($config['pagerfanta']['parameters_name']['limit']);
 
+        $container->setParameter('fsc_hateoas.json_options', $config['json']);
+
         $this->configureMetadata($config, $container);
     }
 

@@ -90,4 +90,30 @@ class RelationBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($xmlName, $relationsMetadata[0]->getContent()->getSerializerXmlElementName());
         $this->assertEquals($xmlRootMetadata, $relationsMetadata[0]->getContent()->getSerializerXmlElementRootName());
     }
+
+    public function testAddEmbeddedRelationProperty()
+    {
+        $RelationsMetadataBuilder = new RelationsBuilder();
+
+        $RelationsMetadataBuilder->add('self',
+            array(
+                'route' => '_some_route',
+            ), array(
+                'property' => '.someProperty',
+                'serializerType' => 'array<Foo>',
+                'serializerXmlElementName' => $xmlName = 'users',
+                'serializerXmlElementRootMetadata' => $xmlRootMetadata = true,
+            )
+        );
+
+        $relationsMetadata = $RelationsMetadataBuilder->build();
+        $this->assertInternalType('array', $relationsMetadata);
+
+        $this->assertInstanceOf('FSC\HateoasBundle\Metadata\RelationContentMetadataInterface', $relationsMetadata[0]->getContent());
+        $this->assertEquals('fsc_hateoas.factory.identity', $relationsMetadata[0]->getContent()->getProviderId());
+        $this->assertEquals('get', $relationsMetadata[0]->getContent()->getProviderMethod());
+        $this->assertEquals(array('.someProperty'), $relationsMetadata[0]->getContent()->getProviderArguments());
+        $this->assertEquals($xmlName, $relationsMetadata[0]->getContent()->getSerializerXmlElementName());
+        $this->assertEquals($xmlRootMetadata, $relationsMetadata[0]->getContent()->getSerializerXmlElementRootName());
+    }
 }
