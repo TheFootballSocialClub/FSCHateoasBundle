@@ -44,7 +44,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
     protected $relationsManager;
     protected $parametersFactory;
     protected $typeParser;
-    protected $relationsKey;
+    protected $relationsJsonKey;
 
     public function __construct(
         ContentFactoryInterface $contentFactory,
@@ -52,14 +52,14 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         RelationsManagerInterface $relationsManager,
         ParametersFactoryInterface $parametersFactory,
         TypeParser $typeParser = null,
-        $relationsKey = null
+        $relationsJsonKey = null
     ) {
         $this->contentFactory = $contentFactory;
         $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->relationsManager = $relationsManager;
         $this->parametersFactory = $parametersFactory;
         $this->typeParser = $typeParser ?: new TypeParser();
-        $this->relationsKey = $relationsKey ?: 'relations';
+        $this->relationsJsonKey = $relationsJsonKey ?: 'relations';
     }
 
     public function onPostSerializeXML(Event $event)
@@ -99,7 +99,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->getVisitor()->addData($this->relationsKey, $relationsData);
+        $event->getVisitor()->addData($this->relationsJsonKey, $relationsData);
     }
 
     public function getOnPostSerializeData(Event $event)
