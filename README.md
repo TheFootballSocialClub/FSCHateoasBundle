@@ -201,8 +201,8 @@ controlled by the following configuration:
 
 fsc_hateoas:
     json:
-        links: _links         # default: links
-        relations: _embedded  # default: relations
+        links_key: _links         # default: links
+        relations_key: _embedded  # default: relations
 ```
 
 The above configuration will result in serialization to valid [hal+json](http://stateless.co/hal_specification.html).

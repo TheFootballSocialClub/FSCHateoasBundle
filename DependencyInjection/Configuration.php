@@ -38,8 +38,8 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('json')
                 ->addDefaultsIfNotSet()
                 ->children()
-                    ->scalarNode('links')->defaultValue('links')->end()
-                    ->scalarNode('relations')->defaultValue('relations')->end()
+                    ->scalarNode('links_key')->defaultValue('links')->end()
+                    ->scalarNode('relations_key')->defaultValue('relations')->end()
                 ->end()
             ->end()
         ;

@@ -4,5 +4,5 @@ imports:
 # Hateoas Bundle Hal+Json configuration
 fsc_hateoas:
     json:
-        links: _links
-        relations: _embedded
+        links_key: _links
+        relations_key: _embedded
