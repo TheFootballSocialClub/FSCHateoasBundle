@@ -5,12 +5,13 @@ namespace FSC\HateoasBundle\Factory;
 class IdentityFactory
 {
     /**
-     * Returns the property
-     * @param  mixed $property
+     * Returns the value
+     *
+     * @param  mixed $value
      * @return mixed
      */
-    public function get($property)
+    public function get($value)
     {
-        return $property;
+        return $value;
     }
 }

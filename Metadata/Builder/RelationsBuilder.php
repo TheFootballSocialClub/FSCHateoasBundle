@@ -31,13 +31,13 @@ class RelationsBuilder implements RelationsBuilderInterface
 
         if (null !== $embed) {
             if (!empty($embed['provider']) && !empty($embed['property'])) {
-                throw new \RuntimeException("content configuration can only have either a provider or a property.");
+                throw new \RuntimeException('Content configuration can only have either a provider or a property.');
             } 
             if (empty($embed['provider']) && empty($embed['property'])) {
-                throw new \RuntimeException("The content configuration needs either a provider or a property.");
+                throw new \RuntimeException('Content configuration needs either a provider or a property.');
             }
             if (isset($embed['provider']) && 2 !== count($embed['provider'])) {
-                throw new \RuntimeException('content "provider" is required, and should be an array of 2 values. [service, method]');
+                throw new \RuntimeException('Content "provider" is required, and should be an array of 2 values. [service, method]');
             }
 
             if (!empty($embed['provider'])) {
