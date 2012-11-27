@@ -34,22 +34,23 @@ class PagerfantaHandler implements SubscribingHandlerInterface
     protected $embedderEventSubscriber;
     protected $linkEventSubscriber;
     protected $xmlElementsNamesUseSerializerMetadata;
-    protected $linksCollectionName;
-    protected $embeddedCollectionName;
+    protected $linksKey;
+    protected $relationsKey;
 
     public function __construct(
         MetadataFactoryInterface $serializerMetadataFactory,
         EmbedderEventSubscriber $embedderEventSubscriber,
         LinkEventSubscriber $linkEventSubscriber,
         $xmlElementsNamesUseSerializerMetadata = true,
-        array $jsonOptions = array()
+        $linksKey = null,
+        $relationsKey = null
     ) {
         $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->embedderEventSubscriber = $embedderEventSubscriber;
         $this->linkEventSubscriber = $linkEventSubscriber;
         $this->xmlElementsNamesUseSerializerMetadata = $xmlElementsNamesUseSerializerMetadata;
-        $this->linksCollectionName = $jsonOptions['links'];
-        $this->embeddedCollectionName = $jsonOptions['relations'];
+        $this->linksKey = $linksKey ?: 'links';
+        $this->relationsKey = $relationsKey ?: 'relations';
     }
 
     public function serializeToXML(XmlSerializationVisitor $visitor, Pagerfanta $pager, array $type)
@@ -109,11 +110,11 @@ class PagerfantaHandler implements SubscribingHandlerInterface
         );
 
         if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
-            $data[$this->linksCollectionName] = $links;
+            $data[$this->linksKey] = $links;
         }
 
         if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
-            $data[$this->embeddedCollectionName] = $relations;
+            $data[$this->relationsKey] = $relations;
         }
 
         return $data;

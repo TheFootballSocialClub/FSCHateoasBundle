@@ -33,13 +33,13 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     protected $linkFactory;
     protected $linkSerializationHelper;
-    protected $linksCollectionName;
+    protected $linksKey;
 
-    public function __construct(LinkFactoryInterface $linkFactory, LinkSerializationHelper $linkSerializationHelper, array $jsonOptions = array())
+    public function __construct(LinkFactoryInterface $linkFactory, LinkSerializationHelper $linkSerializationHelper, $linksKey = null)
     {
         $this->linkFactory = $linkFactory;
         $this->linkSerializationHelper = $linkSerializationHelper;
-        $this->linksCollectionName = !empty($jsonOptions['links']) ? $jsonOptions['links'] : 'links';
+        $this->linksKey = $linksKey ?: 'links';
     }
 
     public function onPostSerializeXML(Event $event)
@@ -57,7 +57,7 @@ class LinkEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->getVisitor()->addData($this->linksCollectionName, $links);
+        $event->getVisitor()->addData($this->linksKey, $links);
     }
 
     public function getOnPostSerializeData(Event $event)
