@@ -45,29 +45,29 @@ class YamlDriver extends AbstractFileDriver
                     $relationContent = $relation['content'];
 
                     if (!empty($relationContent['provider_id']) && !empty($relationContent['property'])) {
-                        throw new \RuntimeException("The content configuration can only have either a provider or a property.");
+                        throw new \RuntimeException('The content configuration can only have either a provider or a property.');
+                    }
+                    if (!empty($relationContent['provider_id']) && empty($relationContent['provider_method'])) {
+                        throw new \RuntimeException('The content configuration needs a "provider_method" when using "provider_id".');
                     }
 
-                    if (!empty($relationContent['provider_id']) && !empty($relationContent['provider_method'])) {
+                    $providerId = $providerMethod = $providerArguments = null;
+
+                    if (!empty($relationContent['provider_id'])) {
                         $providerId     = $relationContent['provider_id'];
                         $providerMethod = $relationContent['provider_method'];
+
+                        $providerArguments = isset($relationContent['provider_arguments']) ? $relationContent['provider_arguments'] : array();
                     } elseif (!empty($relationContent['property'])) {
                         $providerId     = 'fsc_hateoas.factory.identity';
                         $providerMethod = 'get';
-                    } else {
-                        throw new \RuntimeException("The content configuration needs either a provider or a property.");
+
+                        $providerArguments = array($relationContent['property']);
                     }
 
                     $relationContentMetadata = new RelationContentMetadata($providerId, $providerMethod);
+                    $relationContentMetadata->setProviderArguments($providerArguments);
                     $relationMetadata->setContent($relationContentMetadata);
-
-                    if (isset($relationContent['provider_arguments'])) {
-                        $relationContentMetadata->setProviderArguments($relationContent['provider_arguments']);
-                    }
-
-                    if (isset($relationContent['property'])) {
-                        $relationContentMetadata->setProviderArguments(array($relationContent['property']));
-                    }
 
                     if (isset($relationContent['serializer_type'])) {
                         $relationContentMetadata->setSerializerType($relationContent['serializer_type']);
