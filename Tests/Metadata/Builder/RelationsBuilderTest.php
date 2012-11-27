@@ -116,4 +116,58 @@ class RelationBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($xmlName, $relationsMetadata[0]->getContent()->getSerializerXmlElementName());
         $this->assertEquals($xmlRootMetadata, $relationsMetadata[0]->getContent()->getSerializerXmlElementRootName());
     }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Content configuration can only have either a provider or a property.
+     */
+    public function testFail1()
+    {
+        $relationsMetadataBuilder = new RelationsBuilder();
+
+        $relationsMetadataBuilder->add('foo', array('route' => 'foo', ), array(
+            'property' => '.someProperty',
+            'provider' => 'lala',
+        ));
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Content configuration needs either a provider or a property.
+     */
+    public function testFail2()
+    {
+        $relationsMetadataBuilder = new RelationsBuilder();
+
+        $relationsMetadataBuilder->add('foo', array('route' => 'foo', ), array(
+            'a' => '.someProperty',
+            'b' => 'lala',
+        ));
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Content configuration needs either a provider or a property.
+     */
+    public function testFail3()
+    {
+        $relationsMetadataBuilder = new RelationsBuilder();
+
+        $relationsMetadataBuilder->add('foo', array('route' => 'foo', ), array(
+
+        ));
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Content "provider" is required, and should be an array of 2 values. [service, method]
+     */
+    public function testFail4()
+    {
+        $relationsMetadataBuilder = new RelationsBuilder();
+
+        $relationsMetadataBuilder->add('foo', array('route' => 'foo', ), array(
+            'provider' => array('a'),
+        ));
+    }
 }
