@@ -34,7 +34,7 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $urlGenerator
             ->expects($this->once())
             ->method('generate')
-            ->with($route, array('identifier' => $id), true)
+            ->with($route, array('identifier' => $id))
             ->will($this->returnValue($href = 'http://foo.com'))
         ;
 

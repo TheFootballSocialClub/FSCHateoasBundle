@@ -126,6 +126,25 @@ XML
         , $response->getContent());
     }
 
+    public function testGetCreatePostWithFormatInLinksFormXml()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/posts/create_format?_format=xml');
+
+        $response = $client->getResponse(); /** @var $response Response */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<form method="POST" action="http://localhost/api/posts?_format=xml">
+  <link rel="self" href="http://localhost/api/posts/create_format?_format=xml"/>
+  <input type="text" name="post[title]" required="required"/>
+</form>
+
+XML
+            , $response->getContent());
+    }
+
     public function testListPostsXml()
     {
         $client = $this->createClient();
