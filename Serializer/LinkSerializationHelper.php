@@ -32,6 +32,27 @@ class LinkSerializationHelper
 
     public function createGenericLinksData(array $links, GenericSerializationVisitor $visitor)
     {
-        return $visitor->getNavigator()->accept($links, $this->typeParser->parse('array<FSC\HateoasBundle\Model\Link>'), $visitor);
+        $result = array();
+
+        foreach ($links as $link) {
+            $rel = $link->getRel();
+            $link->setRel(null);    // To avoid serialization
+
+            $serializedLink = $visitor->getNavigator()->accept($link, $this->typeParser->parse('FSC\HateoasBundle\Model\Link'), $visitor);
+            if (!empty($result[$rel])) {
+                if (!empty($result[$rel]['href'])) {
+                    $oldLink = $result[$rel];
+                    $result[$rel] = array($oldLink);
+                }
+
+                $result[$rel] []= $serializedLink;
+            } else {
+                $result[$rel] = $serializedLink;
+            }
+
+
+        }
+
+        return $result;
     }
 }
