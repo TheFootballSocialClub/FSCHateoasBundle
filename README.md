@@ -51,7 +51,7 @@ user_profile:
 
 // src/Acme/FooBundle/Entity/User.php
 
-use JMS\SerializerBundle\Annotation as Serializer;
+use JMS\Serializer\Annotation as Serializer;
 use FSC\HateoasBundle\Annotation as Rest;
 
 /**
@@ -127,7 +127,7 @@ We'll use this example.
 
 // src/Acme/FooBundle/Model/Model.php
 
-use JMS\SerializerBundle\Annotation as Serializer;
+use JMS\Serializer\Annotation as Serializer;
 use FSC\HateoasBundle\Annotation as Rest;
 
 /**
@@ -361,7 +361,7 @@ class UserController extends Controller
 
 // src/Acme/FooBundle/Entity/User.php
 
-use JMS\SerializerBundle\Annotation as Serializer;
+use JMS\Serializer\Annotation as Serializer;
 use FSC\HateoasBundle\Annotation as Rest;
 
 // The bundle will automatically add navigation links to the embedded pagerfanta using the correct route
@@ -473,7 +473,7 @@ resource.
 <?php
 // src/Acme/FooBundle/Entity/User.php
 
-use JMS\SerializerBundle\Annotation as Serializer;
+use JMS\Serializer\Annotation as Serializer;
 use FSC\HateoasBundle\Annotation as Rest;
 
 /**

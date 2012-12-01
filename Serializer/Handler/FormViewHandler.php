@@ -2,12 +2,12 @@
 
 namespace FSC\HateoasBundle\Serializer\Handler;
 
-use JMS\SerializerBundle\Serializer\Handler\SubscribingHandlerInterface;
-use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
+use JMS\Serializer\Handler\SubscribingHandlerInterface;
+use JMS\Serializer\EventDispatcher\Event;
 use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
-use JMS\SerializerBundle\Serializer\GraphNavigator;
-use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
+use JMS\Serializer\GraphNavigator;
+use JMS\Serializer\XmlSerializationVisitor;
 use Symfony\Component\Form\FormView;
 
 use FSC\HateoasBundle\Serializer\XmlFormViewSerializer;
