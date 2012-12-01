@@ -2,9 +2,9 @@
 
 namespace FSC\HateoasBundle\Serializer\Handler;
 
-use JMS\SerializerBundle\Serializer\Handler\SubscribingHandlerInterface;
-use JMS\SerializerBundle\Serializer\GraphNavigator;
-use JMS\SerializerBundle\Serializer\VisitorInterface;
+use JMS\Serializer\Handler\SubscribingHandlerInterface;
+use JMS\Serializer\GraphNavigator;
+use JMS\Serializer\VisitorInterface;
 use Symfony\Component\Form\Form;
 
 /**
