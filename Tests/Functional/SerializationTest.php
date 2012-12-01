@@ -57,38 +57,32 @@ class SerializationTest extends TestCase
     "id": 24,
     "first_name": "Adrien",
     "last_name": "Brault",
-    "links": [
-        {
-            "rel": "self",
+    "links": {
+        "self": {
             "href": "http:\/\/localhost\/api\/users\/24"
         },
-        {
-            "rel": "alternate",
+        "alternate": {
             "href": "http:\/\/localhost\/profile\/24"
         },
-        {
-            "rel": "users",
+        "users": {
             "href": "http:\/\/localhost\/api\/users"
         },
-        {
-            "rel": "last-post",
+        "last-post": {
             "href": "http:\/\/localhost\/api\/users\/24\/last-post"
         },
-        {
-            "rel": "posts",
+        "posts": {
             "href": "http:\/\/localhost\/api\/users\/24\/posts"
         }
-    ],
+    },
     "relations": {
         "last-post": {
             "id": 2,
             "title": "How to create awesome symfony2 application",
-            "links": [
-                {
-                    "rel": "self",
+            "links": {
+                "self": {
                     "href": "http:\/\/localhost\/api\/posts\/2"
                 }
-            ]
+            }
         },
         "posts": {
             "page": 1,
@@ -98,32 +92,27 @@ class SerializationTest extends TestCase
                 {
                     "id": 2,
                     "title": "How to create awesome symfony2 application",
-                    "links": [
-                        {
-                            "rel": "self",
+                    "links": {
+                        "self": {
                             "href": "http:\/\/localhost\/api\/posts\/2"
                         }
-                    ]
+                    }
                 }
             ],
-            "links": [
-                {
-                    "rel": "self",
+            "links": {
+                "self": {
                     "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=1"
                 },
-                {
-                    "rel": "first",
+                "first": {
                     "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=1"
                 },
-                {
-                    "rel": "last",
+                "last": {
                     "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=2"
                 },
-                {
-                    "rel": "next",
+                "next": {
                     "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=2"
                 }
-            ]
+            }
         }
     }
 }',
