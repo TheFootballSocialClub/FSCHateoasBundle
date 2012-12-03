@@ -2,11 +2,11 @@
 
 namespace FSC\HateoasBundle\Serializer\Handler;
 
-use JMS\SerializerBundle\Serializer\Handler\SubscribingHandlerInterface;
-use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
-use JMS\SerializerBundle\Serializer\GraphNavigator;
-use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
-use JMS\SerializerBundle\Serializer\GenericSerializationVisitor;
+use JMS\Serializer\Handler\SubscribingHandlerInterface;
+use JMS\Serializer\EventDispatcher\Event;
+use JMS\Serializer\GraphNavigator;
+use JMS\Serializer\XmlSerializationVisitor;
+use JMS\Serializer\GenericSerializationVisitor;
 use Metadata\MetadataFactoryInterface;
 use Pagerfanta\Pagerfanta;
 

@@ -2,9 +2,9 @@
 
 namespace FSC\HateoasBundle\Serializer;
 
-use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
-use JMS\SerializerBundle\Serializer\TypeParser;
-use JMS\SerializerBundle\Serializer\GenericSerializationVisitor;
+use JMS\Serializer\XmlSerializationVisitor;
+use JMS\Serializer\TypeParser;
+use JMS\Serializer\GenericSerializationVisitor;
 
 class LinkSerializationHelper
 {

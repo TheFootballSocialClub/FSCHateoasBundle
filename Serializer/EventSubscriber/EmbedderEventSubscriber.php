@@ -2,11 +2,11 @@
 
 namespace FSC\HateoasBundle\Serializer\EventSubscriber;
 
-use JMS\SerializerBundle\Serializer\EventDispatcher\EventSubscriberInterface;
-use JMS\SerializerBundle\Serializer\TypeParser;
-use JMS\SerializerBundle\Serializer\XmlSerializationVisitor;
-use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
-use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
+use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
+use JMS\Serializer\TypeParser;
+use JMS\Serializer\XmlSerializationVisitor;
+use JMS\Serializer\EventDispatcher\Events;
+use JMS\Serializer\EventDispatcher\Event;
 
 use Metadata\MetadataFactoryInterface as JMSMetadataFactoryInterface;
 use Symfony\Component\Form\FormView;

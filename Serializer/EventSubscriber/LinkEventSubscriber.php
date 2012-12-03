@@ -2,9 +2,9 @@
 
 namespace FSC\HateoasBundle\Serializer\EventSubscriber;
 
-use JMS\SerializerBundle\Serializer\EventDispatcher\EventSubscriberInterface;
-use JMS\SerializerBundle\Serializer\EventDispatcher\Events;
-use JMS\SerializerBundle\Serializer\EventDispatcher\Event;
+use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
+use JMS\Serializer\EventDispatcher\Events;
+use JMS\Serializer\EventDispatcher\Event;
 
 use FSC\HateoasBundle\Factory\LinkFactoryInterface;
 use FSC\HateoasBundle\Serializer\LinkSerializationHelper;

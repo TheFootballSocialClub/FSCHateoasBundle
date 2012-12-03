@@ -4,7 +4,7 @@ namespace FSC\HateoasBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
-use JMS\SerializerBundle\Serializer\Serializer;
+use JMS\Serializer\Serializer;
 
 abstract class TestCase extends WebTestCase
 {
