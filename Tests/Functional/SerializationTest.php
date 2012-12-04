@@ -62,9 +62,14 @@ class SerializationTest extends TestCase
         "self": {
             "href": "http:\/\/localhost\/api\/users\/24"
         },
-        "alternate": {
-            "href": "http:\/\/localhost\/profile\/24"
-        },
+        "alternate": [
+            {
+                "href": "http:\/\/localhost\/profile\/24"
+            },
+            {
+                "href": "http:\/\/localhost\/api\/users\/24\/alternate"
+            }
+        ],
         "users": {
             "href": "http:\/\/localhost\/api\/users"
         },
