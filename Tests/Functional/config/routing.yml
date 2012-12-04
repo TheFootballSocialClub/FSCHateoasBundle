@@ -6,6 +6,9 @@ api_root:
 api_user_get:
     pattern: /api/users/{identifier}
 
+api_user_get_alternate:
+    pattern: /api/users/{identifier}/alternate
+
 api_user_list:
     pattern: /api/users
 

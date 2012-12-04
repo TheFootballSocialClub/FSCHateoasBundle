@@ -26,6 +26,7 @@ class SerializationTest extends TestCase
   <link rel="users" href="http://localhost/api/users"/>
   <link rel="last-post" href="http://localhost/api/users/24/last-post"/>
   <link rel="posts" href="http://localhost/api/users/24/posts"/>
+  <link rel="alternate" href="http://localhost/api/users/24/alternate"/>
   <post rel="last-post" id="2">
     <title><![CDATA[How to create awesome symfony2 application]]></title>
     <link rel="self" href="http://localhost/api/posts/2"/>
@@ -57,38 +58,37 @@ class SerializationTest extends TestCase
     "id": 24,
     "first_name": "Adrien",
     "last_name": "Brault",
-    "links": [
-        {
-            "rel": "self",
+    "links": {
+        "self": {
             "href": "http:\/\/localhost\/api\/users\/24"
         },
-        {
-            "rel": "alternate",
-            "href": "http:\/\/localhost\/profile\/24"
-        },
-        {
-            "rel": "users",
+        "alternate": [
+            {
+                "href": "http:\/\/localhost\/profile\/24"
+            },
+            {
+                "href": "http:\/\/localhost\/api\/users\/24\/alternate"
+            }
+        ],
+        "users": {
             "href": "http:\/\/localhost\/api\/users"
         },
-        {
-            "rel": "last-post",
+        "last-post": {
             "href": "http:\/\/localhost\/api\/users\/24\/last-post"
         },
-        {
-            "rel": "posts",
+        "posts": {
             "href": "http:\/\/localhost\/api\/users\/24\/posts"
         }
-    ],
+    },
     "relations": {
         "last-post": {
             "id": 2,
             "title": "How to create awesome symfony2 application",
-            "links": [
-                {
-                    "rel": "self",
+            "links": {
+                "self": {
                     "href": "http:\/\/localhost\/api\/posts\/2"
                 }
-            ]
+            }
         },
         "posts": {
             "page": 1,
@@ -98,32 +98,27 @@ class SerializationTest extends TestCase
                 {
                     "id": 2,
                     "title": "How to create awesome symfony2 application",
-                    "links": [
-                        {
-                            "rel": "self",
+                    "links": {
+                        "self": {
                             "href": "http:\/\/localhost\/api\/posts\/2"
                         }
-                    ]
+                    }
                 }
             ],
-            "links": [
-                {
-                    "rel": "self",
+            "links": {
+                "self": {
                     "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=1"
                 },
-                {
-                    "rel": "first",
+                "first": {
                     "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=1"
                 },
-                {
-                    "rel": "last",
+                "last": {
                     "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=2"
                 },
-                {
-                    "rel": "next",
+                "next": {
                     "href": "http:\/\/localhost\/api\/users\/24\/posts?limit=1&page=2"
                 }
-            ]
+            }
         }
     }
 }',
