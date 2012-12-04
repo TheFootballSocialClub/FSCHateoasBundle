@@ -252,7 +252,10 @@ JSON;
         "last_name":"Brault",
         "_links":{
             "self":{"href":"http:\/\/localhost\/api\/users\/1"},
-            "alternate":{"href":"http:\/\/localhost\/profile\/1"},
+            "alternate":[
+                {"href":"http:\/\/localhost\/profile\/1"},
+                {"href":"http:\/\/localhost\/api\/users\/1\/alternate"}
+            ],
             "users":{"href":"http:\/\/localhost\/api\/users"},
             "last-post":{"href":"http:\/\/localhost\/api\/users\/1\/last-post"},
             "posts":{"href":"http:\/\/localhost\/api\/users\/1\/posts"}

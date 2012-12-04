@@ -28,3 +28,8 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
               provider_id: test.provider.post
               provider_method: getUserPostsPager
               provider_arguments: [ .id, 1, 1 ]
+        - rel: alternate
+          href:
+              route: api_user_get_alternate
+              parameters:
+                  identifier: .id

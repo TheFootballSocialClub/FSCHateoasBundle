@@ -26,6 +26,7 @@ class SerializationTest extends TestCase
   <link rel="users" href="http://localhost/api/users"/>
   <link rel="last-post" href="http://localhost/api/users/24/last-post"/>
   <link rel="posts" href="http://localhost/api/users/24/posts"/>
+  <link rel="alternate" href="http://localhost/api/users/24/alternate"/>
   <post rel="last-post" id="2">
     <title><![CDATA[How to create awesome symfony2 application]]></title>
     <link rel="self" href="http://localhost/api/posts/2"/>
