@@ -28,6 +28,6 @@ abstract class AbstractLinkFactory
     {
         ksort($parameters); // Have consistent url query strings, for the tests
 
-        return $this->urlGenerator->generate($name, $parameters, true);
+        return $this->urlGenerator->generate($name, $parameters);
     }
 }

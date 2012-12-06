@@ -16,6 +16,11 @@ api_user_list:
 api_user_lastpost_get:
     pattern: /api/users/{id}/last-post
 
+api_post_create_format_form:
+    pattern: /api/posts/create_format
+    defaults:
+        _controller: TestBundle:Post:getCreateFormatPostForm
+
 api_post_create_form:
     pattern: /api/posts/create
     defaults:
