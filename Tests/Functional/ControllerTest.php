@@ -214,9 +214,9 @@ XML
 {
     "id":2,
     "title":"How to create awesome symfony2 application",
-    "_links":[
-        {"rel":"self","href":"http:\/\/localhost\/api\/posts\/2"}
-    ]
+    "_links":{
+        "self":{"href":"http:\/\/localhost\/api\/posts\/2"}
+    }
 }
 JSON;
 
@@ -235,35 +235,38 @@ JSON;
     {
         "id":1,
         "title":"Welcome on the blog!",
-        "_links":[
-            {"rel":"self","href":"http:\/\/localhost\/api\/posts\/1"}
-        ]
+        "_links":{
+            "self":{"href":"http:\/\/localhost\/api\/posts\/1"}
+        }
     },
     {
         "id":2,
         "title":"How to create awesome symfony2 application",
-        "_links":[
-            {"rel":"self","href":"http:\/\/localhost\/api\/posts\/2"}
-        ]
+        "_links":{
+            "self":{"href":"http:\/\/localhost\/api\/posts\/2"}
+        }
     },
     {
         "id":1,
         "first_name":"Adrien",
         "last_name":"Brault",
-        "_links":[
-            {"rel":"self","href":"http:\/\/localhost\/api\/users\/1"},
-            {"rel":"alternate","href":"http:\/\/localhost\/profile\/1"},
-            {"rel":"users","href":"http:\/\/localhost\/api\/users"},
-            {"rel":"last-post","href":"http:\/\/localhost\/api\/users\/1\/last-post"},
-            {"rel":"posts","href":"http:\/\/localhost\/api\/users\/1\/posts"}
-        ],
+        "_links":{
+            "self":{"href":"http:\/\/localhost\/api\/users\/1"},
+            "alternate":[
+                {"href":"http:\/\/localhost\/profile\/1"},
+                {"href":"http:\/\/localhost\/api\/users\/1\/alternate"}
+            ],
+            "users":{"href":"http:\/\/localhost\/api\/users"},
+            "last-post":{"href":"http:\/\/localhost\/api\/users\/1\/last-post"},
+            "posts":{"href":"http:\/\/localhost\/api\/users\/1\/posts"}
+        },
         "_embedded":{
             "last-post":{
                 "id":2,
                 "title":"How to create awesome symfony2 application",
-                "_links":[
-                    {"rel":"self","href":"http:\/\/localhost\/api\/posts\/2"}
-                ]
+                "_links":{
+                    "self":{"href":"http:\/\/localhost\/api\/posts\/2"}
+                }
             },
             "posts":{
                 "page":1,
@@ -273,17 +276,17 @@ JSON;
                     {
                         "id":2,
                         "title":"How to create awesome symfony2 application",
-                        "_links":[
-                            {"rel":"self","href":"http:\/\/localhost\/api\/posts\/2"}
-                        ]
+                        "_links":{
+                            "self":{"href":"http:\/\/localhost\/api\/posts\/2"}
+                        }
                     }
                 ],
-                "_links":[
-                    {"rel":"self","href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=1"},
-                    {"rel":"first","href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=1"},
-                    {"rel":"last","href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=2"},
-                    {"rel":"next","href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=2"}
-                ]
+                "_links":{
+                    "self":{"href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=1"},
+                    "first":{"href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=1"},
+                    "last":{"href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=2"},
+                    "next":{"href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=2"}
+                }
             }
         }
     }
