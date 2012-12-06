@@ -34,7 +34,7 @@ class XmlFormViewSerializer
 
     protected function serializeBlock(\DOMElement $parentElement, FormView $view, $blockName)
     {
-        $variables = $view->getVars();
+        $variables = $view->vars;
 
         $type = null;
         foreach ($variables['block_prefixes'] as $blockPrefix) {
@@ -108,7 +108,7 @@ class XmlFormViewSerializer
                             $this->serializeFormRow($parentElement, $view, $variables);
                             break;
                         default:
-                            throw new \RuntimeException(__METHOD__.' Oups '.$view->getName().' // '.$blockName);
+                            throw new \RuntimeException(__METHOD__.' Oups '.$view->vars['name'].' // '.$blockName);
                     }
             }
 
