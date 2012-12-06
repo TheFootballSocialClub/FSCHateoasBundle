@@ -37,4 +37,13 @@ class PostController extends Controller
 
         return new Response($this->get('serializer')->serialize($formView, $request->get('_format')));
     }
+
+    public function getCreateFormatPostFormAction(Request $request)
+    {
+        $this->get('fsc_hateoas.routing.generator')->setExtraParameters(array(
+            '_format' => $request->get('_format'),
+        ));
+
+        return $this->getCreatePostFormAction($request);
+    }
 }

@@ -42,6 +42,7 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('relations_key')->defaultValue('relations')->end()
                 ->end()
             ->end()
+            ->scalarNode('absolute_url')->defaultValue(true)->end()
         ;
 
         $this->addMetadataSection($root);
