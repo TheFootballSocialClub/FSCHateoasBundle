@@ -86,13 +86,7 @@ services:
 
     fsc_hateoas.serializer.handler.halpagerfanta:
         class: %fsc_hateoas.serializer.handler.halpagerfanta.class%
-        arguments:
-            - @jms_serializer.metadata_factory
-            - @fsc_hateoas.serializer.event_subscriber.embedder
-            - @fsc_hateoas.serializer.event_subscriber.link
-            - true
-            - %fsc_hateoas.json.links_key%
-            - %fsc_hateoas.json.relations_key%
+        parent: fsc_hateoas.serializer.handler.pagerfanta
         tags:
             - { name: jms_serializer.subscribing_handler }
 
