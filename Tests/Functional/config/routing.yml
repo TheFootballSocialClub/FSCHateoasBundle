@@ -53,3 +53,8 @@ api_mixed:
     pattern: /api/mixed
     defaults:
         _controller: TestBundle:Mixed:list
+
+api_halpager:
+    pattern: /api/pager
+    defaults:
+        _controller: TestBundle:Mixed:pager

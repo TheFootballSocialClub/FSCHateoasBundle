@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use FSC\HateoasBundle\Model\HalPagerfanta;
 
 class MixedController extends Controller
 {
@@ -19,6 +20,21 @@ class MixedController extends Controller
         );
 
         $pager = new Pagerfanta(new ArrayAdapter($results));
+
+        return new Response($this->get('serializer')->serialize($pager, $request->get('_format')));
+    }
+
+    public function pagerAction(Request $request)
+    {
+        $data = array(
+            array('first' => 'value'),
+            array('second' => 'value')
+        );
+
+        $adapter = new ArrayAdapter($data);
+        $pager = new HalPagerfanta($adapter);
+        $pager->rel = "test-rel";
+        $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($pager);
 
         return new Response($this->get('serializer')->serialize($pager, $request->get('_format')));
     }
