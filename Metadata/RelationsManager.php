@@ -73,7 +73,14 @@ class RelationsManager implements RelationsManagerInterface
 
     protected function getRequestParameters()
     {
-        return $this->container->get('request')->attributes->get('_route_params');
+        $request       = $this->container->get('request');
+
+        $routeParams   = $request->attributes->get('_route_params');
+        $queryParams   = $request->query->all();
+
+        $requestParams = array_merge($routeParams, $queryParams);
+
+        return $requestParams;
     }
 
     protected function createPagerNavigationRelations(PagerfantaInterface $pager, $route, $routeParameters = array(), $pageParameterName = null, $limitParameterName = null)
