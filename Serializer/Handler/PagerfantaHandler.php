@@ -102,6 +102,8 @@ class PagerfantaHandler implements SubscribingHandlerInterface
     {
         $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
 
+        $shouldSetRoot = null === $visitor->getRoot();
+
         $data = array(
             'page' => $pager->getCurrentPage(),
             'limit' => $pager->getMaxPerPage(),
@@ -115,6 +117,10 @@ class PagerfantaHandler implements SubscribingHandlerInterface
 
         if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
             $data[$this->relationsJsonKey] = $relations;
+        }
+
+        if ($shouldSetRoot) {
+            $visitor->setRoot($data);
         }
 
         return $data;
