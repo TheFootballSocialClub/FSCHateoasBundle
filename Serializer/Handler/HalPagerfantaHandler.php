@@ -20,11 +20,11 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
     {
         return array(
             array(
-            'direction' => GraphNavigator::DIRECTION_SERIALIZATION,
-            'format' => 'json',
-            'type' => 'FSC\HateoasBundle\Model\HalPagerfanta',
-            'method' => 'serializeToArray',
-        )
+                'direction' => GraphNavigator::DIRECTION_SERIALIZATION,
+                'format' => 'json',
+                'type' => 'FSC\HateoasBundle\Model\HalPagerfanta',
+                'method' => 'serializeToArray',
+            )
         );
     }
 
@@ -51,9 +51,11 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
         $this->relationsJsonKey = $relationsKey ?: 'relations';
     }
 
-    public function serializeToArray(GenericSerializationVisitor $visitor, HalPagerfanta $pager, array $type)
+    public function serializeToArray(GenericSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)
     {
         $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
+
+        $pager = $halPager->getPager();
 
         $shouldSetRoot = null === $visitor->getRoot();
 
@@ -71,7 +73,7 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
             $data[$this->relationsJsonKey] = $relations;
         }
 
-        $data[$this->relationsJsonKey][$pager->rel] = $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
+        $data[$this->relationsJsonKey][$halPager->getRel()] = $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
 
         if ($shouldSetRoot) {
             $visitor->setRoot($data);

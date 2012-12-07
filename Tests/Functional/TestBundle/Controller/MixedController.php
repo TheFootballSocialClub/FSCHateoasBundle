@@ -30,12 +30,10 @@ class MixedController extends Controller
             array('first' => 'value'),
             array('second' => 'value')
         );
-
-        $adapter = new ArrayAdapter($data);
-        $pager = new HalPagerfanta($adapter);
-        $pager->rel = "test-rel";
+        $pager = new Pagerfanta(new ArrayAdapter($data));
+        $halPager = new HalPagerfanta($pager, 'test-rel');
         $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($pager);
 
-        return new Response($this->get('serializer')->serialize($pager, $request->get('_format')));
+        return new Response($this->get('serializer')->serialize($halPager, $request->get('_format')));
     }
 }

@@ -2,9 +2,26 @@
 
 namespace FSC\HateoasBundle\Model;
 
-use Pagerfanta\Pagerfanta;
+use Pagerfanta\PagerfantaInterface;
 
-class HalPagerfanta extends Pagerfanta
+class HalPagerfanta
 {
-    public $rel;
+    private $pager;
+    private $rel;
+
+    public function __construct(PagerfantaInterface $pager, $rel)
+    {
+        $this->pager = $pager;
+        $this->rel = $rel;
+    }
+
+    public function getPager()
+    {
+        return $this->pager;
+    }
+
+    public function getRel()
+    {
+        return $this->rel;
+    }
 }
