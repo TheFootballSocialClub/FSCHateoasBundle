@@ -8,7 +8,6 @@ use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\GenericSerializationVisitor;
 use Metadata\MetadataFactoryInterface;
-use Pagerfanta\Pagerfanta;
 
 use FSC\HateoasBundle\Model\HalPagerfanta;
 
