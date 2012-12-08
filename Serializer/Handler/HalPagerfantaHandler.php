@@ -13,19 +13,23 @@ use FSC\HateoasBundle\Model\HalPagerfanta;
 
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
 use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
+use Pagerfanta\Pagerfanta;
 
 class HalPagerfantaHandler implements SubscribingHandlerInterface
 {
     public static function getSubscribingMethods()
     {
-        return array(
-            array(
+        $methods = array();
+        foreach (array('json', 'xml', 'yml') as $format) {
+            $methods[] = array(
                 'direction' => GraphNavigator::DIRECTION_SERIALIZATION,
-                'format' => 'json',
+                'format' => $format,
                 'type' => 'FSC\HateoasBundle\Model\HalPagerfanta',
-                'method' => 'serializeToArray',
-            )
-        );
+                'method' => 'serializeTo'.('xml' == $format ? 'XML' : 'Array'),
+            );
+        }
+
+        return $methods;
     }
 
     protected $serializerMetadataFactory;
@@ -49,6 +53,11 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
         $this->xmlElementsNamesUseSerializerMetadata = $xmlElementsNamesUseSerializerMetadata;
         $this->linksJsonKey = $linksKey ?: 'links';
         $this->relationsJsonKey = $relationsKey ?: 'relations';
+    }
+
+    public function serializeToXML(XmlSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)
+    {
+        return $visitor->getNavigator()->accept($halPager->getPager(), null, $visitor);
     }
 
     public function serializeToArray(GenericSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)

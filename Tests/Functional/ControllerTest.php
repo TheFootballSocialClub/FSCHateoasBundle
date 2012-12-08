@@ -350,6 +350,32 @@ JSON;
         $this->assertEquals($this->removeJsonIndentation($expectedJson), $response->getContent());
     }
 
+    public function testHalPagerInXML()
+    {
+        $client = $this->createClient(array('environment' => 'hal'));
+        $client->request('GET', '/api/pager?_format=xml');
+
+        $response = $client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<collection page="1" limit="10" total="2">
+  <link rel="self" href="http://localhost/api/pager?limit=10&amp;page=1"/>
+  <link rel="first" href="http://localhost/api/pager?limit=10&amp;page=1"/>
+  <link rel="last" href="http://localhost/api/pager?limit=10&amp;page=1"/>
+  <entry>
+    <entry><![CDATA[value]]></entry>
+  </entry>
+  <entry>
+    <entry><![CDATA[value]]></entry>
+  </entry>
+</collection>
+
+XML
+            , $response->getContent());
+    }
+
     protected function removeJsonIndentation($json)
     {
         return preg_replace('/(\n)(?:    )*/', '', $json);
