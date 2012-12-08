@@ -7,13 +7,10 @@ use JMS\Serializer\EventDispatcher\Event;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\GenericSerializationVisitor;
-use Metadata\MetadataFactoryInterface;
 
 use FSC\HateoasBundle\Model\HalPagerfanta;
-
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
 use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
-use Pagerfanta\Pagerfanta;
 
 class HalPagerfantaHandler implements SubscribingHandlerInterface
 {
@@ -32,25 +29,19 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
         return $methods;
     }
 
-    protected $serializerMetadataFactory;
     protected $embedderEventSubscriber;
     protected $linkEventSubscriber;
-    protected $xmlElementsNamesUseSerializerMetadata;
     protected $linksJsonKey;
     protected $relationsJsonKey;
 
     public function __construct(
-        MetadataFactoryInterface $serializerMetadataFactory,
         EmbedderEventSubscriber $embedderEventSubscriber,
         LinkEventSubscriber $linkEventSubscriber,
-        $xmlElementsNamesUseSerializerMetadata = true,
         $linksKey = null,
         $relationsKey = null
     ) {
-        $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->embedderEventSubscriber = $embedderEventSubscriber;
         $this->linkEventSubscriber = $linkEventSubscriber;
-        $this->xmlElementsNamesUseSerializerMetadata = $xmlElementsNamesUseSerializerMetadata;
         $this->linksJsonKey = $linksKey ?: 'links';
         $this->relationsJsonKey = $relationsKey ?: 'relations';
     }
@@ -62,12 +53,9 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
 
     public function serializeToArray(GenericSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)
     {
-        $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
-
-        $pager = $halPager->getPager();
-
         $shouldSetRoot = null === $visitor->getRoot();
 
+        $pager = $halPager->getPager();
         $data = array(
             'page' => $pager->getCurrentPage(),
             'limit' => $pager->getMaxPerPage(),
@@ -82,6 +70,7 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
             $data[$this->relationsJsonKey] = $relations;
         }
 
+        $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
         $data[$this->relationsJsonKey][$halPager->getRel()] = $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
 
         if ($shouldSetRoot) {
