@@ -58,10 +58,10 @@ class RelationsManager implements RelationsManagerInterface
         $this->metadataFactory->addObjectRelations($object, $relations);
     }
 
-    public function addRelation($object, $rel, $href, array $embed = null)
+    public function addRelation($object, $rel, $href, array $embed = null, $required = true)
     {
         $relationsBuilder = $this->relationsBuilderFactory->create();
-        $relationsBuilder->add($rel, $href, $embed);
+        $relationsBuilder->add($rel, $href, $embed, $required);
 
         $this->metadataFactory->addObjectRelations($object, $relationsBuilder->build());
     }

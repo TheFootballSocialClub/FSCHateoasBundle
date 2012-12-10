@@ -17,7 +17,7 @@ class RelationsBuilder implements RelationsBuilderInterface
         $this->relationsMetadata = array();
     }
 
-    public function add($rel, $href, array $embed = null)
+    public function add($rel, $href, array $embed = null, $required = true)
     {
         $relationMetadata = new RelationMetadata($rel);
 
@@ -78,6 +78,8 @@ class RelationsBuilder implements RelationsBuilderInterface
 
             $relationMetadata->setContent($contentMetadata);
         }
+
+        $relationMetadata->setRequired($required);
 
         $this->relationsMetadata[] = $relationMetadata;
     }
