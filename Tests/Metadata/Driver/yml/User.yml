@@ -38,3 +38,9 @@ FSC\HateoasBundle\Tests\Fixtures\User:
             property: .property
         - rel: adrienbrault
           href: http://adrienbrault.fr
+        - rel: best_friend
+          href:
+              route: _some_route
+              parameters:
+                  id: bestFriend.id
+          required: false

@@ -9,6 +9,7 @@ class RelationMetadata implements RelationMetadataInterface
     private $route;
     private $params;
     private $content;
+    private $required = true;
 
     public function __construct($rel)
     {
@@ -79,5 +80,21 @@ class RelationMetadata implements RelationMetadataInterface
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * @param Boolean $required
+     */
+    public function setRequired($required)
+    {
+        $this->required = $required;
+    }
+
+    /**
+     * @return Boolean
+     */
+    public function isRequired()
+    {
+        return $this->required;
     }
 }

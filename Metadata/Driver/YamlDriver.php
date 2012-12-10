@@ -84,6 +84,10 @@ class YamlDriver extends AbstractFileDriver
                     }
                 }
 
+                if (isset($relation['required']) && false === $relation['required']) {
+                    $relationMetadata->setRequired(false);
+                }
+
                 $classMetadata->addRelation($relationMetadata);
             }
         }

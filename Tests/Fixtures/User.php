@@ -29,12 +29,17 @@ use FSC\HateoasBundle\Annotation as Rest;
  * @Rest\Relation("adrienbrault",
  *     href = "http://adrienbrault.fr"
  * )
+ * @Rest\Relation("best_friend",
+ *     href     = @Rest\Route("_some_route", parameters = { "id" = "bestFriend.id" }),
+ *     required = false
+ * )
  */
 class User
 {
     private $id;
     private $username;
     private $property;
+    private $bestFriend;
 
     public function setId($id)
     {
@@ -54,5 +59,15 @@ class User
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function setBestFriend(User $user)
+    {
+        $this->bestFriend = $user;
+    }
+
+    public function getBestFriend()
+    {
+        return $this->bestFriend;
     }
 }
