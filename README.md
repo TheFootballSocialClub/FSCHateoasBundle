@@ -16,7 +16,7 @@ composer.json
 ```json
 {
     "require": {
-        "fsc/hateoas-bundle": "0.2.x-dev"
+        "fsc/hateoas-bundle": "0.3.x-dev"
     },
     "minimum-stability": "dev"
 }
@@ -58,6 +58,7 @@ use FSC\HateoasBundle\Annotation as Rest;
  * @Rest\Relation("self",      href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }))
  * @Rest\Relation("alternate", href = @Rest\Route("user_profile", parameters = { "user_id" = ".id" }))
  * @Rest\Relation("users",     href = @Rest\Route("api_user_list"))
+ * @Rest\Relation("rss",       href = "http://domain.com/users.rss")
  *
  * @Serializer\XmlRoot("user")
  */
@@ -89,6 +90,7 @@ $serializedUser = $container->get('serializer')->serialize($user, $format);
   <link rel="self" href="http://localhost/api/users/24"/>
   <link rel="alternate" href="http://localhost/profile/24"/>
   <link rel="users" href="http://localhost/api/users"/>
+  <link rel="rss" href="http://domain.com/users.rss"/>
 </user>
 ```
 
@@ -106,6 +108,9 @@ or
         },
         "users": {
             "href": "http:\/\/localhost\/api\/users"
+        },
+        "rss": {
+            "href": "http:\/\/domain.com\/users.rss"
         }
     ]
 }
@@ -154,6 +159,7 @@ class RootController extends Controller
                 'route' => 'api_user_get',
                 'parameters' => array('id' => $user->getId())
             ));
+            $relationsBuilder->add('me2', 'http://api.com/users/32'); // if you want to use the router here
 
             $this->get('fsc_hateoas.metadata.factory')->addObjectRelations($root, $relationsBuilder->build());
         }
@@ -185,6 +191,7 @@ class RootController extends Controller
   <link rel="users" href="http://localhost/api/users"/>
   <link rel="posts" href="http://localhost/api/posts"/>
   <link rel="me" href="http://localhost/api/users/32"/>
+  <link rel="me2" href="http://localhost/api/users/32"/>
 </root>
 ```
 

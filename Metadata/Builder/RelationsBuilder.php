@@ -17,16 +17,22 @@ class RelationsBuilder implements RelationsBuilderInterface
         $this->relationsMetadata = array();
     }
 
-    public function add($rel, array $href, array $embed = null)
+    public function add($rel, $href, array $embed = null)
     {
-        if (!isset($href['route'])) {
-            throw new \RuntimeException('href\'s "route" is required.');
-        }
+        $relationMetadata = new RelationMetadata($rel);
 
-        $relationMetadata = new RelationMetadata($rel, $href['route']);
+        if (is_array($href)) {
+            if (!isset($href['route'])) {
+                throw new \RuntimeException('href\'s "route" is required.');
+            }
 
-        if (isset($href['parameters'])) {
-            $relationMetadata->setParams($href['parameters']);
+            $relationMetadata->setRoute($href['route']);
+
+            if (isset($href['parameters'])) {
+                $relationMetadata->setParams($href['parameters']);
+            }
+        } else {
+            $relationMetadata->setUrl($href);
         }
 
         if (null !== $embed) {

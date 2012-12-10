@@ -124,5 +124,13 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('fsc_hateoas.factory.identity', $relationMetadata->getContent()->getProviderId());
         $this->assertEquals('get', $relationMetadata->getContent()->getProviderMethod());
         $this->assertEquals(array('.property'), $relationMetadata->getContent()->getProviderArguments());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('adrienbrault', $relationMetadata->getRel());
+        $this->assertEquals('http://adrienbrault.fr', $relationMetadata->getUrl());
+        $this->assertNull($relationMetadata->getRoute());
+        $this->assertNull($relationMetadata->getContent());
     }
 }

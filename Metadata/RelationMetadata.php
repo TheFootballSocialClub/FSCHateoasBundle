@@ -5,14 +5,14 @@ namespace FSC\HateoasBundle\Metadata;
 class RelationMetadata implements RelationMetadataInterface
 {
     private $rel;
+    private $url;
     private $route;
     private $params;
     private $content;
 
-    public function __construct($rel, $route)
+    public function __construct($rel)
     {
         $this->rel = $rel;
-        $this->route = $route;
         $this->params = array();
     }
 
@@ -66,5 +66,18 @@ class RelationMetadata implements RelationMetadataInterface
     public function getContent()
     {
         return $this->content;
+    }
+
+    public function setUrl($url)
+    {
+        $this->url = (string) $url;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 }

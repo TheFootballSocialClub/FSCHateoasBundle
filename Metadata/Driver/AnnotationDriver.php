@@ -35,9 +35,15 @@ class AnnotationDriver implements DriverInterface
 
         foreach ($annotations as $annotation) {
             if ($annotation instanceof Annotation\Relation) {
-                $relationMetadata = new RelationMetadata($annotation->rel, $annotation->href->value);
-                if (!empty($annotation->href->parameters)) {
-                    $relationMetadata->setParams($annotation->href->parameters);
+                $relationMetadata = new RelationMetadata($annotation->rel);
+
+                if ($annotation->href instanceof Annotation\Route) {
+                    $relationMetadata->setRoute($annotation->href->value);
+                    if (!empty($annotation->href->parameters)) {
+                        $relationMetadata->setParams($annotation->href->parameters);
+                    }
+                } else {
+                    $relationMetadata->setUrl($annotation->href);
                 }
 
                 if (null !== $annotation->embed && $annotation->embed instanceof Annotation\Content) {

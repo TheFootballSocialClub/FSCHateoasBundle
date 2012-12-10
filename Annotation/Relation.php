@@ -17,8 +17,6 @@ final class Relation
 
     /**
      * @Required
-     *
-     * @var \FSC\HateoasBundle\Annotation\Route
      */
     public $href;
 

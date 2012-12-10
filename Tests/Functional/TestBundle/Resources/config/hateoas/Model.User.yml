@@ -11,7 +11,8 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
               parameters:
                   id: .id
         - rel: users
-          href: api_user_list
+          href:
+              route: api_user_list
         - rel: last-post
           href:
               route: api_user_lastpost_get

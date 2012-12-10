@@ -50,7 +50,10 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 
     public function createLinkFromMetadata(RelationMetadataInterface $relationMetadata, $object)
     {
-        $href = $this->generateUrl($relationMetadata->getRoute(), $this->parametersFactory->createParameters($object, $relationMetadata->getParams()));
+        $href = $relationMetadata->getUrl() !== null
+            ? $relationMetadata->getUrl()
+            : $this->generateUrl($relationMetadata->getRoute(), $this->parametersFactory->createParameters($object, $relationMetadata->getParams()))
+        ;
 
         return $this->createLink($relationMetadata->getRel(), $href);
     }

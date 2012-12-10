@@ -6,11 +6,13 @@ FSC\HateoasBundle\Tests\Fixtures\User:
               parameters:
                   identifier: id
         - rel: alternate
-          href: _some_route2
+          href:
+              route: _some_route2
         - rel: alternate
           href: { route: _some_route3 }
         - rel: home
-          href: homepage
+          href:
+              route: homepage
         - rel: friends
           href:
               route: user_friends_list
@@ -34,3 +36,5 @@ FSC\HateoasBundle\Tests\Fixtures\User:
             route: homepage
           content:
             property: .property
+        - rel: adrienbrault
+          href: http://adrienbrault.fr

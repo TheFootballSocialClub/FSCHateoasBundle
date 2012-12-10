@@ -205,6 +205,7 @@ XML
 <root>
   <link rel="users" href="http://localhost/api/users"/>
   <link rel="posts" href="http://localhost/api/posts"/>
+  <link rel="adrienbrault" href="http://adrienbrault.fr"/>
 </root>
 
 XML
@@ -225,6 +226,7 @@ XML
   <link rel="users" href="http://localhost/api/users"/>
   <link rel="posts" href="http://localhost/api/posts"/>
   <link rel="me" href="http://localhost/api/users/1"/>
+  <link rel="adrienbrault" href="http://adrienbrault.fr"/>
 </root>
 
 XML

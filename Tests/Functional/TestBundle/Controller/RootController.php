@@ -21,6 +21,8 @@ class RootController extends Controller
             ));
         }
 
+        $this->get('fsc_hateoas.metadata.relations_manager')->addRelation($root, 'adrienbrault', 'http://adrienbrault.fr');
+
         return new Response($this->get('serializer')->serialize($root, $request->get('_format')));
     }
 }
