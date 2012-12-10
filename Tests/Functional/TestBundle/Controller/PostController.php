@@ -46,4 +46,13 @@ class PostController extends Controller
 
         return $this->getCreatePostFormAction($request);
     }
+
+    public function putPostAction($id)
+    {
+        $post = $this->get('test.provider.post')->getPost($id);
+
+        return new Response('', 201, array(
+            'Location' => $this->get('fsc_hateoas.routing.relation_url_generator')->generateUrl($post, 'self'),
+        ));
+    }
 }

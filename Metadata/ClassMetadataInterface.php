@@ -8,4 +8,11 @@ interface ClassMetadataInterface
      * @return array<RelationMetadataInterface>
      */
     public function getRelations();
+
+    /**
+     * @param string $rel
+     *
+     * @return RelationMetadataInterface
+     */
+    public function getRelation($rel);
 }

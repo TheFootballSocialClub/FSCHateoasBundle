@@ -543,3 +543,36 @@ class UserController extends Controller
     </select>
 </form>
 ```
+
+## RelationUrlGenerator
+
+You can leverage the fact that the hateoas bundle knows how to create url to an object's relation. This is usefull if you
+want generate the self url to an object:
+
+```php
+$user = ...
+$userUrl = $container->get('fsc_hateoas.routing.relation_url_generator')->generateUrl($user, 'self')
+```
+
+You can even use the controller trait:
+
+```php
+<?php
+
+use FSC\HateoasBundle\Controller\HateoasTrait;
+
+class UserController extends Controller
+{
+    public function createUserAction(Request $request)
+    {
+        $user = new User();
+
+        ... // you own stuff
+
+        return Response('', 201, array(
+            'Location' => $this->generateSelfUrl($user),
+        ));
+    }
+}
+
+```

@@ -12,6 +12,7 @@ parameters:
     fsc_hateoas.serializer.handler.form.class: FSC\HateoasBundle\Serializer\Handler\FormHandler
     fsc_hateoas.factory.identity.class: FSC\HateoasBundle\Factory\IdentityFactory
     fsc_hateoas.routing.generator.class: FSC\HateoasBundle\Routing\UrlGenerator
+    fsc_hateoas.routing.relation_url_generator.class: FSC\HateoasBundle\Routing\RelationUrlGenerator
 
     fsc_hateoas.json.links_key: ~
     fsc_hateoas.json.relations_key: ~
@@ -105,3 +106,10 @@ services:
         class: %fsc_hateoas.routing.generator.class%
         arguments:
             - @router
+
+    fsc_hateoas.routing.relation_url_generator:
+        class: %fsc_hateoas.routing.relation_url_generator.class%
+        arguments:
+            - @fsc_hateoas.routing.generator
+            - @fsc_hateoas.metadata.factory
+            - @fsc_hateoas.factory.parameters

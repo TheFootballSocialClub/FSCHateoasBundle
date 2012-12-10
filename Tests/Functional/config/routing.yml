@@ -40,6 +40,13 @@ api_post_get:
     pattern: /api/posts/{id}
     defaults:
         _controller: TestBundle:Post:getPost
+    requirements: { _method: GET }
+
+api_post_put:
+    pattern: /api/posts/{id}
+    defaults:
+        _controller: TestBundle:Post:putPost
+    requirements: { _method: PUT }
 
 api_user_posts_list:
     pattern: /api/users/{id}/posts

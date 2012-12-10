@@ -28,6 +28,16 @@ XML
         , $response->getContent());
     }
 
+    public function testPutPostXml()
+    {
+        $client = $this->createClient();
+        $client->request('PUT', '/api/posts/2');
+
+        $response = $client->getResponse(); /**  */
+
+        $this->assertEquals('http://localhost/api/posts/2', $response->headers->get('Location'));
+    }
+
     public function testGetUserPostsXml()
     {
         $client = $this->createClient();
