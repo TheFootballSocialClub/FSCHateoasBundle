@@ -8,6 +8,7 @@ parameters:
     fsc_hateoas.serializer.event_subscriber.link.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
     fsc_hateoas.serializer.event_subscriber.embedder.class: FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber
     fsc_hateoas.serializer.handler.pagerfanta.class: FSC\HateoasBundle\Serializer\Handler\PagerfantaHandler
+    fsc_hateoas.serializer.handler.halpagerfanta.class: FSC\HateoasBundle\Serializer\Handler\HalPagerfantaHandler
     fsc_hateoas.serializer.handler.form_view.class: FSC\HateoasBundle\Serializer\Handler\FormViewHandler
     fsc_hateoas.serializer.handler.form.class: FSC\HateoasBundle\Serializer\Handler\FormHandler
     fsc_hateoas.factory.identity.class: FSC\HateoasBundle\Factory\IdentityFactory
@@ -79,6 +80,16 @@ services:
             - @fsc_hateoas.serializer.event_subscriber.embedder
             - @fsc_hateoas.serializer.event_subscriber.link
             - true
+            - %fsc_hateoas.json.links_key%
+            - %fsc_hateoas.json.relations_key%
+        tags:
+            - { name: jms_serializer.subscribing_handler }
+
+    fsc_hateoas.serializer.handler.halpagerfanta:
+        class: %fsc_hateoas.serializer.handler.halpagerfanta.class%
+        arguments:
+            - @fsc_hateoas.serializer.event_subscriber.embedder
+            - @fsc_hateoas.serializer.event_subscriber.link
             - %fsc_hateoas.json.links_key%
             - %fsc_hateoas.json.relations_key%
         tags:
