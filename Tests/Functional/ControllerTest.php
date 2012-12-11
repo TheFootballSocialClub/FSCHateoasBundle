@@ -346,9 +346,9 @@ JSON;
     "limit":10,
     "total":2,
     "_links":{
-        "self":{"href":"http:\/\/localhost\/api\/pager?limit=10&page=1"},
-        "first":{"href":"http:\/\/localhost\/api\/pager?limit=10&page=1"},
-        "last":{"href":"http:\/\/localhost\/api\/pager?limit=10&page=1"}
+        "self":{"href":"http:\/\/localhost\/api\/pager?_format=json&limit=10&page=1"},
+        "first":{"href":"http:\/\/localhost\/api\/pager?_format=json&limit=10&page=1"},
+        "last":{"href":"http:\/\/localhost\/api\/pager?_format=json&limit=10&page=1"}
     },
     "_embedded":{
         "test-rel":[
@@ -373,9 +373,9 @@ JSON;
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <collection page="1" limit="10" total="2">
-  <link rel="self" href="http://localhost/api/pager?limit=10&amp;page=1"/>
-  <link rel="first" href="http://localhost/api/pager?limit=10&amp;page=1"/>
-  <link rel="last" href="http://localhost/api/pager?limit=10&amp;page=1"/>
+  <link rel="self" href="http://localhost/api/pager?_format=xml&amp;limit=10&amp;page=1"/>
+  <link rel="first" href="http://localhost/api/pager?_format=xml&amp;limit=10&amp;page=1"/>
+  <link rel="last" href="http://localhost/api/pager?_format=xml&amp;limit=10&amp;page=1"/>
   <entry>
     <entry><![CDATA[value]]></entry>
   </entry>
