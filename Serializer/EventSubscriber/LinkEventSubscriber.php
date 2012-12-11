@@ -53,7 +53,9 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     public function onPostSerialize(Event $event)
     {
-        if (null === ($links = $this->getOnPostSerializeData($event))) {
+        $links = $this->getOnPostSerializeData($event);
+
+        if (empty($links)) {
             return;
         }
 

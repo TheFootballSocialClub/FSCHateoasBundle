@@ -3,6 +3,11 @@ api_root:
     defaults:
         _controller: TestBundle:Root:index
 
+api_root_empty:
+    pattern: /api/empty
+    defaults:
+        _controller: TestBundle:Root:empty
+
 api_user_get:
     pattern: /api/users/{identifier}
 

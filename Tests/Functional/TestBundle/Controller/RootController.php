@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\Root;
+use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\EmptyRoot;
 
 class RootController extends Controller
 {
@@ -24,5 +25,12 @@ class RootController extends Controller
         $this->get('fsc_hateoas.metadata.relations_manager')->addRelation($root, 'adrienbrault', 'http://adrienbrault.fr');
 
         return new Response($this->get('serializer')->serialize($root, $request->get('_format')));
+    }
+
+    public function emptyAction(Request $request)
+    {
+        $data = new EmptyRoot();
+
+        return new Response($this->get('serializer')->serialize($data, $request->get('_format')));
     }
 }

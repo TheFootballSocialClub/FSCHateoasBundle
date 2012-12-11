@@ -388,6 +388,23 @@ XML
             , $response->getContent());
     }
 
+    /**
+     * This test covers the case when an object has metadata attached but no relations/links
+     */
+    public function testEmptyActionJson()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/empty?_format=json');
+
+        $response = $client->getResponse(); /** @var $response Response */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<JSON
+{"foo":"bar"}
+JSON
+            , $response->getContent());
+    }
+
     protected function removeJsonIndentation($json)
     {
         return preg_replace('/(\n)(?:    )*/', '', $json);
