@@ -15,6 +15,11 @@ class HalPagerfanta
         $this->rel = $rel;
     }
 
+    public static function create(PagerfantaInterface $pager, $rel)
+    {
+        return new static($pager, $rel);
+    }
+
     public function getPager()
     {
         return $this->pager;

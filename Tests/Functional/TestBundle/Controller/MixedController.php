@@ -31,8 +31,9 @@ class MixedController extends Controller
             array('second' => 'value')
         );
         $pager = new Pagerfanta(new ArrayAdapter($data));
-        $halPager = new HalPagerfanta($pager, 'test-rel');
         $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($pager);
+
+        $halPager = HalPagerfanta::create($pager, 'test-rel');
 
         return new Response($this->get('serializer')->serialize($halPager, $request->get('_format')));
     }
