@@ -49,9 +49,9 @@ XML
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <collection page="1" limit="10" total="2">
-  <link rel="self" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
-  <link rel="first" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
-  <link rel="last" href="http://localhost/api/users/42/posts?limit=10&amp;page=1"/>
+  <link rel="self" href="http://localhost/api/users/42/posts?_format=xml&amp;limit=10&amp;page=1"/>
+  <link rel="first" href="http://localhost/api/users/42/posts?_format=xml&amp;limit=10&amp;page=1"/>
+  <link rel="last" href="http://localhost/api/users/42/posts?_format=xml&amp;limit=10&amp;page=1"/>
   <post id="2">
     <title><![CDATA[How to create awesome symfony2 application]]></title>
     <link rel="self" href="http://localhost/api/posts/2"/>
@@ -77,9 +77,9 @@ XML
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <collection page="1" limit="10" total="2">
-  <link rel="self" href="http://localhost/api/users/42/posts?pagination%5Blimit%5D=10&amp;pagination%5Bpage%5D=1"/>
-  <link rel="first" href="http://localhost/api/users/42/posts?pagination%5Blimit%5D=10&amp;pagination%5Bpage%5D=1"/>
-  <link rel="last" href="http://localhost/api/users/42/posts?pagination%5Blimit%5D=10&amp;pagination%5Bpage%5D=1"/>
+  <link rel="self" href="http://localhost/api/users/42/posts?_format=xml&amp;pagination%5Blimit%5D=10&amp;pagination%5Bpage%5D=1"/>
+  <link rel="first" href="http://localhost/api/users/42/posts?_format=xml&amp;pagination%5Blimit%5D=10&amp;pagination%5Bpage%5D=1"/>
+  <link rel="last" href="http://localhost/api/users/42/posts?_format=xml&amp;pagination%5Blimit%5D=10&amp;pagination%5Bpage%5D=1"/>
   <post id="2">
     <title><![CDATA[How to create awesome symfony2 application]]></title>
     <link rel="self" href="http://localhost/api/posts/2"/>
@@ -128,7 +128,7 @@ XML
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <form method="POST" action="http://localhost/api/posts">
-  <link rel="self" href="http://localhost/api/posts/create"/>
+  <link rel="self" href="http://localhost/api/posts/create?_format=xml"/>
   <input type="text" name="post[title]" required="required"/>
 </form>
 
@@ -166,9 +166,9 @@ XML
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <posts page="1" limit="10" total="3">
-  <link rel="self" href="http://localhost/api/posts?limit=10&amp;page=1"/>
-  <link rel="first" href="http://localhost/api/posts?limit=10&amp;page=1"/>
-  <link rel="last" href="http://localhost/api/posts?limit=10&amp;page=1"/>
+  <link rel="self" href="http://localhost/api/posts?_format=xml&amp;limit=10&amp;page=1"/>
+  <link rel="first" href="http://localhost/api/posts?_format=xml&amp;limit=10&amp;page=1"/>
+  <link rel="last" href="http://localhost/api/posts?_format=xml&amp;limit=10&amp;page=1"/>
   <post id="1">
     <title><![CDATA[Welcome on the blog!]]></title>
     <link rel="self" href="http://localhost/api/posts/1"/>
