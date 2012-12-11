@@ -44,7 +44,7 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     public function onPostSerializeXML(Event $event)
     {
-        if (null === ($links = $this->linkFactory->createLinks($event->getObject(), $event->getType()))) {
+        if (!$links = $this->linkFactory->createLinks($event->getObject(), $event->getType())) {
             return;
         }
 
@@ -53,8 +53,8 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     public function onPostSerialize(Event $event)
     {
-        if (null === ($links = $this->getOnPostSerializeData($event))) {
-            return;
+        if (!$links = $this->getOnPostSerializeData($event)) {
+            return null;
         }
 
         $event->getVisitor()->addData($this->linksJsonKey, $links);
@@ -62,8 +62,8 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     public function getOnPostSerializeData(Event $event)
     {
-        if (null === ($links = $this->linkFactory->createLinks($event->getObject()))) {
-            return;
+        if (!$links = $this->linkFactory->createLinks($event->getObject())) {
+            return null;
         }
 
         $visitor = $event->getVisitor();
