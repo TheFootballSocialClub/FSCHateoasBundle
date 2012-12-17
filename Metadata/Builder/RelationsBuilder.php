@@ -38,7 +38,7 @@ class RelationsBuilder implements RelationsBuilderInterface
         if (null !== $embed) {
             if (!empty($embed['provider']) && !empty($embed['property'])) {
                 throw new \RuntimeException('Content configuration can only have either a provider or a property.');
-            } 
+            }
             if (empty($embed['provider']) && empty($embed['property'])) {
                 throw new \RuntimeException('Content configuration needs either a provider or a property.');
             }
