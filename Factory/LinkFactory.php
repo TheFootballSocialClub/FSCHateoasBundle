@@ -3,7 +3,6 @@
 namespace FSC\HateoasBundle\Factory;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Form\Util\PropertyPath;
 
 use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Metadata\MetadataFactoryInterface;

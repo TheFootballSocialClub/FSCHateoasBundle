@@ -4,7 +4,6 @@ namespace FSC\HateoasBundle\Metadata;
 
 use Metadata\MetadataFactoryInterface as BaseMetadataFactoryInterface;
 
-use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
 use FSC\HateoasBundle\Metadata\ClassMetadata;
 
 class MetadataFactory implements MetadataFactoryInterface

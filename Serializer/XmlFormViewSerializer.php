@@ -4,11 +4,10 @@ namespace FSC\HateoasBundle\Serializer;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Extension\Core\View\ChoiceView;
-use Symfony\Component\Form\Util\PropertyPath;
 
 class XmlFormViewSerializer
 {
-    static protected $baseTypes = array(
+    protected static $baseTypes = array(
         'text', 'textarea', 'email', 'integer', 'money', 'number', 'password', 'percent', 'search', 'url', 'hidden',
         'collection', 'choice', 'checkbox', 'radio', 'datetime', 'date',
     );

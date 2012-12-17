@@ -15,7 +15,7 @@ interface MetadataFactoryInterface
 
     /**
      * @param object $object
-     * @param array $relations
+     * @param array  $relations
      */
     public function addObjectRelations($object, array $relations);
 }
