@@ -10,8 +10,6 @@ use JMS\Serializer\EventDispatcher\Event;
 
 use Metadata\MetadataFactoryInterface as JMSMetadataFactoryInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\Util\PropertyPath;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pagerfanta\PagerfantaInterface;
 
 use FSC\HateoasBundle\Factory\ContentFactoryInterface;
