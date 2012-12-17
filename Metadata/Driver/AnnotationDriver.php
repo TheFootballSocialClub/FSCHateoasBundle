@@ -79,6 +79,10 @@ class AnnotationDriver implements DriverInterface
                     }
                 }
 
+                if (false === $annotation->required) {
+                    $relationMetadata->setRequired(false);
+                }
+
                 $classMetadata->addRelation($relationMetadata);
             }
         }

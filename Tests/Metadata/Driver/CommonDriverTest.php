@@ -63,6 +63,7 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('_some_route', $relationMetadata->getRoute());
         $this->assertEquals(array('identifier' => 'id'), $relationMetadata->getParams());
         $this->assertNull($relationMetadata->getContent());
+        $this->assertTrue($relationMetadata->isRequired());
 
         $n++;
 
@@ -71,6 +72,7 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('_some_route2', $relationMetadata->getRoute());
         $this->assertEquals(array(), $relationMetadata->getParams());
         $this->assertNull($relationMetadata->getContent());
+        $this->assertTrue($relationMetadata->isRequired());
 
         $n++;
 
@@ -79,6 +81,7 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('_some_route3', $relationMetadata->getRoute());
         $this->assertEquals(array(), $relationMetadata->getParams());
         $this->assertNull($relationMetadata->getContent());
+        $this->assertTrue($relationMetadata->isRequired());
 
         $n++;
 
@@ -100,6 +103,7 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($relationMetadata->getContent()->getSerializerType());
         $this->assertNull($relationMetadata->getContent()->getSerializerXmlElementName());
         $this->assertTrue($relationMetadata->getContent()->getSerializerXmlElementRootName());
+        $this->assertTrue($relationMetadata->isRequired());
 
         $n++;
 
@@ -114,6 +118,7 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Pagerfanta<custom>', $relationMetadata->getContent()->getSerializerType());
         $this->assertEquals('favorites', $relationMetadata->getContent()->getSerializerXmlElementName());
         $this->assertTrue($relationMetadata->getContent()->getSerializerXmlElementRootName());
+        $this->assertTrue($relationMetadata->isRequired());
 
         $n++;
 
@@ -124,6 +129,7 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('fsc_hateoas.factory.identity', $relationMetadata->getContent()->getProviderId());
         $this->assertEquals('get', $relationMetadata->getContent()->getProviderMethod());
         $this->assertEquals(array('.property'), $relationMetadata->getContent()->getProviderArguments());
+        $this->assertTrue($relationMetadata->isRequired());
 
         $n++;
 
@@ -132,5 +138,15 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://adrienbrault.fr', $relationMetadata->getUrl());
         $this->assertNull($relationMetadata->getRoute());
         $this->assertNull($relationMetadata->getContent());
+        $this->assertTrue($relationMetadata->isRequired());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('best_friend', $relationMetadata->getRel());
+        $this->assertEquals('_some_route', $relationMetadata->getRoute());
+        $this->assertEquals(array('id' => 'bestFriend.id'), $relationMetadata->getParams());
+        $this->assertNull($relationMetadata->getContent());
+        $this->assertFalse($relationMetadata->isRequired());
     }
 }

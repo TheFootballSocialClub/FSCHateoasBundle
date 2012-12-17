@@ -4,6 +4,7 @@ namespace FSC\HateoasBundle\Factory;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Metadata\MetadataFactoryInterface;
@@ -42,7 +43,13 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
         $links = array();
 
         foreach ($classMetadata->getRelations() as $relationMetadata) {
-            $links[] = $this->createLinkFromMetadata($relationMetadata, $object);
+            try {
+                $links[] = $this->createLinkFromMetadata($relationMetadata, $object);
+            } catch (UnexpectedTypeException $e) {
+                if ($relationMetadata->isRequired()) {
+                    throw $e;
+                }
+            }
         }
 
         return $links;

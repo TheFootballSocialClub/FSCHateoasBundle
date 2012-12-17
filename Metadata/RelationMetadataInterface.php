@@ -28,4 +28,9 @@ interface RelationMetadataInterface
      * @return null|RelationContentMetadataInterface
      */
     public function getContent();
+
+    /**
+     * @return Boolean
+     */
+    public function isRequired();
 }
