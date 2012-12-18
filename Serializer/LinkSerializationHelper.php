@@ -20,13 +20,9 @@ class LinkSerializationHelper
         foreach ($links as $link) {
             $entryNode = $visitor->getDocument()->createElement('link');
             $visitor->getCurrentNode()->appendChild($entryNode);
-            $visitor->setCurrentNode($entryNode);
 
-            if (null !== $node = $visitor->getNavigator()->accept($link, null, $visitor)) {
-                $visitor->getCurrentNode()->appendChild($node);
-            }
-
-            $visitor->revertCurrentNode();
+            $entryNode->setAttribute('rel', $link->getRel());
+            $entryNode->setAttribute('href', $link->getHref());
         }
     }
 
@@ -38,7 +34,14 @@ class LinkSerializationHelper
             $rel = $link->getRel();
             $link->setRel(null); // To avoid serialization
 
-            $serializedLink = $visitor->getNavigator()->accept($link, $this->typeParser->parse('FSC\HateoasBundle\Model\Link'), $visitor);
+            $serializedLink = array();
+            if (null !== $link->getRel()) {
+                $serializedLink['rel'] = $link->getRel();
+            }
+            if (null !== $link->getHref()) {
+                $serializedLink['href'] = $link->getHref();
+            }
+
             if (isset($serializedLinks[$rel])) {
                 if (isset($serializedLinks[$rel]['href'])) {
                     $serializedLinks[$rel] = array($serializedLinks[$rel]);
