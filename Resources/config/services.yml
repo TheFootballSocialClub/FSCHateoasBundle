@@ -34,6 +34,8 @@ services:
     fsc_hateoas.factory.parameters:
         class: %fsc_hateoas.factory.parameters.class%
         public: false
+        arguments:
+            - @property_accessor
 
     fsc_hateoas.factory.content:
         class: %fsc_hateoas.factory.content.class%

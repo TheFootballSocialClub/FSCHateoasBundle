@@ -7,15 +7,25 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ParametersFactory implements ParametersFactoryInterface
 {
+    private $propertyAccessor;
+
+    /**
+     * @param PropertyAccessor $propertyAccessor
+     */
+    public function __construct(PropertyAccessor $propertyAccessor)
+    {
+        $this->propertyAccessor = $propertyAccessor;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function createParameters($data, $parameters)
     {
         $self = $this;
-        array_walk($parameters, function (&$value, $key) use ($data, $self) {
+        $propertyAccessor = $this->propertyAccessor;
+        array_walk($parameters, function (&$value, $key) use ($data, $self, $propertyAccessor) {
             if (is_string($value) && in_array(substr($value, 0, 1), array('.', '['))) {
-                $propertyAccessor = new PropertyAccessor();
                 $propertyPath = new PropertyPath(preg_replace('/^\./', '', $value));
                 $value = $propertyAccessor->getValue($data, $propertyPath);
 

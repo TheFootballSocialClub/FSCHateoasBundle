@@ -3,6 +3,7 @@
 namespace FSC\HateoasBundle\Tests\Factory;
 
 use FSC\HateoasBundle\Factory\LinkFactory;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class LinkFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +19,7 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $metadataFactory = $this->getMock('FSC\HateoasBundle\Metadata\MetadataFactoryInterface');
-        $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory();
+        $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory(new PropertyAccessor());
         $linkFactory = new LinkFactory($urlGenerator, $metadataFactory, $parametersFactory);
 
         $object = (object) array('id' => $id = 3);
@@ -53,7 +54,7 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $metadataFactory = $this->getMock('FSC\HateoasBundle\Metadata\MetadataFactoryInterface');
-        $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory();
+        $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory(new PropertyAccessor());
         $linkFactory = new LinkFactory($urlGenerator, $metadataFactory, $parametersFactory);
 
         $object = (object) array('id' => $id = 3);
