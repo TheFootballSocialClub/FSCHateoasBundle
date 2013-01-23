@@ -13,7 +13,8 @@
         "symfony/framework-bundle": ">=2.1,<2.3-dev",
         "jms/metadata": ">=1.1.0,<1.3-dev",
         "jms/serializer": "1.0.x",
-        "jms/serializer-bundle": "*"
+        "jms/serializer-bundle": "*",
+        "symfony/property-access": "dev-master"
     },
     "require-dev": {
         "symfony/class-loader": "*",
