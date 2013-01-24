@@ -10,7 +10,7 @@ class ParametersFactory implements ParametersFactoryInterface
     private $propertyAccessor;
 
     /**
-     * @param PropertyAccessor $propertyAccessor
+     * @param PropertyAccessorInterface $propertyAccessor
      */
     public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
