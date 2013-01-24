@@ -3,7 +3,7 @@
 namespace FSC\HateoasBundle\Factory;
 
 use Symfony\Component\PropertyAccess\PropertyPath;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class ParametersFactory implements ParametersFactoryInterface
 {
@@ -12,7 +12,7 @@ class ParametersFactory implements ParametersFactoryInterface
     /**
      * @param PropertyAccessor $propertyAccessor
      */
-    public function __construct(PropertyAccessor $propertyAccessor)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
         $this->propertyAccessor = $propertyAccessor;
     }
