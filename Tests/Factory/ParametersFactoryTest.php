@@ -3,6 +3,7 @@
 namespace FSC\HateoasBundle\Tests\Util;
 
 use FSC\HateoasBundle\Factory\ParametersFactory;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ParametersFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +12,7 @@ class ParametersFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateParameters($data, $parameters, $expectedResult)
     {
-        $parametersFactory = new ParametersFactory();
+        $parametersFactory = new ParametersFactory(new PropertyAccessor());
         $this->assertEquals($expectedResult, $parametersFactory->createParameters($data, $parameters));
     }
 

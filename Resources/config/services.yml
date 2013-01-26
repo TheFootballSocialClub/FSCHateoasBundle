@@ -14,6 +14,7 @@ parameters:
     fsc_hateoas.factory.identity.class: FSC\HateoasBundle\Factory\IdentityFactory
     fsc_hateoas.routing.generator.class: FSC\HateoasBundle\Routing\UrlGenerator
     fsc_hateoas.routing.relation_url_generator.class: FSC\HateoasBundle\Routing\RelationUrlGenerator
+    fsc_hateoas.form.property_accessor.class: Symfony\Component\PropertyAccess\PropertyAccessor
 
     fsc_hateoas.json.links_key: ~
     fsc_hateoas.json.relations_key: ~
@@ -34,6 +35,8 @@ services:
     fsc_hateoas.factory.parameters:
         class: %fsc_hateoas.factory.parameters.class%
         public: false
+        arguments:
+            - @fsc_hateoas.form.property_accessor
 
     fsc_hateoas.factory.content:
         class: %fsc_hateoas.factory.content.class%
@@ -124,3 +127,6 @@ services:
             - @fsc_hateoas.routing.generator
             - @fsc_hateoas.metadata.factory
             - @fsc_hateoas.factory.parameters
+
+    fsc_hateoas.form.property_accessor:
+        class: %fsc_hateoas.form.property_accessor.class%

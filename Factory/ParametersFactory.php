@@ -2,20 +2,32 @@
 
 namespace FSC\HateoasBundle\Factory;
 
-use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class ParametersFactory implements ParametersFactoryInterface
 {
+    private $propertyAccessor;
+
+    /**
+     * @param PropertyAccessorInterface $propertyAccessor
+     */
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
+    {
+        $this->propertyAccessor = $propertyAccessor;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function createParameters($data, $parameters)
     {
         $self = $this;
-        array_walk($parameters, function (&$value, $key) use ($data, $self) {
+        $propertyAccessor = $this->propertyAccessor;
+        array_walk($parameters, function (&$value, $key) use ($data, $self, $propertyAccessor) {
             if (is_string($value) && in_array(substr($value, 0, 1), array('.', '['))) {
                 $propertyPath = new PropertyPath(preg_replace('/^\./', '', $value));
-                $value = $propertyPath->getValue($data);
+                $value = $propertyAccessor->getValue($data, $propertyPath);
 
                 return;
             } elseif ('@' === $value) {

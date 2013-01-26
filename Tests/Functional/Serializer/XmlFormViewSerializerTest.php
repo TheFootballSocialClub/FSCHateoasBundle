@@ -137,7 +137,6 @@ XML
         $this->assertXmlElementEquals(<<<XML
 <form>
     <select name="form[publishedAt][year]" required="required">
-        <option value="2007">2007</option>
         <option value="2008">2008</option>
         <option value="2009">2009</option>
         <option value="2010">2010</option>
@@ -148,6 +147,7 @@ XML
         <option value="2015">2015</option>
         <option value="2016">2016</option>
         <option value="2017">2017</option>
+        <option value="2018">2018</option>
     </select>
     <select name="form[publishedAt][month]" required="required">
         <option value="1">Jan</option>
@@ -201,7 +201,6 @@ XML
     <input type="text" name="form[editedAt][day]" required="required"/>
     <input type="date" name="form[createdAt]" required="required"/>
     <select name="form[publishedAtTime][date][year]" required="required">
-        <option value="2007">2007</option>
         <option value="2008">2008</option>
         <option value="2009">2009</option>
         <option value="2010">2010</option>
@@ -212,6 +211,7 @@ XML
         <option value="2015">2015</option>
         <option value="2016">2016</option>
         <option value="2017">2017</option>
+        <option value="2018">2018</option>
     </select>
     <select name="form[publishedAtTime][date][month]" required="required">
         <option value="1">Jan</option>
