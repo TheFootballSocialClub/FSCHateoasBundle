@@ -6,5 +6,4 @@ framework:
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
     form: ~
-    validation:
-        translation_domain: validators
+    validation: ~
