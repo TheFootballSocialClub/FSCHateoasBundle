@@ -28,8 +28,6 @@ class ParametersFactory implements ParametersFactoryInterface
             if (is_string($value) && in_array(substr($value, 0, 1), array('.', '['))) {
                 $propertyPath = new PropertyPath(preg_replace('/^\./', '', $value));
                 $value = $propertyAccessor->getValue($data, $propertyPath);
-
-                return;
             } elseif ('@' === $value) {
                 $value = $data;
             } elseif (is_array($value)) {
