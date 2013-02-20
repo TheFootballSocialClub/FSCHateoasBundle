@@ -480,10 +480,8 @@ class XmlFormViewSerializer
     protected function serializeCollectionWidget(\DOMElement $parentElement, FormView $view, $variables)
     {
         if (isset($variables['prototype'])) {
-            // TODO test this ?
-            var_dump($variables['prototype']);exit;
             $variables['attr'] = array_merge($variables['attr'], array(
-                'data-prototype' => $this->renderer->searchAndRenderBlock($variables['prototype'], 'row'),
+                'data-prototype' => $this->serializeBlock($parentElement,$variables['prototype'], 'row'),
             ));
         }
 
