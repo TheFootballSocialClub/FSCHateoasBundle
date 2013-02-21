@@ -605,7 +605,6 @@ class XmlFormViewSerializer
             </div>
         {% endif %}
     */
-
     protected function serializeDateWidget(\DOMElement $parentElement, FormView $view, $variables)
     {
         if ('single_text' == $variables['widget']) {
