@@ -4,6 +4,10 @@ namespace FSC\HateoasBundle\Tests\Functional\Serializer;
 
 use FSC\HateoasBundle\Tests\Functional\TestCase;
 use FSC\HateoasBundle\Serializer\XmlFormViewSerializer;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+
 
 /**
  * @group functional
@@ -101,6 +105,32 @@ XML
         $this->assertXmlElementEquals(<<<XML
 <form enctype="multipart/form-data">
     <input type="file" name="form[avatar]" required="required"/>
+</form>
+XML
+            , $formElement);
+    }
+
+    public function testCollectionType()
+    {
+        $formFactory = $this->getKernel()->getContainer()->get('form.factory');
+
+        $form = $formFactory->createBuilder('form')
+            ->add('service', 'collection', [
+                'type'         => new availabilityFormType(),
+                'allow_add' => true
+            ])
+            ->getForm();
+
+        $formView = $form->createView();
+
+        $xmlFormViewSerializer = new XmlFormViewSerializer();
+
+        $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
+
+        $this->assertXmlElementEquals(<<<XML
+<form>
+    <input type="text" name="form[service][__name__][timeId]" required="required"/>
+    <input type="text" name="form[service][__name__][dayId]" required="required"/>
 </form>
 XML
             , $formElement);
@@ -397,4 +427,24 @@ XML
 
         return $domDocument->createElement('form');
     }
+}
+
+class availabilityFormType extends AbstractType
+{
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add('timeId');
+        $builder->add('dayId');
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array());
+    }
+    public function getName()
+    {
+        return 'availability';
+    }
+
 }
