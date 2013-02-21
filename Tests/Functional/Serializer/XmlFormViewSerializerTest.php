@@ -115,10 +115,10 @@ XML
         $formFactory = $this->getKernel()->getContainer()->get('form.factory');
 
         $form = $formFactory->createBuilder('form')
-            ->add('service', 'collection', [
+            ->add('service', 'collection', array(
                 'type'         => new availabilityFormType(),
                 'allow_add' => true
-            ])
+            ))
             ->getForm();
 
         $formView = $form->createView();
