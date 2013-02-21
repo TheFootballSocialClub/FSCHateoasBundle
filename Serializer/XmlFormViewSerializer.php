@@ -42,6 +42,11 @@ class XmlFormViewSerializer
             }
         }
 
+        if ($variables['label'])
+        {
+            $this->serializeLabel($parentElement, $type, $variables);
+        }
+
         if ($view->isRendered()) {
             return;
         }
@@ -78,7 +83,15 @@ class XmlFormViewSerializer
                     $this->serializeUrlWidget($parentElement, $view, $variables);
                     break;
                 case 'choice':
-                    $this->serializeChoiceWidget($parentElement, $view, $variables);
+                    if ($variables['expanded'])
+                    {
+                        $this->serializeFieldset($parentElement, $view, $variables);
+                    }
+                    else
+                    {
+                        $this->serializeChoiceWidget($parentElement, $view, $variables);
+                    }
+
                     break;
                 case 'hidden':
                     $this->serializeHiddenWidget($parentElement, $view, $variables);
@@ -174,12 +187,22 @@ class XmlFormViewSerializer
         $parentElement->appendChild($inputElement);
 
         $inputElement->setAttribute('type', $variables['type']);
+        $inputElement->setAttribute('id', $variables['id']);
 
         if (!empty($variables['value'])) {
             $inputElement->setAttribute('value', $variables['value']);
         }
 
         $this->addWidgetAttributes($inputElement, $view, $variables);
+    }
+
+    protected function serializeLabel(\DOMElement $parentElement, $type, $variables)
+    {
+        $labelElement = $parentElement->ownerDocument->createElement('label',$variables['label']);
+        $parentElement->appendChild($labelElement);
+
+        $labelElement->setAttribute('for', $variables['id']);
+
     }
 
     /*
@@ -237,6 +260,7 @@ class XmlFormViewSerializer
     protected function serializeTextareaWidget(\DOMElement $parentElement, FormView $view, $variables)
     {
         $textareaElement = $parentElement->ownerDocument->createElement('textarea', $variables['value']);
+        $textareaElement->setAttribute('id', $variables['id']);
         $parentElement->appendChild($textareaElement);
 
         $this->addWidgetAttributes($textareaElement, $view, $variables);
@@ -320,6 +344,15 @@ class XmlFormViewSerializer
         $this->serializeWidgetSimple($parentElement, $view, $variables);
     }
 
+    protected function serializeFieldset(\DOMElement $parentElement, FormView $view, $variables)
+    {
+        $fieldsetElement = $parentElement->ownerDocument->createElement('fieldset');
+        $parentElement->appendChild($fieldsetElement);
+
+        $fieldsetElement->setAttribute('id', $variables['id']);
+
+        $this->serializeChoiceWidget($fieldsetElement, $view, $variables);
+    }
     /*
         {% if expanded %}
             {{ block('choice_widget_expanded') }}
@@ -329,6 +362,7 @@ class XmlFormViewSerializer
     */
     protected function serializeChoiceWidget(\DOMElement $parentElement, FormView $view, $variables)
     {
+
         return isset($variables['expanded']) && $variables['expanded']
             ? $this->serializeChoiceWidgetExpanded($parentElement, $view, $variables)
             : $this->serializeChoiceWidgetCollapsed($parentElement, $view, $variables)
@@ -372,6 +406,8 @@ class XmlFormViewSerializer
         $parentElement->appendChild($selectElement);
 
         $this->addWidgetAttributes($selectElement, $view, $variables);
+
+        $selectElement->setAttribute('id', $variables['id']);
 
         if (isset($variables['multiple']) && $variables['multiple']) {
             $selectElement->setAttribute('multiple', 'multiple');
@@ -497,6 +533,7 @@ class XmlFormViewSerializer
     {
         $inputElement = $parentElement->ownerDocument->createElement('input');
         $inputElement->setAttribute('type', 'checkbox');
+        $inputElement->setAttribute('id', $variables['id']);
 
         if (isset($variables['value'])) {
             $inputElement->setAttribute('value', $variables['value']);
@@ -518,6 +555,7 @@ class XmlFormViewSerializer
     {
         $inputElement = $parentElement->ownerDocument->createElement('input');
         $inputElement->setAttribute('type', 'radio');
+        $inputElement->setAttribute('id', $variables['id']);
 
         if (isset($variables['value'])) {
             $inputElement->setAttribute('value', $variables['value']);
@@ -567,6 +605,7 @@ class XmlFormViewSerializer
             </div>
         {% endif %}
     */
+
     protected function serializeDateWidget(\DOMElement $parentElement, FormView $view, $variables)
     {
         if ('single_text' == $variables['widget']) {

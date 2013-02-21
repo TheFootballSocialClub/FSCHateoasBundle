@@ -14,7 +14,9 @@ class XmlFormViewSerializerTest extends TestCase
     {
         $formFactory = $this->getKernel()->getContainer()->get('form.factory');
         $form = $formFactory->createBuilder('form')
-            ->add('name', 'text')
+            ->add('name', 'text',array(
+                'label' => 'custom label'
+            ))
             ->add('description', 'textarea')
             ->add('email', 'email')
             ->add('age', 'integer')
@@ -24,12 +26,14 @@ class XmlFormViewSerializerTest extends TestCase
             ->add('query', 'search')
             ->add('website', 'url')
             ->add('gender', 'choice', array(
-                'choices' => array('m' => 'male', 'f' => 'female')
+                'choices' => array('m' => 'male', 'f' => 'female'),
+                'label' => 'custom'
             ))
             ->add('genderRadio', 'choice', array(
                 'choices' => array('m' => 'male', 'f' => 'female'),
                 'expanded' => true,
                 'multiple' => false,
+                'label' => 'label'
             ))
             ->add('limit', 'hidden')
             ->add('towns', 'collection', array(
@@ -42,7 +46,7 @@ class XmlFormViewSerializerTest extends TestCase
                 ),
             ))
             ->add('public', 'checkbox', array(
-                'label'     => 'Show this entry publicly?',
+                'label'     => 'label',
                 'required'  => false,
             ))
             ->getForm();
@@ -61,25 +65,33 @@ class XmlFormViewSerializerTest extends TestCase
 
         $this->assertXmlElementEquals(<<<XML
 <form>
-    <input type="text" name="form[name]" required="required"/>
-    <textarea name="form[description]" required="required">Desc</textarea>
-    <input type="email" name="form[email]" required="required"/>
-    <input type="integer" name="form[age]" required="required"/>
-    <input type="number" name="form[height]" required="required"/>
-    <input type="password" name="form[password]" required="required"/>
-    <input type="text" name="form[progress]" required="required"/>
-    <input type="search" name="form[query]" required="required"/>
-    <input type="url" name="form[website]" required="required"/>
-    <select name="form[gender]" required="required">
+    <label for="form_name">custom label</label>
+    <input type="text" id="form_name" name="form[name]" required="required"/>
+    <textarea id="form_description" name="form[description]" required="required">Desc</textarea>
+    <input type="email" id="form_email" name="form[email]" required="required"/>
+    <input type="integer" id="form_age" name="form[age]" required="required"/>
+    <input type="number" id="form_height" name="form[height]" required="required"/>
+    <input type="password" id="form_password" name="form[password]" required="required"/>
+    <input type="text" id="form_progress" name="form[progress]" required="required"/>
+    <input type="search" id="form_query" name="form[query]" required="required"/>
+    <input type="url" id="form_website" name="form[website]" required="required"/>
+    <label for="form_gender">custom</label>
+    <select name="form[gender]" required="required" id="form_gender">
         <option value="m">male</option>
         <option value="f">female</option>
     </select>
-    <input type="radio" value="m" name="form[genderRadio]" required="required"/>
-    <input type="radio" value="f" name="form[genderRadio]" required="required"/>
-    <input type="hidden" name="form[limit]"/>
-    <input type="email" value="Paris" name="form[towns][par]" class="email-box"/>
-    <input type="email" value="London" name="form[towns][lon]" class="email-box"/>
-    <input type="checkbox" value="1" checked="1" name="form[public]"/>
+    <label for="form_genderRadio">label</label>
+    <fieldset id="form_genderRadio">
+        <label for="form_genderRadio_0">male</label>
+        <input type="radio" id="form_genderRadio_0" value="m" name="form[genderRadio]" required="required"/>
+        <label for="form_genderRadio_1">female</label>
+        <input type="radio" id="form_genderRadio_1" value="f" name="form[genderRadio]" required="required"/>
+    </fieldset>
+    <input type="hidden" id="form_limit" name="form[limit]"/>
+    <input type="email" id="form_towns_par" value="Paris" name="form[towns][par]" class="email-box"/>
+    <input type="email" id="form_towns_lon" value="London" name="form[towns][lon]" class="email-box"/>
+    <label for="form_public">label</label>
+    <input type="checkbox" id="form_public" value="1" checked="1" name="form[public]"/>
 </form>
 XML
         , $formElement);
@@ -100,7 +112,7 @@ XML
 
         $this->assertXmlElementEquals(<<<XML
 <form enctype="multipart/form-data">
-    <input type="file" name="form[avatar]" required="required"/>
+    <input type="file" id="form_avatar" name="form[avatar]" required="required"/>
 </form>
 XML
             , $formElement);
@@ -108,6 +120,9 @@ XML
 
     public function testDateFields()
     {
+        // force locale for PHP_INTL DateTime
+        locale_set_default('en-US');
+
         $formFactory = $this->getKernel()->getContainer()->get('form.factory');
         $form = $formFactory->createBuilder('form')
             ->add('publishedAt', 'date', array(
@@ -136,7 +151,7 @@ XML
 
         $this->assertXmlElementEquals(<<<XML
 <form>
-    <select name="form[publishedAt][year]" required="required">
+    <select name="form[publishedAt][year]" required="required" id="form_publishedAt_year">
         <option value="2008">2008</option>
         <option value="2009">2009</option>
         <option value="2010">2010</option>
@@ -149,7 +164,7 @@ XML
         <option value="2017">2017</option>
         <option value="2018">2018</option>
     </select>
-    <select name="form[publishedAt][month]" required="required">
+    <select name="form[publishedAt][month]" required="required" id="form_publishedAt_month">
         <option value="1">Jan</option>
         <option value="2">Feb</option>
         <option value="3">Mar</option>
@@ -163,7 +178,7 @@ XML
         <option value="11">Nov</option>
         <option value="12">Dec</option>
     </select>
-    <select name="form[publishedAt][day]" required="required">
+    <select name="form[publishedAt][day]" required="required" id="form_publishedAt_day">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -196,11 +211,11 @@ XML
         <option value="30">30</option>
         <option value="31">31</option>
     </select>
-    <input type="text" name="form[editedAt][year]" required="required"/>
-    <input type="text" name="form[editedAt][month]" required="required"/>
-    <input type="text" name="form[editedAt][day]" required="required"/>
-    <input type="date" name="form[createdAt]" required="required"/>
-    <select name="form[publishedAtTime][date][year]" required="required">
+    <input type="text" id="form_editedAt_year" name="form[editedAt][year]" required="required"/>
+    <input type="text" id="form_editedAt_month" name="form[editedAt][month]" required="required"/>
+    <input type="text" id="form_editedAt_day" name="form[editedAt][day]" required="required"/>
+    <input type="date" id="form_createdAt" name="form[createdAt]" required="required"/>
+    <select name="form[publishedAtTime][date][year]" required="required" id="form_publishedAtTime_date_year">
         <option value="2008">2008</option>
         <option value="2009">2009</option>
         <option value="2010">2010</option>
@@ -213,7 +228,7 @@ XML
         <option value="2017">2017</option>
         <option value="2018">2018</option>
     </select>
-    <select name="form[publishedAtTime][date][month]" required="required">
+    <select name="form[publishedAtTime][date][month]" required="required" id="form_publishedAtTime_date_month">
         <option value="1">Jan</option>
         <option value="2">Feb</option>
         <option value="3">Mar</option>
@@ -227,7 +242,7 @@ XML
         <option value="11">Nov</option>
         <option value="12">Dec</option>
     </select>
-    <select name="form[publishedAtTime][date][day]" required="required">
+    <select name="form[publishedAtTime][date][day]" required="required" id="form_publishedAtTime_date_day">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -260,7 +275,7 @@ XML
         <option value="30">30</option>
         <option value="31">31</option>
     </select>
-    <select name="form[publishedAtTime][time][hour]" required="required">
+    <select name="form[publishedAtTime][time][hour]" required="required" id="form_publishedAtTime_time_hour">
         <option value="0">00</option>
         <option value="1">01</option>
         <option value="2">02</option>
@@ -286,7 +301,7 @@ XML
         <option value="22">22</option>
         <option value="23">23</option>
     </select>
-    <select name="form[publishedAtTime][time][minute]" required="required">
+    <select name="form[publishedAtTime][time][minute]" required="required" id="form_publishedAtTime_time_minute">
         <option value="0">00</option>
         <option value="1">01</option>
         <option value="2">02</option>
@@ -376,7 +391,7 @@ XML
 
         $this->assertXmlElementEquals(<<<XML
 <form method="POST" action="http://localhost/hey" rel="create">
-    <input type="text" name="form[name]" required="required"/>
+    <input type="text" id="form_name" name="form[name]" required="required"/>
 </form>
 XML
             , $formElement);
