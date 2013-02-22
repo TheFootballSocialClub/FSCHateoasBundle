@@ -42,9 +42,9 @@ class XmlFormViewSerializer
             }
         }
 
-        if ($variables['label'])
+        if ($variables['label'] === null)
         {
-            $this->serializeLabel($parentElement, $type, $variables);
+            $variables['label'] = $this->humanize($variables['name']);
         }
 
         if ($view->isRendered()) {
@@ -54,6 +54,12 @@ class XmlFormViewSerializer
         if ('rest' == $blockName) {
             $this->serializeRestWidget($parentElement, $view, $variables);
         } else {
+
+            if (($type || 'widget' == $blockName) && false !== $variables['label'])
+            {
+                $this->serializeLabel($parentElement, $type, $variables);
+            }
+
             switch ($type) {
                 case 'text':
                     $this->serializeWidgetSimple($parentElement, $view, $variables);
@@ -629,5 +635,15 @@ class XmlFormViewSerializer
         }
 
         return $choice->value === $selectedValue;
+    }
+
+    /**
+     * Copied from the symfony src code
+     *
+     * @see Symfony\Component\Form\FormRenderer::humanize
+     */
+    public function humanize($text)
+    {
+        return ucfirst(trim(strtolower(preg_replace('/[_\s]+/', ' ', $text))));
     }
 }

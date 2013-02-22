@@ -129,6 +129,7 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <form method="POST" action="http://localhost/api/posts">
   <link rel="self" href="http://localhost/api/posts/create?_format=xml"/>
+  <label for="post_title">Title</label>
   <input type="text" id="post_title" name="post[title]" required="required"/>
 </form>
 
@@ -148,6 +149,7 @@ XML
 <?xml version="1.0" encoding="UTF-8"?>
 <form method="POST" action="http://localhost/api/posts?_format=xml">
   <link rel="self" href="http://localhost/api/posts/create_format?_format=xml"/>
+  <label for="post_title">Title</label>
   <input type="text" id="post_title" name="post[title]" required="required"/>
 </form>
 
@@ -184,6 +186,7 @@ XML
   <link rel="create" href="http://localhost/api/posts/create"/>
   <form rel="create" method="POST" action="http://localhost/api/posts">
     <link rel="self" href="http://localhost/api/posts/create"/>
+    <label for="post_title">Title</label>
     <input type="text" id="post_title" name="post[title]" required="required"/>
   </form>
 </posts>
