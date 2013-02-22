@@ -42,7 +42,7 @@ class XmlFormViewSerializer
             }
         }
 
-        if ($variables['label'] === null)
+        if (null === $variables['label'])
         {
             $variables['label'] = $this->humanize($variables['name']);
         }
