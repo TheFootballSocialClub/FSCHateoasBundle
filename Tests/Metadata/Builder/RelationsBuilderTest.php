@@ -170,4 +170,22 @@ class RelationBuilderTest extends \PHPUnit_Framework_TestCase
             'provider' => array('a'),
         ));
     }
+
+    public function testClear()
+    {
+        $RelationsBuilder = new RelationsBuilder();
+
+        $RelationsBuilder->add('self', array('route' => $route = '_some_route'));
+
+        $relationsMetadata = $RelationsBuilder->build();
+
+        $this->assertInternalType('array', $relationsMetadata);
+        $this->assertCount(1, $relationsMetadata);
+
+        $relationsMetadata = $RelationsBuilder->clear();
+        $relationsMetadata = $RelationsBuilder->build();
+
+        $this->assertInternalType('array', $relationsMetadata);
+        $this->assertCount(0, $relationsMetadata);
+    }
 }

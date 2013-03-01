@@ -86,4 +86,9 @@ class RelationsBuilder implements RelationsBuilderInterface
     {
         return $this->relationsMetadata;
     }
+
+    public function clear()
+    {
+        $this->relationsMetadata = array();
+    }
 }
