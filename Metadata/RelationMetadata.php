@@ -5,6 +5,7 @@ namespace FSC\HateoasBundle\Metadata;
 class RelationMetadata implements RelationMetadataInterface
 {
     private $rel;
+    private $required;
     private $url;
     private $route;
     private $params;
@@ -79,5 +80,18 @@ class RelationMetadata implements RelationMetadataInterface
     public function getUrl()
     {
         return $this->url;
+    }
+
+    public function setRequired($required)
+    {
+        $this->required = (boolean) $required;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequired()
+    {
+        return $this->required;
     }
 }

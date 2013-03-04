@@ -10,6 +10,11 @@ interface RelationMetadataInterface
     public function getRel();
 
     /**
+     * @return boolean
+     */
+    public function getRequired();
+
+    /**
      * @return string|null
      */
     public function getUrl();

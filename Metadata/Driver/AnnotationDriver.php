@@ -37,6 +37,10 @@ class AnnotationDriver implements DriverInterface
             if ($annotation instanceof Annotation\Relation) {
                 $relationMetadata = new RelationMetadata($annotation->rel);
 
+                if(null !== $annotation->required) {
+                    $relationMetadata->setRequired($annotation->required);
+                }
+
                 if ($annotation->href instanceof Annotation\Route) {
                     $relationMetadata->setRoute($annotation->href->value);
                     if (!empty($annotation->href->parameters)) {
