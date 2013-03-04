@@ -21,6 +21,11 @@ final class Relation
     public $href;
 
     /**
+     * @var boolean
+     */
+    public $required = true;
+
+    /**
      * @var \FSC\HateoasBundle\Annotation\Content
      */
     public $embed;

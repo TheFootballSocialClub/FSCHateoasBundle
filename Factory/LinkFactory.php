@@ -3,11 +3,14 @@
 namespace FSC\HateoasBundle\Factory;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Metadata\MetadataFactoryInterface;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
 use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
+
+use FSC\HateoasBundle\Exception\RelationRequiredException;
 
 class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 {
@@ -26,11 +29,11 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
     public function createLinks($object)
     {
         if ($object instanceof Link) {
-            return;
+            return null;
         }
 
         if (null === ($classMetadata = $this->metadataFactory->getMetadata($object))) {
-            return;
+            return null;
         }
 
         return $this->createLinksFromMetadata($classMetadata, $object);
@@ -41,7 +44,16 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
         $links = array();
 
         foreach ($classMetadata->getRelations() as $relationMetadata) {
-            $links[] = $this->createLinkFromMetadata($relationMetadata, $object);
+            /**
+             * @var RelationMetadataInterface $relationMetadata
+             */
+            $link = $this->createLinkFromMetadata($relationMetadata, $object);
+
+            if (isset($link) && $link->getHref()) {
+                $links[] = $link;
+            } elseif($relationMetadata->getRequired()) {
+                throw new RelationRequiredException($relationMetadata, $object);
+            }
         }
 
         return $links;
@@ -49,10 +61,14 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 
     public function createLinkFromMetadata(RelationMetadataInterface $relationMetadata, $object)
     {
-        $href = $relationMetadata->getUrl() !== null
-            ? $relationMetadata->getUrl()
-            : $this->generateUrl($relationMetadata->getRoute(), $this->parametersFactory->createParameters($object, $relationMetadata->getParams()))
-        ;
+        try{
+            $href = $relationMetadata->getUrl() !== null
+                ? $relationMetadata->getUrl()
+                : $this->generateUrl($relationMetadata->getRoute(), $this->parametersFactory->createParameters($object, $relationMetadata->getParams()))
+            ;
+        } catch (UnexpectedTypeException $e) {
+            return null;
+        }
 
         return $this->createLink($relationMetadata->getRel(), $href);
     }
