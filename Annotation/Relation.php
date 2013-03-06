@@ -21,6 +21,10 @@ final class Relation
     public $href;
 
     /**
+     */
+    public $skipIfNull;
+
+    /**
      * @var \FSC\HateoasBundle\Annotation\Content
      */
     public $embed;

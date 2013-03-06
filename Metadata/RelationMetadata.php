@@ -8,6 +8,7 @@ class RelationMetadata implements RelationMetadataInterface
     private $url;
     private $route;
     private $params;
+    private $skipIfNull;
     private $content;
 
     public function __construct($rel)
@@ -80,4 +81,19 @@ class RelationMetadata implements RelationMetadataInterface
     {
         return $this->url;
     }
+
+    public function setSkipIfNull($skipIfNull)
+    {
+        $this->skipIfNull = (array) $skipIfNull;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSkipIfNull()
+    {
+        return $this->skipIfNull;
+    }
+
+
 }
