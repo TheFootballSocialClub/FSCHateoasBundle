@@ -8,6 +8,7 @@ class RelationMetadata implements RelationMetadataInterface
     private $url;
     private $route;
     private $params;
+    private $skipIfNull = array();
     private $content;
     private $options;
     private $attributes;
@@ -113,5 +114,18 @@ class RelationMetadata implements RelationMetadataInterface
     public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    public function setSkipIfNull($skipIfNull)
+    {
+        $this->skipIfNull = (array) $skipIfNull;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSkipIfNull()
+    {
+        return $this->skipIfNull;
     }
 }

@@ -21,6 +21,11 @@ final class Relation
     public $href;
 
     /**
+     * @var string|array
+     */
+    public $skipIfNull = array();
+
+    /**
      * @var \FSC\HateoasBundle\Annotation\Content
      */
     public $embed;

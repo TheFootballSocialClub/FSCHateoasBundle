@@ -25,6 +25,11 @@ interface RelationMetadataInterface
     public function getParams();
 
     /**
+     * @return array
+     */
+    public function getSkipIfNull();
+
+    /**
      * @return null|RelationContentMetadataInterface
      */
     public function getContent();

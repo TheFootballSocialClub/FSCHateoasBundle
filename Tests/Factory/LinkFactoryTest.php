@@ -26,7 +26,9 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $relationUrlGenerator = new \FSC\HateoasBundle\Routing\RelationUrlGenerator($metadataFactory, $parametersFactory);
         $relationUrlGenerator->setUrlGenerator('default', $FSCUrlGenerator);
 
-        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator);
+        $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+
+        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator, $propertyAccessor);
 
         $object = (object) array('id' => $id = 3);
 
@@ -67,7 +69,9 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $relationUrlGenerator = new \FSC\HateoasBundle\Routing\RelationUrlGenerator($metadataFactory, $parametersFactory);
         $relationUrlGenerator->setUrlGenerator('default', $FSCUrlGenerator);
 
-        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator);
+        $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+
+        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator, $propertyAccessor);
 
         $object = (object) array('id' => $id = 3);
 
