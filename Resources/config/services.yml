@@ -29,6 +29,7 @@ services:
         public: false
         arguments:
             - @fsc_hateoas.routing.generator
+            - @fsc_hateoas.property_accessor
             - @fsc_hateoas.metadata.factory
             - @fsc_hateoas.factory.parameters
 
