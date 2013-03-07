@@ -50,7 +50,7 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
          * @var RelationMetadataInterface $relationMetadata
          */
         foreach ($classMetadata->getRelations() as $relationMetadata) {
-            if($link = $this->createLinkFromMetadata($relationMetadata, $object)){
+            if($link = $this->createLinkFromMetadata($relationMetadata, $object)) {
                 $links[] = $link;
             }
         }
@@ -58,12 +58,13 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
         return $links;
     }
 
-    protected function isSkipLink(RelationMetadataInterface $relationMetadata, $object){
-        if(! $fields = $relationMetadata->getSkipIfNull()){
+    protected function isSkipLink(RelationMetadataInterface $relationMetadata, $object)
+    {
+        if(! $fields = $relationMetadata->getSkipIfNull()) {
             return false;
         }
 
-        foreach($fields as $field){
+        foreach($fields as $field) {
             $field = trim($field, '.');
             $propertyPath = new PropertyPath($field);
             $value = $this->propertyAccessor->getValue($object, $propertyPath);
@@ -78,7 +79,7 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 
     public function createLinkFromMetadata(RelationMetadataInterface $relationMetadata, $object)
     {
-        if($this->isSkipLink($relationMetadata, $object)){
+        if($this->isSkipLink($relationMetadata, $object)) {
             return null;
         }
 

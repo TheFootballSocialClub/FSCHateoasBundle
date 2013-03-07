@@ -8,7 +8,7 @@ class RelationMetadata implements RelationMetadataInterface
     private $url;
     private $route;
     private $params;
-    private $skipIfNull;
+    private $skipIfNull = array();
     private $content;
 
     public function __construct($rel)
