@@ -480,12 +480,26 @@ class XmlFormViewSerializer
     protected function serializeCollectionWidget(\DOMElement $parentElement, FormView $view, $variables)
     {
         if (isset($variables['prototype'])) {
-            $variables['attr'] = array_merge($variables['attr'], array(
-                'data-prototype' => $this->serializeBlock($parentElement,$variables['prototype'], 'row'),
-            ));
+            $this->serializePrototype($parentElement, $variables);
+        } else {
+            $this->serializeFormWidget($parentElement, $view, $variables);
         }
+    }
 
-        $this->serializeFormWidget($parentElement, $view, $variables);
+    protected function serializePrototype(\DOMElement $parentElement, $variables)
+    {
+        $document = new \DOMDocument('1.0', 'UTF-8');
+
+        $divElement = $document->createElement('div');
+        $divElement->setAttribute('id',$variables['id'].'___name__');
+
+        $this->serializeBlock($divElement,$variables['prototype'], 'row');
+
+        $ulElement = $parentElement->ownerDocument->createElement('ul');
+        $ulElement->setAttribute('id',$variables['id']);
+        $ulElement->setAttribute('data-prototype', htmlentities($document->saveHTML($divElement), ENT_QUOTES, 'UTF-8'));
+
+        $parentElement->appendChild($ulElement);
     }
 
     /*
