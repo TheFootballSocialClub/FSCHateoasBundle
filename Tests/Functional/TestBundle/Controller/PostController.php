@@ -55,4 +55,11 @@ class PostController extends Controller
             'Location' => $this->get('fsc_hateoas.routing.relation_url_generator')->generateUrl($post, 'self'),
         ));
     }
+
+    public function getPostAlternateRouterAction(Request $request, $id)
+    {
+        $post = $this->get('test.provider.post')->getAlternateRouterPost($id);
+
+        return new Response($this->get('serializer')->serialize($post, $request->get('_format')));
+    }
 }

@@ -42,6 +42,9 @@ class AnnotationDriver implements DriverInterface
                     if (!empty($annotation->href->parameters)) {
                         $relationMetadata->setParams($annotation->href->parameters);
                     }
+                    if (!empty($annotation->href->options)) {
+                        $relationMetadata->setOptions($annotation->href->options);
+                    }
                 } else {
                     $relationMetadata->setUrl($annotation->href);
                 }

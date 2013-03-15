@@ -1,11 +1,11 @@
 <?php
 
-namespace FSC\HateoasBundle\Routing;
+namespace FSC\HateoasBundle\Tests\Functional\TestBundle\Routing;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 
-class UrlGenerator implements UrlGeneratorInterface
+class PrependUrlGenerator implements UrlGeneratorInterface
 {
     private $wrappedUrlGenerator;
     private $extraParameters;
@@ -45,26 +45,6 @@ class UrlGenerator implements UrlGeneratorInterface
             $absolute = true;
         }
 
-        return $this->wrappedUrlGenerator->generate($name, $parameters, $absolute);
-    }
-
-    public function setForceAbsolute($forceAbsolute)
-    {
-        $this->forceAbsolute = $forceAbsolute;
-    }
-
-    public function setExtraParameters(array $extraParameters)
-    {
-        $this->extraParameters = $extraParameters;
-    }
-
-    public function getExtraParameters()
-    {
-        return $this->extraParameters;
-    }
-
-    public function getForceAbsolute()
-    {
-        return $this->forceAbsolute;
+        return 'PREPEND' . $this->wrappedUrlGenerator->generate($name, $parameters, $absolute);
     }
 }

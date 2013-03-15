@@ -9,6 +9,7 @@ class RelationMetadata implements RelationMetadataInterface
     private $route;
     private $params;
     private $content;
+    private $options;
 
     public function __construct($rel)
     {
@@ -79,5 +80,21 @@ class RelationMetadata implements RelationMetadataInterface
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param array $options
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 }

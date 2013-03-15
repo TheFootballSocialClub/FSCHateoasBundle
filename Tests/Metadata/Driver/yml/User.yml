@@ -38,3 +38,10 @@ FSC\HateoasBundle\Tests\Fixtures\User:
             property: .property
         - rel: adrienbrault
           href: http://adrienbrault.fr
+        - rel: options
+          href:
+            route: homepage
+            options:
+              key1: value1
+          content:
+            property: .property

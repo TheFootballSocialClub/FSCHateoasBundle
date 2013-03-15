@@ -13,11 +13,12 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 {
     protected $metadataFactory;
     protected $parametersFactory;
+    protected $relationUrlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, MetadataFactoryInterface $metadataFactory,
-                                ParametersFactoryInterface $parametersFactory)
+    public function __construct(MetadataFactoryInterface $metadataFactory,
+                                ParametersFactoryInterface $parametersFactory, $relationUrlGenerator)
     {
-        parent::__construct($urlGenerator);
+        parent::__construct($relationUrlGenerator);
 
         $this->metadataFactory = $metadataFactory;
         $this->parametersFactory = $parametersFactory;
@@ -49,10 +50,16 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 
     public function createLinkFromMetadata(RelationMetadataInterface $relationMetadata, $object)
     {
-        $href = $relationMetadata->getUrl() !== null
-            ? $relationMetadata->getUrl()
-            : $this->generateUrl($relationMetadata->getRoute(), $this->parametersFactory->createParameters($object, $relationMetadata->getParams()))
-        ;
+        if (null !== $relationMetadata->getUrl()) {
+            $href = $relationMetadata->getUrl();
+        } else {
+            $href = $this->generateUrl(
+                $relationMetadata->getRoute(),
+                $this->parametersFactory->createParameters($object, $relationMetadata->getParams()),
+                false,
+                $relationMetadata->getOptions()
+            );
+        }
 
         return $this->createLink($relationMetadata->getRel(), $href);
     }

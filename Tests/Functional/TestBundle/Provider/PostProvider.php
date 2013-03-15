@@ -6,6 +6,7 @@ use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
 
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\Post;
+use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\AlternateRouterPost;
 
 class PostProvider
 {
@@ -56,5 +57,17 @@ class PostProvider
         $pager->setMaxPerPage($limit);
 
         return $pager;
+    }
+
+    public function getAlternateRouterPost($id)
+    {
+        switch ($id) {
+            case 1:
+                return AlternateRouterPost::create($id, 'Welcome on the blog!');
+            case 2:
+                return AlternateRouterPost::create($id, 'How to create awesome symfony2 application');
+            default:
+                return AlternateRouterPost::create($id, '');
+        }
     }
 }

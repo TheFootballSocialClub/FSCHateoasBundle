@@ -132,5 +132,16 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://adrienbrault.fr', $relationMetadata->getUrl());
         $this->assertNull($relationMetadata->getRoute());
         $this->assertNull($relationMetadata->getContent());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('options', $relationMetadata->getRel());
+        $this->assertEquals('homepage', $relationMetadata->getRoute());
+
+        $optionsArray = array(
+            'key1' => 'value1'
+        );
+        $this->assertEquals($optionsArray, $relationMetadata->getOptions());
     }
 }
