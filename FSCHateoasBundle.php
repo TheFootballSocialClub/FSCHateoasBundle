@@ -8,7 +8,7 @@ use FSC\HateoasBundle\DependencyInjection\Compiler\UrlGeneratorCompilerPass;
 
 class FSCHateoasBundle extends Bundle
 {
-	public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container)
     {
         parent::build($container);
 

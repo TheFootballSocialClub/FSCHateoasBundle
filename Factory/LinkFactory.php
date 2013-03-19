@@ -8,6 +8,7 @@ use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Metadata\MetadataFactoryInterface;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
 use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
+use FSC\HateoasBundle\Routing\RelationUrlGenerator;
 
 class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 {
@@ -16,8 +17,9 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
     protected $relationUrlGenerator;
 
     public function __construct(MetadataFactoryInterface $metadataFactory,
-                                ParametersFactoryInterface $parametersFactory, $relationUrlGenerator)
-    {
+                                ParametersFactoryInterface $parametersFactory,
+                                RelationUrlGenerator $relationUrlGenerator
+    ) {
         parent::__construct($relationUrlGenerator);
 
         $this->metadataFactory = $metadataFactory;
