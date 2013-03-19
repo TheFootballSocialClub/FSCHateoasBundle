@@ -25,7 +25,7 @@ class UrlGeneratorCompilerPass implements CompilerPassInterface
         foreach ($taggedServices as $id => $attributes) {
             $alias = !empty($attributes[0]['alias']) ? $attributes[0]['alias'] : $id;
             $definition->addMethodCall(
-                'addUrlGenerator',
+                'setUrlGenerator',
                 array($alias, new Reference($id))
             );
         }

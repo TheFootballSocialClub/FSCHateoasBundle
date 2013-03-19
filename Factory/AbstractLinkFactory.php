@@ -25,7 +25,7 @@ abstract class AbstractLinkFactory
         return $link;
     }
 
-    public function generateUrl($name, $parameters = array(), $absolute = false, $options)
+    public function generateUrl($name, $parameters = array(), $absolute = false, $options = array())
     {
         ksort($parameters); // Have consistent url query strings, for the tests
 

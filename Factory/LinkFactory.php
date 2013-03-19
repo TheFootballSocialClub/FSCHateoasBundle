@@ -14,7 +14,6 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 {
     protected $metadataFactory;
     protected $parametersFactory;
-    protected $relationUrlGenerator;
 
     public function __construct(MetadataFactoryInterface $metadataFactory,
                                 ParametersFactoryInterface $parametersFactory,

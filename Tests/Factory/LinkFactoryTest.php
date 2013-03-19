@@ -24,7 +24,7 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $FSCUrlGenerator = new \FSC\HateoasBundle\Routing\UrlGenerator($urlGenerator);
 
         $relationUrlGenerator = new \FSC\HateoasBundle\Routing\RelationUrlGenerator($metadataFactory, $parametersFactory);
-        $relationUrlGenerator->addUrlGenerator('default', $FSCUrlGenerator);
+        $relationUrlGenerator->setUrlGenerator('default', $FSCUrlGenerator);
 
         $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator);
 
@@ -65,7 +65,7 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $FSCUrlGenerator = new \FSC\HateoasBundle\Routing\UrlGenerator($urlGenerator);
 
         $relationUrlGenerator = new \FSC\HateoasBundle\Routing\RelationUrlGenerator($metadataFactory, $parametersFactory);
-        $relationUrlGenerator->addUrlGenerator('default', $FSCUrlGenerator);
+        $relationUrlGenerator->setUrlGenerator('default', $FSCUrlGenerator);
 
         $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator);
 

@@ -42,21 +42,16 @@ class RelationUrlGenerator
 
     /**
      * Adds a URL Generator to the internal list of generators. Called by the Compiler Pass
-     * @param String                $alias
+     * @param string                $alias
      * @param UrlGeneratorInterface $generator
-     * @throws RuntimeException
      */
-    public function addUrlGenerator($alias, UrlGeneratorInterface $generator)
+    public function setUrlGenerator($alias, UrlGeneratorInterface $generator)
     {
-        if (!empty($this->urlGenerators[$alias])) {
-            throw new \RuntimeException("You can only have one URL Generator service with alias {$alias}");
-        }
-
         $this->urlGenerators[$alias] = $generator;
     }
 
     /**
-     * @param  String $alias
+     * @param  string $alias
      * @return UrlGeneratorInterface
      * @throws RuntimeException
      */
