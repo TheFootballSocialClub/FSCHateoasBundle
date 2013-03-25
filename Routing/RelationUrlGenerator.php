@@ -53,12 +53,12 @@ class RelationUrlGenerator
     /**
      * @param  string $alias
      * @return UrlGeneratorInterface
-     * @throws RuntimeException
+     * @throws InvalidArgumentException
      */
     public function getUrlGenerator($alias)
     {
         if (empty($this->urlGenerators[$alias])) {
-            throw new \RuntimeException("URL Generator with alias {$alias} not found");
+            throw new \InvalidArgumentException("URL Generator with alias {$alias} not found");
         }
 
         return $this->urlGenerators[$alias];
