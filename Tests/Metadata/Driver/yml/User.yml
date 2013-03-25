@@ -45,3 +45,7 @@ FSC\HateoasBundle\Tests\Fixtures\User:
               key1: value1
           content:
             property: .property
+        - rel: templated
+          href:
+              route: homepage
+          templated: true

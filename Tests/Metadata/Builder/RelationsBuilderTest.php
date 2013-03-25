@@ -203,4 +203,19 @@ class RelationBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($route, $relationsMetadata[0]->getRoute());
         $this->assertEquals($options, $relationsMetadata[0]->getOptions());
     }
+
+    public function testAddRouteTemplated()
+    {
+        $RelationsBuilder = new RelationsBuilder();
+
+        $RelationsBuilder->add('self', array('route' => $route = '_some_route'), null, true);
+
+        $relationsMetadata = $RelationsBuilder->build();
+
+        $this->assertInternalType('array', $relationsMetadata);
+
+        $this->assertInstanceOf('FSC\HateoasBundle\Metadata\RelationMetadataInterface', $relationsMetadata[0]);
+        $this->assertEquals($route, $relationsMetadata[0]->getRoute());
+        $this->assertTrue($relationsMetadata[0]->getTemplated());
+    }
 }

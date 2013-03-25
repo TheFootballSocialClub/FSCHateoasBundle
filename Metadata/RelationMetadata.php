@@ -10,6 +10,7 @@ class RelationMetadata implements RelationMetadataInterface
     private $params;
     private $content;
     private $options;
+    private $templated;
 
     public function __construct($rel)
     {
@@ -96,5 +97,21 @@ class RelationMetadata implements RelationMetadataInterface
     public function setOptions(array $options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getTemplated()
+    {
+        return $this->templated;
+    }
+
+    /**
+     * @param boolean $templated
+     */
+    public function setTemplated($templated)
+    {
+        $this->templated = (bool) $templated;
     }
 }

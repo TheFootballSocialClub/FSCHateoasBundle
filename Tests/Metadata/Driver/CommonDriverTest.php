@@ -87,6 +87,7 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('homepage', $relationMetadata->getRoute());
         $this->assertEquals(array(), $relationMetadata->getParams());
         $this->assertNull($relationMetadata->getContent());
+        $this->assertFalse($relationMetadata->getTemplated());
 
         $n++;
 
@@ -143,5 +144,13 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
             'key1' => 'value1'
         );
         $this->assertEquals($optionsArray, $relationMetadata->getOptions());
+
+        $n++;
+
+        $relationMetadata = $relationsMetadata[$n];
+        $this->assertEquals('templated', $relationMetadata->getRel());
+        $this->assertEquals('homepage', $relationMetadata->getRoute());
+        $this->assertEquals(array(), $relationMetadata->getParams());
+        $this->assertTrue($relationMetadata->getTemplated());
     }
 }

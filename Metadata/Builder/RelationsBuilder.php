@@ -17,7 +17,7 @@ class RelationsBuilder implements RelationsBuilderInterface
         $this->relationsMetadata = array();
     }
 
-    public function add($rel, $href, array $embed = null)
+    public function add($rel, $href, array $embed = null, $templated = false)
     {
         $relationMetadata = new RelationMetadata($rel);
 
@@ -37,6 +37,8 @@ class RelationsBuilder implements RelationsBuilderInterface
         } else {
             $relationMetadata->setUrl($href);
         }
+
+        $relationMetadata->setTemplated($templated);
 
         if (null !== $embed) {
             if (!empty($embed['provider']) && !empty($embed['property'])) {

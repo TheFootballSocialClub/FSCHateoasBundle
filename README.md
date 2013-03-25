@@ -59,6 +59,7 @@ use FSC\HateoasBundle\Annotation as Rest;
  * @Rest\Relation("alternate", href = @Rest\Route("user_profile", parameters = { "user_id" = ".id" }))
  * @Rest\Relation("users",     href = @Rest\Route("api_user_list"))
  * @Rest\Relation("rss",       href = "http://domain.com/users.rss")
+ * @Rest\Relation("search",    href = "http://domain.com/search{?q,lang}", templated = true)
  *
  * @Serializer\XmlRoot("user")
  */
@@ -91,6 +92,7 @@ $serializedUser = $container->get('serializer')->serialize($user, $format);
   <link rel="alternate" href="http://localhost/profile/24"/>
   <link rel="users" href="http://localhost/api/users"/>
   <link rel="rss" href="http://domain.com/users.rss"/>
+  <link rel="search" href="http://domain.com/search{?q,lang}", templated="true"/>
 </user>
 ```
 
@@ -111,6 +113,10 @@ or
         },
         "rss": {
             "href": "http:\/\/domain.com\/users.rss"
+        },
+        "search": {
+            "href": "http://domain.com/search{?q,lang}",
+            "templated": true
         }
     ]
 }

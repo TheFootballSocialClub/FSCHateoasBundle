@@ -24,4 +24,9 @@ final class Relation
      * @var \FSC\HateoasBundle\Annotation\Content
      */
     public $embed;
+
+    /**
+     * @var boolean
+     */
+    public $templated;
 }

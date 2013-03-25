@@ -4,3 +4,6 @@ FSC\HateoasBundle\Model\Link:
             xml_attribute: true
         href:
             xml_attribute: true
+        templated:
+        	xml_attribute: true
+        	type: boolean
