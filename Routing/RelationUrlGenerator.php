@@ -35,7 +35,6 @@ class RelationUrlGenerator
         return $urlGenerator->generate(
             $relationMetadata->getRoute(),
             $this->parametersFactory->createParameters($object, $relationMetadata->getParams()),
-            false,                                                                                  // absolute, TODO move that to options as well
             $options
         );
     }

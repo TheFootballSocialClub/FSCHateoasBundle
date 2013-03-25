@@ -57,7 +57,6 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
             $href = $this->generateUrl(
                 $relationMetadata->getRoute(),
                 $this->parametersFactory->createParameters($object, $relationMetadata->getParams()),
-                false,
                 $relationMetadata->getOptions()
             );
         }

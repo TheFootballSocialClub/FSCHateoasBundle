@@ -25,12 +25,14 @@ abstract class AbstractLinkFactory
         return $link;
     }
 
-    public function generateUrl($name, $parameters = array(), $absolute = false, $options = array())
+    public function generateUrl($name, $parameters = array(), $options = array())
     {
         ksort($parameters); // Have consistent url query strings, for the tests
 
         $alias = !empty($options['router']) ? $options['router'] : 'default';
         $urlGenerator = $this->relationUrlGenerator->getUrlGenerator($alias);
+
+        $absolute = !empty($options['absolute']) ? $options['absolute'] : false;
 
         return $urlGenerator->generate($name, $parameters, $absolute);
     }
