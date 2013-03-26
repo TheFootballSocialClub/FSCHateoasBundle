@@ -62,4 +62,11 @@ class PostController extends Controller
 
         return new Response($this->get('serializer')->serialize($post, $request->get('_format')));
     }
+
+    public function getPostTemplatedAction(Request $request, $id)
+    {
+        $post = $this->get('test.provider.post')->getPostTemplated($id);
+
+        return new Response($this->get('serializer')->serialize($post, $request->get('_format')));
+    }
 }

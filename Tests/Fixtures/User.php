@@ -33,6 +33,7 @@ use FSC\HateoasBundle\Annotation as Rest;
  *     href = @Rest\Route("homepage", options = { "key1" = "value1" } ),
  *     embed = @Rest\Content(property = ".property")
  * )
+ * @Rest\Relation("templated", href = @Rest\Route("homepage"), attributes = { "isTemplated" = true })
  */
 class User
 {
