@@ -1,0 +1,7 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\PostTemplated:
+    relations:
+        - rel: self
+          href:
+              route: api_post_get
+              parameters: { id: .id }
+          templated: true

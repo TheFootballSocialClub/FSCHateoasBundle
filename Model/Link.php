@@ -9,6 +9,7 @@ class Link
 {
     private $rel;
     private $href;
+    private $templated;
 
     public function setHref($href)
     {
@@ -28,5 +29,21 @@ class Link
     public function getRel()
     {
         return $this->rel;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getTemplated()
+    {
+        return $this->templated;
+    }
+
+    /**
+     * @param boolean $templated
+     */
+    public function setTemplated($templated)
+    {
+        $this->templated = (bool) $templated;
     }
 }

@@ -46,6 +46,12 @@ class YamlDriver extends AbstractFileDriver
                     $relationMetadata->setUrl($relation['href']);
                 }
 
+                if (isset($relation['templated'])) {
+                    $relationMetadata->setTemplated($relation['templated']);
+                } else {
+                    $relationMetadata->setTemplated(false);
+                }
+
                 if (!empty($relation['content'])) {
                     $relationContent = $relation['content'];
 

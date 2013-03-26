@@ -430,4 +430,24 @@ JSON
 XML
         , $response->getContent());
     }
+
+    public function testTemplated()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/posts/2/templated?_format=xml');
+
+        $response = $client->getResponse(); /**  */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<post id="2">
+  <title><![CDATA[How to create awesome symfony2 application]]></title>
+  <link rel="self" href="http://localhost/api/posts/2"/>
+  <link rel="self" href="http://localhost/api/posts/2" templated="true"/>
+</post>
+
+XML
+        , $response->getContent());
+    }
 }

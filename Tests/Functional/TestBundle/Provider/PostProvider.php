@@ -7,6 +7,7 @@ use Pagerfanta\Adapter\ArrayAdapter;
 
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\Post;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\AlternateRouterPost;
+use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\PostTemplated;
 
 class PostProvider
 {
@@ -68,6 +69,18 @@ class PostProvider
                 return AlternateRouterPost::create($id, 'How to create awesome symfony2 application');
             default:
                 return AlternateRouterPost::create($id, '');
+        }
+    }
+
+    public function getPostTemplated($id)
+    {
+        switch ($id) {
+            case 1:
+                return PostTemplated::create($id, 'Welcome on the blog!');
+            case 2:
+                return PostTemplated::create($id, 'How to create awesome symfony2 application');
+            default:
+                return PostTemplated::create($id, '');
         }
     }
 }
