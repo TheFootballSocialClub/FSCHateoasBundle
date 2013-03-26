@@ -9,3 +9,10 @@ services:
         class: FSC\HateoasBundle\Tests\Functional\TestBundle\Form\Type\PostCreateType
         tags:
             - { name: form.type, alias: test_post_create }
+
+    test.url_generator.prepend:
+        class: FSC\HateoasBundle\Tests\Functional\TestBundle\Routing\PrependUrlGenerator
+        arguments:
+            - @router
+        tags:
+            - { name: fsc_hateoas.url_generator, alias: prepend }

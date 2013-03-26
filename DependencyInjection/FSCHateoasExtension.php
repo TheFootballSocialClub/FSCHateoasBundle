@@ -37,8 +37,10 @@ class FSCHateoasExtension extends ConfigurableExtension
         $container->setParameter('fsc_hateoas.json.links_key', $config['json']['links_key']);
         $container->setParameter('fsc_hateoas.json.relations_key', $config['json']['relations_key']);
 
-        $urlGeneratorDefinition = $container->getDefinition('fsc_hateoas.routing.generator');
-        $urlGeneratorDefinition->addMethodCall('setForceAbsolute', array($config['absolute_url']));
+        foreach (array('fsc_hateoas.factory.link', 'fsc_hateoas.routing.relation_url_generator', 'fsc_hateoas.factory.form_view') as $serviceName) {
+            $service = $container->getDefinition($serviceName);
+            $service->addArgument($config['absolute_url']);
+        }
 
         $this->configureMetadata($config, $container);
     }

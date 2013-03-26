@@ -28,9 +28,9 @@ services:
         class: %fsc_hateoas.factory.link.class%
         public: false
         arguments:
-            - @fsc_hateoas.routing.generator
             - @fsc_hateoas.metadata.factory
             - @fsc_hateoas.factory.parameters
+            - @fsc_hateoas.routing.relation_url_generator
 
     fsc_hateoas.factory.parameters:
         class: %fsc_hateoas.factory.parameters.class%
@@ -120,11 +120,12 @@ services:
         class: %fsc_hateoas.routing.generator.class%
         arguments:
             - @router
+        tags:
+            - { name: fsc_hateoas.url_generator, alias: default }
 
     fsc_hateoas.routing.relation_url_generator:
         class: %fsc_hateoas.routing.relation_url_generator.class%
         arguments:
-            - @fsc_hateoas.routing.generator
             - @fsc_hateoas.metadata.factory
             - @fsc_hateoas.factory.parameters
 

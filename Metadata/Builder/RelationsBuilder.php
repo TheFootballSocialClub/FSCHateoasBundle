@@ -31,6 +31,9 @@ class RelationsBuilder implements RelationsBuilderInterface
             if (isset($href['parameters'])) {
                 $relationMetadata->setParams($href['parameters']);
             }
+            if (isset($href['options'])) {
+                $relationMetadata->setOptions($href['options']);
+            }
         } else {
             $relationMetadata->setUrl($href);
         }

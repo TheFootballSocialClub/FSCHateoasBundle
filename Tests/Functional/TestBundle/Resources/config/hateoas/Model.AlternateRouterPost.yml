@@ -1,0 +1,12 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\AlternateRouterPost:
+    relations:
+        - rel: alternate_router
+          href:
+              route: api_post_get
+              parameters: { id: .id }
+              options: { router: prepend }
+        - rel: alternate_router_relative
+          href:
+              route: api_post_get
+              parameters: { id: .id }
+              options: { router: prepend, absolute: false }

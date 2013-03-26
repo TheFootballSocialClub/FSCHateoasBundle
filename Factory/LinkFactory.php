@@ -8,16 +8,19 @@ use FSC\HateoasBundle\Model\Link;
 use FSC\HateoasBundle\Metadata\MetadataFactoryInterface;
 use FSC\HateoasBundle\Metadata\ClassMetadataInterface;
 use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
+use FSC\HateoasBundle\Routing\RelationUrlGenerator;
 
 class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 {
     protected $metadataFactory;
     protected $parametersFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, MetadataFactoryInterface $metadataFactory,
-                                ParametersFactoryInterface $parametersFactory)
-    {
-        parent::__construct($urlGenerator);
+    public function __construct(MetadataFactoryInterface $metadataFactory,
+                                ParametersFactoryInterface $parametersFactory,
+                                RelationUrlGenerator $relationUrlGenerator,
+                                $forceAbsolute = true
+    ) {
+        parent::__construct($relationUrlGenerator, $forceAbsolute);
 
         $this->metadataFactory = $metadataFactory;
         $this->parametersFactory = $parametersFactory;
@@ -49,10 +52,15 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 
     public function createLinkFromMetadata(RelationMetadataInterface $relationMetadata, $object)
     {
-        $href = $relationMetadata->getUrl() !== null
-            ? $relationMetadata->getUrl()
-            : $this->generateUrl($relationMetadata->getRoute(), $this->parametersFactory->createParameters($object, $relationMetadata->getParams()))
-        ;
+        if (null !== $relationMetadata->getUrl()) {
+            $href = $relationMetadata->getUrl();
+        } else {
+            $href = $this->generateUrl(
+                $relationMetadata->getRoute(),
+                $this->parametersFactory->createParameters($object, $relationMetadata->getParams()),
+                $relationMetadata->getOptions()
+            );
+        }
 
         return $this->createLink($relationMetadata->getRel(), $href);
     }

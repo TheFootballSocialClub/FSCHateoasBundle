@@ -221,7 +221,7 @@ fsc_hateoas:
         xml_elements_names_use_serializer_metadata: true
 ```
 
-With this configuration he pagerfanta handler will use the serializer's xml root name metadata to know what xml element
+With this configuration the pagerfanta handler will use the serializer's xml root name metadata to know what xml element
 name should be used for each result. (ie: `/** @Serializer\XmlRootName("user") */ class User {}`)
 
 ### Example
@@ -553,8 +553,8 @@ class UserController extends Controller
 
 ## RelationUrlGenerator
 
-You can leverage the fact that the hateoas bundle knows how to create url to an object's relation. This is usefull if you
-want generate the self url to an object:
+You can leverage the fact that the hateoas bundle knows how to create url to an object's relation. This is useful if you
+want to generate the `self` url to an object:
 
 ```php
 $user = ...
@@ -581,5 +581,52 @@ class UserController extends Controller
         ));
     }
 }
+```
 
+## Route options
+
+### Using different routers
+
+The bundle supports registering different routers with it. This can be useful for example to use a different router
+for templated URLs. To register the router, you need to tag the service with `fsc_hateoas.url_generator`, and you
+can provide an `alias`, so that you don't have to write out the full service name. This is useful for example if you
+want to provide URI Templates ([RFC-6570](https://tools.ietf.org/html/rfc6570)) by using the
+[Hautelook Templated URI Bundle](https://github.com/hautelook/TemplatedUriBundle).
+
+Example:
+
+```yaml
+services:
+    test.url_generator.prepend:
+        class: FSC\HateoasBundle\Tests\Functional\TestBundle\Routing\PrependUrlGenerator
+        arguments:
+            - @router
+        tags:
+            - { name: fsc_hateoas.url_generator, alias: prepend }
+```
+
+You can then use this router in the annotation by using the `options`. Example:
+
+```php
+/**
+ * @Rest\Relation("self", href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }, options = { "router" = "prepend" }))
+ */
+class User
+{
+
+}
+```
+
+### Creating absolute / relative URLs
+
+You can force a link to be absolute or relative by specifying it as an `option` to the Route. Example:
+
+```php
+/**
+ * @Rest\Relation("self", href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }, options = { "absolute" = true }))
+ */
+class User
+{
+
+}
 ```

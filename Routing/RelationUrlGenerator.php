@@ -4,19 +4,21 @@ namespace FSC\HateoasBundle\Routing;
 
 use FSC\HateoasBundle\Metadata\MetadataFactoryInterface;
 use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RelationUrlGenerator
 {
-    protected $urlGenerator;
     protected $metadataFactory;
     protected $parametersFactory;
+    protected $urlGenerators;
+    protected $forceAbsolute;
 
-    public function __construct(UrlGenerator $urlGenerator, MetadataFactoryInterface $metadataFactory,
-        ParametersFactoryInterface $parametersFactory)
+    public function __construct(MetadataFactoryInterface $metadataFactory, ParametersFactoryInterface $parametersFactory, $forceAbsolute = true)
     {
-        $this->urlGenerator = $urlGenerator;
         $this->metadataFactory = $metadataFactory;
         $this->parametersFactory = $parametersFactory;
+        $this->urlGenerators = array();
+        $this->forceAbsolute = $forceAbsolute;
     }
 
     public function generateUrl($object, $rel)
@@ -28,9 +30,43 @@ class RelationUrlGenerator
             throw new \RuntimeException(sprintf('Relation "%s" doesn\'t exist.', $rel));
         }
 
-        return $this->urlGenerator->generate(
+        $options = $relationMetadata->getOptions();
+        $alias = !empty($options['router']) ? $options['router'] : 'default';
+        $urlGenerator = $this->getUrlGenerator($alias);
+
+        $absolute = $this->forceAbsolute;
+        if (isset($options['absolute'])) {
+            $absolute = $options['absolute'];
+        }
+
+        return $urlGenerator->generate(
             $relationMetadata->getRoute(),
-            $this->parametersFactory->createParameters($object, $relationMetadata->getParams())
+            $this->parametersFactory->createParameters($object, $relationMetadata->getParams()),
+            $absolute
         );
+    }
+
+    /**
+     * Adds a URL Generator to the internal list of generators. Called by the Compiler Pass
+     * @param string                $alias
+     * @param UrlGeneratorInterface $generator
+     */
+    public function setUrlGenerator($alias, UrlGeneratorInterface $generator)
+    {
+        $this->urlGenerators[$alias] = $generator;
+    }
+
+    /**
+     * @param  string $alias
+     * @return UrlGeneratorInterface
+     * @throws InvalidArgumentException
+     */
+    public function getUrlGenerator($alias)
+    {
+        if (empty($this->urlGenerators[$alias])) {
+            throw new \InvalidArgumentException("URL Generator with alias {$alias} not found");
+        }
+
+        return $this->urlGenerators[$alias];
     }
 }

@@ -37,7 +37,7 @@ class UrlGenerator implements UrlGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate($name, $parameters = array(), $absolute = false)
+    public function generate($name, $parameters = array(), $absolute = null)
     {
         $parameters = array_merge($this->extraParameters, $parameters);
 
