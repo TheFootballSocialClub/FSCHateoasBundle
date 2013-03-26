@@ -97,4 +97,14 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($rel, $link->getRel());
         $this->assertEquals($href, $link->getHref());
     }
+
+    public function testLinkRelationAttributes()
+    {
+        $relationAttributes = array('isTemplated' => true);
+        $link = LinkFactory::createLink($rel = 'self', $href = 'http://ohoho', $relationAttributes);
+        $this->assertInstanceOf('FSC\HateoasBundle\Model\Link', $link);
+        $this->assertEquals($rel, $link->getRel());
+        $this->assertEquals($href, $link->getHref());
+        $this->assertEquals($relationAttributes, $link->getRelationAttributes());
+    }
 }

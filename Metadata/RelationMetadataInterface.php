@@ -33,4 +33,9 @@ interface RelationMetadataInterface
      * @return array
      */
     public function getOptions();
+
+    /**
+     * @return array|null
+     */
+    public function getRelationAttributes();
 }
