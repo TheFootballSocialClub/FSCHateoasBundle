@@ -589,7 +589,9 @@ class UserController extends Controller
 
 The bundle supports registering different routers with it. This can be useful for example to use a different router
 for templated URLs. To register the router, you need to tag the service with `fsc_hateoas.url_generator`, and you
-can provide an `alias`, so that you don't have to write out the full service name.
+can provide an `alias`, so that you don't have to write out the full service name. This is useful for example if you
+want to provide URI Templates ([RFC-6570](https://tools.ietf.org/html/rfc6570)) by using the
+[Hautelook Templated URI Bundle](https://github.com/hautelook/TemplatedUriBundle).
 
 Example:
 
