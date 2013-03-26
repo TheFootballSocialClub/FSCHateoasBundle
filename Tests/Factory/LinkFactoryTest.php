@@ -105,6 +105,6 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('FSC\HateoasBundle\Model\Link', $link);
         $this->assertEquals($rel, $link->getRel());
         $this->assertEquals($href, $link->getHref());
-        $this->assertEquals($relationAttributes, $link->getRelationAttributes());
+        $this->assertEquals($relationAttributes, $link->getAttributes());
     }
 }

@@ -9,7 +9,7 @@ class Link
 {
     private $rel;
     private $href;
-    private $relationAttributes;
+    private $attributes;
 
     public function setHref($href)
     {
@@ -34,16 +34,19 @@ class Link
     /**
      * @return array
      */
-    public function getRelationAttributes()
+    public function getAttributes()
     {
-        return $this->relationAttributes;
+        return $this->attributes;
     }
 
     /**
-     * @param array $relationAttributes
+     * @param array $attributes
      */
-    public function setRelationAttributes($relationAttributes)
+    public function setAttributes($attributes)
     {
-        $this->relationAttributes = $relationAttributes;
+        if (is_null($attributes)) {
+            $attributes = array();
+        }
+        $this->attributes = $attributes;
     }
 }

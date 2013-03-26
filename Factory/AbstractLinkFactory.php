@@ -23,7 +23,7 @@ abstract class AbstractLinkFactory
         $link = new Link();
         $link->setRel($rel);
         $link->setHref($href);
-        $link->setRelationAttributes($relationAttributes);
+        $link->setAttributes($relationAttributes);
 
         return $link;
     }

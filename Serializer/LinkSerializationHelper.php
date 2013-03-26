@@ -24,9 +24,9 @@ class LinkSerializationHelper
             $entryNode->setAttribute('rel', $link->getRel());
             $entryNode->setAttribute('href', $link->getHref());
 
-            $relationAttributes = $link->getRelationAttributes();
-            if (isset($relationAttributes['isTemplated'])) {
-                $entryNode->setAttribute('templated', $relationAttributes['isTemplated'] ? 'true' : 'false');
+            $attributes = $link->getAttributes();
+            foreach ($attributes as $attributeName => $attributeValue) {
+                $entryNode->setAttribute($attributeName, $attributeValue);
             }
         }
     }
@@ -47,10 +47,7 @@ class LinkSerializationHelper
                 $serializedLink['href'] = $link->getHref();
             }
 
-            $relationAttributes = $link->getRelationAttributes();
-            if (isset($relationAttributes['isTemplated'])) {
-                $serializedLink['templated'] = $relationAttributes['isTemplated'] ? 'true' : 'false';
-            }
+            $serializedLink = array_merge($serializedLink, $link->getAttributes());
 
             if (isset($serializedLinks[$rel])) {
                 if (isset($serializedLinks[$rel]['href'])) {

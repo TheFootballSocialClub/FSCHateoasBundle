@@ -3,4 +3,4 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\TemplatedPost:
         - rel: search
           href: "search?{&q}"
           attributes:
-              isTemplated: true
+              templated: "true"
