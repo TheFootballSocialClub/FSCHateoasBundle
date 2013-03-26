@@ -91,6 +91,7 @@ services:
     fsc_hateoas.serializer.handler.halpagerfanta:
         class: %fsc_hateoas.serializer.handler.halpagerfanta.class%
         arguments:
+            - @jms_serializer.metadata_factory
             - @fsc_hateoas.serializer.event_subscriber.embedder
             - @fsc_hateoas.serializer.event_subscriber.link
             - %fsc_hateoas.json.links_key%
@@ -104,6 +105,7 @@ services:
             - @fsc_hateoas.serializer.xml_form_view
             - @fsc_hateoas.serializer.event_subscriber.embedder
             - @fsc_hateoas.serializer.event_subscriber.link
+            - @jms_serializer.metadata_factory
         tags:
             - { name: jms_serializer.subscribing_handler }
 

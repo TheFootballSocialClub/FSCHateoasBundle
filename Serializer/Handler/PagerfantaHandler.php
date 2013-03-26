@@ -7,6 +7,8 @@ use JMS\Serializer\EventDispatcher\Event;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\GenericSerializationVisitor;
+use JMS\Serializer\SerializationContext;
+use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Metadata\MetadataFactoryInterface;
 use Pagerfanta\Pagerfanta;
 
@@ -66,8 +68,11 @@ class PagerfantaHandler implements SubscribingHandlerInterface
             $visitor->document = $visitor->createDocument();
         }
 
-        $this->embedderEventSubscriber->onPostSerializeXML(new Event($visitor, $pager, $type));
-        $this->linkEventSubscriber->onPostSerializeXML(new Event($visitor, $pager, $type));
+        $context = SerializationContext::create();
+        $context->initialize('xml', $visitor, $visitor->getNavigator(), $this->serializerMetadataFactory);
+
+        $this->embedderEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $pager, $type));
+        $this->linkEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $pager, $type));
 
         $currentNode = $visitor->getCurrentNode(); /** @var $currentNode \DOMElement */
         $currentNode->setAttribute('page', $pager->getCurrentPage());
@@ -77,7 +82,7 @@ class PagerfantaHandler implements SubscribingHandlerInterface
         $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
 
         if (!$this->xmlElementsNamesUseSerializerMetadata) {
-            return $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
+            return $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $context);
         }
 
         foreach ($pager->getCurrentPageResults() as $result) {
@@ -90,7 +95,7 @@ class PagerfantaHandler implements SubscribingHandlerInterface
             $visitor->getCurrentNode()->appendChild($entryNode);
             $visitor->setCurrentNode($entryNode);
 
-            if (null !== $node = $visitor->getNavigator()->accept($result, $resultsType, $visitor)) {
+            if (null !== $node = $visitor->getNavigator()->accept($result, $resultsType, $context)) {
                 $visitor->getCurrentNode()->appendChild($node);
             }
 
@@ -104,18 +109,21 @@ class PagerfantaHandler implements SubscribingHandlerInterface
 
         $shouldSetRoot = null === $visitor->getRoot();
 
+        $context = SerializationContext::create();
+        $context->initialize('json', $visitor, $visitor->getNavigator(), $this->serializerMetadataFactory);
+
         $data = array(
             'page' => $pager->getCurrentPage(),
             'limit' => $pager->getMaxPerPage(),
             'total' => $pager->getNbResults(),
-            'results' => $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor),
+            'results' => $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $context),
         );
 
-        if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
+        if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
             $data[$this->linksJsonKey] = $links;
         }
 
-        if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
+        if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
             $data[$this->relationsJsonKey] = $relations;
         }
 

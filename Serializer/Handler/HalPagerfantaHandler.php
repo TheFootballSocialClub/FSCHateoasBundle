@@ -7,6 +7,10 @@ use JMS\Serializer\EventDispatcher\Event;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\GenericSerializationVisitor;
+use JMS\Serializer\SerializationContext;
+use JMS\Serializer\EventDispatcher\ObjectEvent;
+
+use Metadata\MetadataFactoryInterface;
 
 use FSC\HateoasBundle\Model\HalPagerfanta;
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
@@ -29,17 +33,20 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
         return $methods;
     }
 
+    protected $serializerMetadataFactory;
     protected $embedderEventSubscriber;
     protected $linkEventSubscriber;
     protected $linksJsonKey;
     protected $relationsJsonKey;
 
     public function __construct(
+        MetadataFactoryInterface $serializerMetadataFactory,
         EmbedderEventSubscriber $embedderEventSubscriber,
         LinkEventSubscriber $linkEventSubscriber,
         $linksKey = null,
         $relationsKey = null
     ) {
+        $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->embedderEventSubscriber = $embedderEventSubscriber;
         $this->linkEventSubscriber = $linkEventSubscriber;
         $this->linksJsonKey = $linksKey ?: 'links';
@@ -48,12 +55,18 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
 
     public function serializeToXML(XmlSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)
     {
-        return $visitor->getNavigator()->accept($halPager->getPager(), null, $visitor);
+        $context = SerializationContext::create();
+        $context->initialize('xml', $visitor, $visitor->getNavigator(), $this->serializerMetadataFactory);
+
+        return $visitor->getNavigator()->accept($halPager->getPager(), null, $context);
     }
 
     public function serializeToArray(GenericSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)
     {
         $shouldSetRoot = null === $visitor->getRoot();
+
+        $context = SerializationContext::create();
+        $context->initialize('json', $visitor, $visitor->getNavigator(), $this->serializerMetadataFactory);
 
         $pager = $halPager->getPager();
         $data = array(
@@ -62,16 +75,16 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
             'total' => $pager->getNbResults(),
         );
 
-        if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
+        if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
             $data[$this->linksJsonKey] = $links;
         }
 
-        if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
+        if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
             $data[$this->relationsJsonKey] = $relations;
         }
 
         $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
-        $data[$this->relationsJsonKey][$halPager->getRel()] = $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
+        $data[$this->relationsJsonKey][$halPager->getRel()] = $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $context);
 
         if ($shouldSetRoot) {
             $visitor->setRoot($data);
