@@ -423,7 +423,8 @@ JSON
 <post id="2">
   <title><![CDATA[How to create awesome symfony2 application]]></title>
   <link rel="self" href="http://localhost/api/posts/2"/>
-  <link rel="alternate_router" href="PREPEND/api/posts/2"/>
+  <link rel="alternate_router" href="PREPENDhttp://localhost/api/posts/2"/>
+  <link rel="alternate_router_relative" href="PREPEND/api/posts/2"/>
 </post>
 
 XML

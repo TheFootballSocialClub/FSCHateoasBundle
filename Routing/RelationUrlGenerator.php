@@ -11,12 +11,14 @@ class RelationUrlGenerator
     protected $metadataFactory;
     protected $parametersFactory;
     protected $urlGenerators;
+    protected $forceAbsolute;
 
-    public function __construct(MetadataFactoryInterface $metadataFactory, ParametersFactoryInterface $parametersFactory)
+    public function __construct(MetadataFactoryInterface $metadataFactory, ParametersFactoryInterface $parametersFactory, $forceAbsolute = true)
     {
         $this->metadataFactory = $metadataFactory;
         $this->parametersFactory = $parametersFactory;
         $this->urlGenerators = array();
+        $this->forceAbsolute = $forceAbsolute;
     }
 
     public function generateUrl($object, $rel)
@@ -32,10 +34,15 @@ class RelationUrlGenerator
         $alias = !empty($options['router']) ? $options['router'] : 'default';
         $urlGenerator = $this->getUrlGenerator($alias);
 
+        $absolute = $this->forceAbsolute;
+        if (isset($options['absolute'])) {
+            $absolute = $options['absolute'];
+        }
+
         return $urlGenerator->generate(
             $relationMetadata->getRoute(),
             $this->parametersFactory->createParameters($object, $relationMetadata->getParams()),
-            $options
+            $absolute
         );
     }
 

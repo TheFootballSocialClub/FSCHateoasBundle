@@ -8,14 +8,10 @@ use Symfony\Component\Routing\RequestContext;
 class PrependUrlGenerator implements UrlGeneratorInterface
 {
     private $wrappedUrlGenerator;
-    private $extraParameters;
-    private $forceAbsolute;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, $forceAbsolute = false)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->wrappedUrlGenerator = $urlGenerator;
-        $this->extraParameters = array();
-        $this->forceAbsolute = $forceAbsolute;
     }
 
     /**
@@ -37,14 +33,8 @@ class PrependUrlGenerator implements UrlGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate($name, $parameters = array(), $absolute = false, $options = array())
+    public function generate($name, $parameters = array(), $absolute = false)
     {
-        $parameters = array_merge($this->extraParameters, $parameters);
-
-        if ($this->forceAbsolute) {
-            $absolute = true;
-        }
-
         return 'PREPEND' . $this->wrappedUrlGenerator->generate($name, $parameters, $absolute);
     }
 }

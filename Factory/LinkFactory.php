@@ -17,9 +17,10 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 
     public function __construct(MetadataFactoryInterface $metadataFactory,
                                 ParametersFactoryInterface $parametersFactory,
-                                RelationUrlGenerator $relationUrlGenerator
+                                RelationUrlGenerator $relationUrlGenerator,
+                                $forceAbsolute = true
     ) {
-        parent::__construct($relationUrlGenerator);
+        parent::__construct($relationUrlGenerator, $forceAbsolute);
 
         $this->metadataFactory = $metadataFactory;
         $this->parametersFactory = $parametersFactory;

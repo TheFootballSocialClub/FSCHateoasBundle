@@ -10,11 +10,13 @@ class FormViewFactory
 {
     protected $urlGenerator;
     protected $formFactory;
+    protected $forceAbsolute;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, FormFactoryInterface $formFactory)
+    public function __construct(UrlGeneratorInterface $urlGenerator, FormFactoryInterface $formFactory, $forceAbsolute = true)
     {
         $this->urlGenerator = $urlGenerator;
         $this->formFactory = $formFactory;
+        $this->forceAbsolute = $forceAbsolute;
     }
 
     public function create(FormInterface $form, $method, $route, array $routeParameters = array())
@@ -23,7 +25,7 @@ class FormViewFactory
 
         $formView->vars['attr'] = array(
             'method' => strtoupper($method),
-            'action' => $this->urlGenerator->generate($route, $routeParameters),
+            'action' => $this->urlGenerator->generate($route, $routeParameters, $this->forceAbsolute),
         );
 
         return $formView;

@@ -10,10 +10,12 @@ use FSC\HateoasBundle\Model\Link;
 abstract class AbstractLinkFactory
 {
     protected $relationUrlGenerator;
+    protected $forceAbsolute;
 
-    public function __construct(RelationUrlGenerator $relationUrlGenerator)
+    public function __construct(RelationUrlGenerator $relationUrlGenerator, $forceAbsolute = true)
     {
         $this->relationUrlGenerator = $relationUrlGenerator;
+        $this->forceAbsolute = $forceAbsolute;
     }
 
     public static function createLink($rel, $href)
@@ -32,7 +34,7 @@ abstract class AbstractLinkFactory
         $alias = !empty($options['router']) ? $options['router'] : 'default';
         $urlGenerator = $this->relationUrlGenerator->getUrlGenerator($alias);
 
-        $absolute = !empty($options['absolute']) ? $options['absolute'] : false;
+        $absolute = isset($options['absolute']) ? $options['absolute'] : $this->forceAbsolute;
 
         return $urlGenerator->generate($name, $parameters, $absolute);
     }
