@@ -50,7 +50,7 @@ class AnnotationDriver implements DriverInterface
                 }
 
                 if (null !== $annotation->attributes) {
-                    $relationMetadata->setRelationAttributes($annotation->attributes);
+                    $relationMetadata->setAttributes($annotation->attributes);
                 }
 
                 if (null !== $annotation->embed && $annotation->embed instanceof Annotation\Content) {

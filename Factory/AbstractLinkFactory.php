@@ -18,12 +18,12 @@ abstract class AbstractLinkFactory
         $this->forceAbsolute = $forceAbsolute;
     }
 
-    public static function createLink($rel, $href, $relationAttributes = null)
+    public static function createLink($rel, $href, $attributes = null)
     {
         $link = new Link();
         $link->setRel($rel);
         $link->setHref($href);
-        $link->setAttributes($relationAttributes);
+        $link->setAttributes($attributes);
 
         return $link;
     }

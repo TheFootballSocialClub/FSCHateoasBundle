@@ -37,5 +37,5 @@ interface RelationMetadataInterface
     /**
      * @return array|null
      */
-    public function getRelationAttributes();
+    public function getAttributes();
 }

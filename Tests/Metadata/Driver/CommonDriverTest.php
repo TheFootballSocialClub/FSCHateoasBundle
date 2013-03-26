@@ -155,6 +155,6 @@ class CommonDriverTest extends \PHPUnit_Framework_TestCase
         $expectedAttributes = array(
             'isTemplated' => true
         );
-        $this->assertEquals($expectedAttributes, $relationMetadata->getRelationAttributes());
+        $this->assertEquals($expectedAttributes, $relationMetadata->getAttributes());
     }
 }

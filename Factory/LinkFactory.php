@@ -62,6 +62,6 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
             );
         }
 
-        return $this->createLink($relationMetadata->getRel(), $href, $relationMetadata->getRelationAttributes());
+        return $this->createLink($relationMetadata->getRel(), $href, $relationMetadata->getAttributes());
     }
 }

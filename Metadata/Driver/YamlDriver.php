@@ -47,7 +47,7 @@ class YamlDriver extends AbstractFileDriver
                 }
 
                 if (!empty($relation['attributes'])) {
-                    $relationMetadata->setRelationAttributes($relation['attributes']);
+                    $relationMetadata->setAttributes($relation['attributes']);
                 }
 
                 if (!empty($relation['content'])) {

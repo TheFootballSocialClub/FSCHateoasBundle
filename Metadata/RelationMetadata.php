@@ -10,7 +10,7 @@ class RelationMetadata implements RelationMetadataInterface
     private $params;
     private $content;
     private $options;
-    private $relationAttributes;
+    private $attributes;
 
     public function __construct($rel)
     {
@@ -102,16 +102,16 @@ class RelationMetadata implements RelationMetadataInterface
     /**
      * @return array
      */
-    public function getRelationAttributes()
+    public function getAttributes()
     {
-        return $this->relationAttributes;
+        return $this->attributes;
     }
 
     /**
-     * @param array $relationAttributes
+     * @param array $attributes
      */
-    public function setRelationAttributes($relationAttributes)
+    public function setAttributes($attributes)
     {
-        $this->relationAttributes = $relationAttributes;
+        $this->attributes = $attributes;
     }
 }
