@@ -23,6 +23,11 @@ class LinkSerializationHelper
 
             $entryNode->setAttribute('rel', $link->getRel());
             $entryNode->setAttribute('href', $link->getHref());
+
+            $relationAttributes = $link->getRelationAttributes();
+            if (isset($relationAttributes['isTemplated'])) {
+                $entryNode->setAttribute('templated', $relationAttributes['isTemplated'] ? 'true' : 'false');
+            }
         }
     }
 
@@ -40,6 +45,11 @@ class LinkSerializationHelper
             }
             if (null !== $link->getHref()) {
                 $serializedLink['href'] = $link->getHref();
+            }
+
+            $relationAttributes = $link->getRelationAttributes();
+            if (isset($relationAttributes['isTemplated'])) {
+                $serializedLink['templated'] = $relationAttributes['isTemplated'] ? 'true' : 'false';
             }
 
             if (isset($serializedLinks[$rel])) {

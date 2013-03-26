@@ -76,3 +76,10 @@ api_post_get_router:
     defaults:
         _controller: TestBundle:Post:getPostAlternateRouter
     requirements: { _method: GET }
+
+api_post_get_templated:
+    pattern: /api/posts/{id}/templated
+    defaults:
+        _controller: TestBundle:Post:getPostTemplated
+    requirements: { _method: GET }
+

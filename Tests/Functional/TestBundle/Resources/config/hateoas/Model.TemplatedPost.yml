@@ -1,0 +1,6 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\TemplatedPost:
+    relations:
+        - rel: search
+          href: "search?{&q}"
+          attributes:
+              isTemplated: true
