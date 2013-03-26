@@ -409,4 +409,25 @@ JSON
     {
         return preg_replace('/(\n)(?:    )*/', '', $json);
     }
+
+    public function testDifferentRouter()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/posts/2/alternate_router?_format=xml');
+
+        $response = $client->getResponse(); /**  */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<post id="2">
+  <title><![CDATA[How to create awesome symfony2 application]]></title>
+  <link rel="self" href="http://localhost/api/posts/2"/>
+  <link rel="alternate_router" href="PREPENDhttp://localhost/api/posts/2"/>
+  <link rel="alternate_router_relative" href="PREPEND/api/posts/2"/>
+</post>
+
+XML
+        , $response->getContent());
+    }
 }

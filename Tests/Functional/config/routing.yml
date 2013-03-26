@@ -70,3 +70,9 @@ api_halpager:
     pattern: /api/pager
     defaults:
         _controller: TestBundle:Mixed:pager
+
+api_post_get_router:
+    pattern: /api/posts/{id}/alternate_router
+    defaults:
+        _controller: TestBundle:Post:getPostAlternateRouter
+    requirements: { _method: GET }

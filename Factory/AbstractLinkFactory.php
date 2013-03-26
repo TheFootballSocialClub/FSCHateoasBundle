@@ -3,16 +3,19 @@
 namespace FSC\HateoasBundle\Factory;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use FSC\HateoasBundle\Routing\RelationUrlGenerator;
 
 use FSC\HateoasBundle\Model\Link;
 
 abstract class AbstractLinkFactory
 {
-    protected $urlGenerator;
+    protected $relationUrlGenerator;
+    protected $forceAbsolute;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(RelationUrlGenerator $relationUrlGenerator, $forceAbsolute = true)
     {
-        $this->urlGenerator = $urlGenerator;
+        $this->relationUrlGenerator = $relationUrlGenerator;
+        $this->forceAbsolute = $forceAbsolute;
     }
 
     public static function createLink($rel, $href)
@@ -24,10 +27,15 @@ abstract class AbstractLinkFactory
         return $link;
     }
 
-    public function generateUrl($name, $parameters = array())
+    public function generateUrl($name, $parameters = array(), $options = array())
     {
         ksort($parameters); // Have consistent url query strings, for the tests
 
-        return $this->urlGenerator->generate($name, $parameters);
+        $alias = !empty($options['router']) ? $options['router'] : 'default';
+        $urlGenerator = $this->relationUrlGenerator->getUrlGenerator($alias);
+
+        $absolute = isset($options['absolute']) ? $options['absolute'] : $this->forceAbsolute;
+
+        return $urlGenerator->generate($name, $parameters, $absolute);
     }
 }

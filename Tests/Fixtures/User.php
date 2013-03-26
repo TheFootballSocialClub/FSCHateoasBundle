@@ -29,6 +29,10 @@ use FSC\HateoasBundle\Annotation as Rest;
  * @Rest\Relation("adrienbrault",
  *     href = "http://adrienbrault.fr"
  * )
+ * @Rest\Relation("options",
+ *     href = @Rest\Route("homepage", options = { "key1" = "value1" } ),
+ *     embed = @Rest\Content(property = ".property")
+ * )
  */
 class User
 {

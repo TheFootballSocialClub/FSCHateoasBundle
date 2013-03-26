@@ -20,7 +20,13 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $metadataFactory = $this->getMock('FSC\HateoasBundle\Metadata\MetadataFactoryInterface');
         $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory(new PropertyAccessor());
-        $linkFactory = new LinkFactory($urlGenerator, $metadataFactory, $parametersFactory);
+
+        $FSCUrlGenerator = new \FSC\HateoasBundle\Routing\UrlGenerator($urlGenerator);
+
+        $relationUrlGenerator = new \FSC\HateoasBundle\Routing\RelationUrlGenerator($metadataFactory, $parametersFactory);
+        $relationUrlGenerator->setUrlGenerator('default', $FSCUrlGenerator);
+
+        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator);
 
         $object = (object) array('id' => $id = 3);
 
@@ -55,7 +61,13 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $metadataFactory = $this->getMock('FSC\HateoasBundle\Metadata\MetadataFactoryInterface');
         $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory(new PropertyAccessor());
-        $linkFactory = new LinkFactory($urlGenerator, $metadataFactory, $parametersFactory);
+
+        $FSCUrlGenerator = new \FSC\HateoasBundle\Routing\UrlGenerator($urlGenerator);
+
+        $relationUrlGenerator = new \FSC\HateoasBundle\Routing\RelationUrlGenerator($metadataFactory, $parametersFactory);
+        $relationUrlGenerator->setUrlGenerator('default', $FSCUrlGenerator);
+
+        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator);
 
         $object = (object) array('id' => $id = 3);
 
