@@ -23,6 +23,11 @@ class LinkSerializationHelper
 
             $entryNode->setAttribute('rel', $link->getRel());
             $entryNode->setAttribute('href', $link->getHref());
+
+            $attributes = $link->getAttributes();
+            foreach ($attributes as $attributeName => $attributeValue) {
+                $entryNode->setAttribute($attributeName, $attributeValue);
+            }
         }
     }
 
@@ -41,6 +46,8 @@ class LinkSerializationHelper
             if (null !== $link->getHref()) {
                 $serializedLink['href'] = $link->getHref();
             }
+
+            $serializedLink = array_merge($serializedLink, $link->getAttributes());
 
             if (isset($serializedLinks[$rel])) {
                 if (isset($serializedLinks[$rel]['href'])) {

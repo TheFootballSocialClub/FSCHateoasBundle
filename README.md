@@ -583,6 +583,42 @@ class UserController extends Controller
 }
 ```
 
+## Relation Attributes
+
+There is an attributes array that you can set on the relations that will be serialized to attributes of the
+link. This can be useful for things, such as marking the links as being templated. Example:
+
+```php
+/**
+ * @Rest\Relation("search", href = "http://domain.com/search?{&q}", attributes = { "templated" = "true" })
+ */
+class User
+{
+}
+```
+
+### Results
+
+```xml
+<user id="24">
+  <link rel="search" href="http://domain.com/search?{&q}" templated="true" />
+</user>
+```
+
+or
+
+```json
+{
+    "id": 24,
+    "links": [
+        "search": {
+            "href": "http:\/\/domain.com/search?{&q}",
+            "templated": "true"
+        }
+    ]
+}
+```
+
 ## Route options
 
 ### Using different routers

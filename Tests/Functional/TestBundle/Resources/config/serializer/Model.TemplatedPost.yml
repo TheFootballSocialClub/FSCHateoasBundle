@@ -1,0 +1,5 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\TemplatedPost:
+    xml_root_name: post
+    properties:
+        id:
+            xml_attribute: true

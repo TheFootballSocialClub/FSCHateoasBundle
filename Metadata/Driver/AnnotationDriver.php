@@ -49,6 +49,10 @@ class AnnotationDriver implements DriverInterface
                     $relationMetadata->setUrl($annotation->href);
                 }
 
+                if (null !== $annotation->attributes) {
+                    $relationMetadata->setAttributes($annotation->attributes);
+                }
+
                 if (null !== $annotation->embed && $annotation->embed instanceof Annotation\Content) {
                     if (!(empty($annotation->embed->provider) xor empty($annotation->embed->property))) {
                         throw new \RuntimeException('The @Content annotation needs either a provider or a property.');
