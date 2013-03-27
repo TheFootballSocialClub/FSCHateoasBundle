@@ -3,7 +3,6 @@
 namespace FSC\HateoasBundle\Serializer\Handler;
 
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
-use JMS\Serializer\EventDispatcher\Event;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\GenericSerializationVisitor;

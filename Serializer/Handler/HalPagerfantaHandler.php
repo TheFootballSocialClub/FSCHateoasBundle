@@ -3,14 +3,11 @@
 namespace FSC\HateoasBundle\Serializer\Handler;
 
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
-use JMS\Serializer\EventDispatcher\Event;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\GenericSerializationVisitor;
 use JMS\Serializer\Context;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
-
-use Metadata\MetadataFactoryInterface;
 
 use FSC\HateoasBundle\Model\HalPagerfanta;
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
@@ -33,20 +30,17 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
         return $methods;
     }
 
-    protected $serializerMetadataFactory;
     protected $embedderEventSubscriber;
     protected $linkEventSubscriber;
     protected $linksJsonKey;
     protected $relationsJsonKey;
 
     public function __construct(
-        MetadataFactoryInterface $serializerMetadataFactory,
         EmbedderEventSubscriber $embedderEventSubscriber,
         LinkEventSubscriber $linkEventSubscriber,
         $linksKey = null,
         $relationsKey = null
     ) {
-        $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->embedderEventSubscriber = $embedderEventSubscriber;
         $this->linkEventSubscriber = $linkEventSubscriber;
         $this->linksJsonKey = $linksKey ?: 'links';

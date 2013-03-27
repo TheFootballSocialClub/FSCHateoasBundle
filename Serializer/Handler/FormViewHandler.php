@@ -3,14 +3,12 @@
 namespace FSC\HateoasBundle\Serializer\Handler;
 
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
-use JMS\Serializer\EventDispatcher\Event;
 use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\Context;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
-use Metadata\MetadataFactoryInterface;
 use Symfony\Component\Form\FormView;
 
 use FSC\HateoasBundle\Serializer\XmlFormViewSerializer;
@@ -35,16 +33,13 @@ class FormViewHandler implements SubscribingHandlerInterface
     protected $xmlFormViewSerializer;
     protected $embedderEventSubscriber;
     protected $linkEventSubscriber;
-    protected $serializerMetadataFactory;
 
     public function __construct(XmlFormViewSerializer $xmlFormViewSerializer,
-        EmbedderEventSubscriber $embedderEventSubscriber, LinkEventSubscriber $linkEventSubscriber,
-        MetadataFactoryInterface $serializerMetadataFactory
+        EmbedderEventSubscriber $embedderEventSubscriber, LinkEventSubscriber $linkEventSubscriber
     ) {
         $this->xmlFormViewSerializer = $xmlFormViewSerializer;
         $this->embedderEventSubscriber = $embedderEventSubscriber;
         $this->linkEventSubscriber = $linkEventSubscriber;
-        $this->serializerMetadataFactory = $serializerMetadataFactory;
     }
 
     public function serializeToXML(XmlSerializationVisitor $visitor, FormView $formView, array $type, Context $context)
