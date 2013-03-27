@@ -3,10 +3,11 @@
 namespace FSC\HateoasBundle\Serializer\Handler;
 
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
-use JMS\Serializer\EventDispatcher\Event;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\GenericSerializationVisitor;
+use JMS\Serializer\Context;
+use JMS\Serializer\EventDispatcher\ObjectEvent;
 
 use FSC\HateoasBundle\Model\HalPagerfanta;
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
@@ -46,12 +47,12 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
         $this->relationsJsonKey = $relationsKey ?: 'relations';
     }
 
-    public function serializeToXML(XmlSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)
+    public function serializeToXML(XmlSerializationVisitor $visitor, HalPagerfanta $halPager, array $type, Context $context)
     {
-        return $visitor->getNavigator()->accept($halPager->getPager(), null, $visitor);
+        return $visitor->getNavigator()->accept($halPager->getPager(), null, $context);
     }
 
-    public function serializeToArray(GenericSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)
+    public function serializeToArray(GenericSerializationVisitor $visitor, HalPagerfanta $halPager, array $type, Context $context)
     {
         $shouldSetRoot = null === $visitor->getRoot();
 
@@ -62,16 +63,16 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
             'total' => $pager->getNbResults(),
         );
 
-        if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
+        if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
             $data[$this->linksJsonKey] = $links;
         }
 
-        if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new Event($visitor, $pager, $type)))) {
+        if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
             $data[$this->relationsJsonKey] = $relations;
         }
 
         $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
-        $data[$this->relationsJsonKey][$halPager->getRel()] = $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $visitor);
+        $data[$this->relationsJsonKey][$halPager->getRel()] = $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $context);
 
         if ($shouldSetRoot) {
             $visitor->setRoot($data);

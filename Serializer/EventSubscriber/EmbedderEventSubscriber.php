@@ -81,7 +81,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
             $node = $visitor->getNavigator()->accept(
                 $relationContent,
                 $this->getContentType($relationMetadata->getContent()),
-                $visitor
+                $event->getContext()
             );
             if (null !== $node) {
                 $visitor->getCurrentNode()->appendChild($node);
@@ -115,7 +115,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
             $relationsData[$relationMetadata->getRel()] = $visitor->getNavigator()->accept(
                 $relationContent,
                 $this->getContentType($relationMetadata->getContent()),
-                $visitor
+                $event->getContext()
             );
         }
 
