@@ -8,7 +8,7 @@ use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
-use JMS\Serializer\SerializationContext;
+use JMS\Serializer\Context;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Metadata\MetadataFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -47,7 +47,7 @@ class FormViewHandler implements SubscribingHandlerInterface
         $this->serializerMetadataFactory = $serializerMetadataFactory;
     }
 
-    public function serializeToXML(XmlSerializationVisitor $visitor, FormView $formView, array $type)
+    public function serializeToXML(XmlSerializationVisitor $visitor, FormView $formView, array $type, Context $context)
     {
         if (null === $visitor->document) {
             $visitorClass = new \ReflectionClass(get_class($visitor));
@@ -59,9 +59,6 @@ class FormViewHandler implements SubscribingHandlerInterface
 
             $visitor->document = $visitor->createDocument();
         }
-
-        $context = SerializationContext::create();
-        $context->initialize('xml', $visitor, $visitor->getNavigator(), $this->serializerMetadataFactory);
 
         $this->embedderEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $formView, $type));
         $this->linkEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $formView, $type));

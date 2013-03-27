@@ -7,7 +7,7 @@ use JMS\Serializer\EventDispatcher\Event;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\GenericSerializationVisitor;
-use JMS\Serializer\SerializationContext;
+use JMS\Serializer\Context;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Metadata\MetadataFactoryInterface;
 use Pagerfanta\Pagerfanta;
@@ -55,7 +55,7 @@ class PagerfantaHandler implements SubscribingHandlerInterface
         $this->relationsJsonKey = $relationsKey ?: 'relations';
     }
 
-    public function serializeToXML(XmlSerializationVisitor $visitor, Pagerfanta $pager, array $type)
+    public function serializeToXML(XmlSerializationVisitor $visitor, Pagerfanta $pager, array $type, Context $context)
     {
         if (null === $visitor->document) {
             $visitorClass = new \ReflectionClass(get_class($visitor));
@@ -67,9 +67,6 @@ class PagerfantaHandler implements SubscribingHandlerInterface
 
             $visitor->document = $visitor->createDocument();
         }
-
-        $context = SerializationContext::create();
-        $context->initialize('xml', $visitor, $visitor->getNavigator(), $this->serializerMetadataFactory);
 
         $this->embedderEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $pager, $type));
         $this->linkEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $pager, $type));
@@ -103,14 +100,11 @@ class PagerfantaHandler implements SubscribingHandlerInterface
         }
     }
 
-    public function serializeToArray(GenericSerializationVisitor $visitor, Pagerfanta $pager, array $type)
+    public function serializeToArray(GenericSerializationVisitor $visitor, Pagerfanta $pager, array $type, Context $context)
     {
         $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
 
         $shouldSetRoot = null === $visitor->getRoot();
-
-        $context = SerializationContext::create();
-        $context->initialize('json', $visitor, $visitor->getNavigator(), $this->serializerMetadataFactory);
 
         $data = array(
             'page' => $pager->getCurrentPage(),

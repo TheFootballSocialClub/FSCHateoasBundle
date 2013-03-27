@@ -7,7 +7,7 @@ use JMS\Serializer\EventDispatcher\Event;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\GenericSerializationVisitor;
-use JMS\Serializer\SerializationContext;
+use JMS\Serializer\Context;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 
 use Metadata\MetadataFactoryInterface;
@@ -53,20 +53,14 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
         $this->relationsJsonKey = $relationsKey ?: 'relations';
     }
 
-    public function serializeToXML(XmlSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)
+    public function serializeToXML(XmlSerializationVisitor $visitor, HalPagerfanta $halPager, array $type, Context $context)
     {
-        $context = SerializationContext::create();
-        $context->initialize('xml', $visitor, $visitor->getNavigator(), $this->serializerMetadataFactory);
-
         return $visitor->getNavigator()->accept($halPager->getPager(), null, $context);
     }
 
-    public function serializeToArray(GenericSerializationVisitor $visitor, HalPagerfanta $halPager, array $type)
+    public function serializeToArray(GenericSerializationVisitor $visitor, HalPagerfanta $halPager, array $type, Context $context)
     {
         $shouldSetRoot = null === $visitor->getRoot();
-
-        $context = SerializationContext::create();
-        $context->initialize('json', $visitor, $visitor->getNavigator(), $this->serializerMetadataFactory);
 
         $pager = $halPager->getPager();
         $data = array(
