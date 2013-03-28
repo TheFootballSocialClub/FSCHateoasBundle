@@ -34,6 +34,7 @@ use FSC\HateoasBundle\Annotation as Rest;
  *     embed = @Rest\Content(property = ".property")
  * )
  * @Rest\Relation("templated", href = @Rest\Route("homepage"), attributes = { "isTemplated" = true })
+ * @Rest\Relation("excluded", href = @Rest\Route("homepage"), excludeIf = { ".parent" = null } )
  */
 class User
 {

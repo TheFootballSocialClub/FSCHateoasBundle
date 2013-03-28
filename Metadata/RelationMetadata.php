@@ -8,15 +8,16 @@ class RelationMetadata implements RelationMetadataInterface
     private $url;
     private $route;
     private $params;
-    private $skipIfNull = array();
     private $content;
     private $options;
     private $attributes;
+    private $excludeIf;
 
     public function __construct($rel)
     {
         $this->rel = $rel;
         $this->params = array();
+        $this->excludeIf = array();
     }
 
     public function setParams($params)
@@ -116,16 +117,19 @@ class RelationMetadata implements RelationMetadataInterface
         $this->attributes = $attributes;
     }
 
-    public function setSkipIfNull($skipIfNull)
+    /**
+     * @param array $excludeIf
+     */
+    public function setExcludeIf(array $excludeIf)
     {
-        $this->skipIfNull = (array) $skipIfNull;
+        $this->excludeIf = (array) $excludeIf;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSkipIfNull()
+    public function getExcludeIf()
     {
-        return $this->skipIfNull;
+        return $this->excludeIf;
     }
 }

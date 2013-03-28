@@ -50,3 +50,8 @@ FSC\HateoasBundle\Tests\Fixtures\User:
               route: homepage
           attributes:
               isTemplated: true
+        - rel: excluded
+          href:
+              route: homepage
+          exclude_if:
+              ".parent": ~

@@ -53,7 +53,9 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
          * @var RelationMetadataInterface $relationMetadata
          */
         foreach ($classMetadata->getRelations() as $relationMetadata) {
-            if($link = $this->createLinkFromMetadata($relationMetadata, $object)) {
+            if (!$this->shouldExcludeLink($relationMetadata, $object) &&
+                $link = $this->createLinkFromMetadata($relationMetadata, $object)
+            ) {
                 $links[] = $link;
             }
         }
@@ -61,18 +63,18 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
         return $links;
     }
 
-    protected function isSkipLink(RelationMetadataInterface $relationMetadata, $object)
+    protected function shouldExcludeLink(RelationMetadataInterface $relationMetadata, $object)
     {
-        if(! $fields = $relationMetadata->getSkipIfNull()) {
+        if (!$fields = $relationMetadata->getExcludeIf()) {
             return false;
         }
 
-        foreach($fields as $field) {
+        foreach ($fields as $field => $valueToExclude) {
             $field = trim($field, '.');
             $propertyPath = new PropertyPath($field);
             $value = $this->propertyAccessor->getValue($object, $propertyPath);
 
-            if(null === $value){
+            if ($valueToExclude === $value) {
                 return true;
             }
         }
@@ -82,9 +84,7 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
 
     public function createLinkFromMetadata(RelationMetadataInterface $relationMetadata, $object)
     {
-        if ($this->isSkipLink($relationMetadata, $object)) {
-            return null;
-        } elseif (null !== $relationMetadata->getUrl()) {
+        if (null !== $relationMetadata->getUrl()) {
             $href = $relationMetadata->getUrl();
         } else {
             $href = $this->generateUrl(
