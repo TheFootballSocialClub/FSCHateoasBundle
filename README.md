@@ -16,7 +16,7 @@ composer.json
 ```json
 {
     "require": {
-        "fsc/hateoas-bundle": "0.3.x-dev"
+        "fsc/hateoas-bundle": "0.4.x-dev"
     },
     "minimum-stability": "dev"
 }
