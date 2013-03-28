@@ -6,6 +6,10 @@
         {
             "name": "Adrien Brault",
             "email": "adrien.brault@gmail.com"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/TheFootballSocialClub/FSCHateoasBundle/contributors"
         }
     ],
     "require": {
