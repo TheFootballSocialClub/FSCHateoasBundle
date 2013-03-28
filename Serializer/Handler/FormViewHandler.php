@@ -3,11 +3,12 @@
 namespace FSC\HateoasBundle\Serializer\Handler;
 
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
-use JMS\Serializer\EventDispatcher\Event;
 use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
+use JMS\Serializer\Context;
+use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Symfony\Component\Form\FormView;
 
 use FSC\HateoasBundle\Serializer\XmlFormViewSerializer;
@@ -34,14 +35,14 @@ class FormViewHandler implements SubscribingHandlerInterface
     protected $linkEventSubscriber;
 
     public function __construct(XmlFormViewSerializer $xmlFormViewSerializer,
-        EmbedderEventSubscriber $embedderEventSubscriber, LinkEventSubscriber $linkEventSubscriber)
-    {
+        EmbedderEventSubscriber $embedderEventSubscriber, LinkEventSubscriber $linkEventSubscriber
+    ) {
         $this->xmlFormViewSerializer = $xmlFormViewSerializer;
         $this->embedderEventSubscriber = $embedderEventSubscriber;
         $this->linkEventSubscriber = $linkEventSubscriber;
     }
 
-    public function serializeToXML(XmlSerializationVisitor $visitor, FormView $formView, array $type)
+    public function serializeToXML(XmlSerializationVisitor $visitor, FormView $formView, array $type, Context $context)
     {
         if (null === $visitor->document) {
             $visitorClass = new \ReflectionClass(get_class($visitor));
@@ -54,8 +55,8 @@ class FormViewHandler implements SubscribingHandlerInterface
             $visitor->document = $visitor->createDocument();
         }
 
-        $this->embedderEventSubscriber->onPostSerializeXML(new Event($visitor, $formView, $type));
-        $this->linkEventSubscriber->onPostSerializeXML(new Event($visitor, $formView, $type));
+        $this->embedderEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $formView, $type));
+        $this->linkEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $formView, $type));
 
         $this->xmlFormViewSerializer->serialize($formView, $visitor->getCurrentNode());
     }
