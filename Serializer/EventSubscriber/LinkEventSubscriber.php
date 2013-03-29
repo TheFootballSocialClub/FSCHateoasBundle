@@ -5,6 +5,8 @@ namespace FSC\HateoasBundle\Serializer\EventSubscriber;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\Events;
 use JMS\Serializer\EventDispatcher\Event;
+use JMS\Serializer\Metadata\ClassMetadata;
+use JMS\Serializer\Metadata\PropertyMetadata;
 
 use FSC\HateoasBundle\Factory\LinkFactoryInterface;
 use FSC\HateoasBundle\Serializer\LinkSerializationHelper;
@@ -34,12 +36,14 @@ class LinkEventSubscriber implements EventSubscriberInterface
     protected $linkFactory;
     protected $linkSerializationHelper;
     protected $linksJsonKey;
+    protected $deferredLinks;
 
     public function __construct(LinkFactoryInterface $linkFactory, LinkSerializationHelper $linkSerializationHelper, $linksJsonKey = null)
     {
         $this->linkFactory = $linkFactory;
         $this->linkSerializationHelper = $linkSerializationHelper;
         $this->linksJsonKey = $linksJsonKey ?: 'links';
+        $this->deferredLinks = new \SplObjectStorage();
     }
 
     public function onPostSerializeXML(Event $event)
@@ -64,7 +68,31 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     public function getOnPostSerializeData(Event $event)
     {
-        if (null === ($links = $this->linkFactory->createLinks($event->getObject()))) {
+        $object = $event->getObject();
+        $context = $event->getContext();
+        $metadataStack = $context->getMetadataStack();
+
+        $links = $this->linkFactory->createLinks($object);
+        if ($this->deferredLinks->contains($object)) {
+            // $object contains inlined objects that had links
+
+            $links = array_merge($this->deferredLinks->offsetGet($object), $links ?: array());
+            $this->deferredLinks->detach($object);
+        }
+
+        if (null === $links) {
+            return;
+        }
+
+        if ($metadataStack->count() > 0 && $metadataStack[0]->inline) {
+            // $object is inlined inside another object
+
+            $visitingStack = $context->getVisitingStack();
+            $parentObject = $visitingStack[0]; // $object is inlined inside $parentObject
+
+            // We need to defer the links serialization to the $parentObject
+            $this->deferredLinks->attach($parentObject, $links);
+
             return;
         }
 
