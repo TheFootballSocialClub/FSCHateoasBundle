@@ -101,7 +101,12 @@ class PagerfantaHandler implements SubscribingHandlerInterface
 
     public function serializeToArray(GenericSerializationVisitor $visitor, Pagerfanta $pager, array $type, Context $context)
     {
-        $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
+        $resultsType = array(
+            'name' => 'array',
+        );
+        if (isset($type['params'])) {
+            $resultsType['params'] = $type['params'];
+        }
 
         $shouldSetRoot = null === $visitor->getRoot();
 

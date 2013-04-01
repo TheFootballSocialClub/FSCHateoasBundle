@@ -71,7 +71,12 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
             $data[$this->relationsJsonKey] = $relations;
         }
 
-        $resultsType = isset($type['params'][0]) ? $type['params'][0] : null;
+        $resultsType = array(
+            'name' => 'array',
+        );
+        if (isset($type['params'])) {
+            $resultsType['params'] = $type['params'];
+        }
         $data[$this->relationsJsonKey][$halPager->getRel()] = $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $context);
 
         if ($shouldSetRoot) {
