@@ -195,7 +195,6 @@ class XmlFormViewSerializer
         $parentElement->appendChild($inputElement);
 
         $inputElement->setAttribute('type', $variables['type']);
-        $inputElement->setAttribute('id', $variables['id']);
 
         if (!empty($variables['value'])) {
             $inputElement->setAttribute('value', $variables['value']);
@@ -234,6 +233,8 @@ class XmlFormViewSerializer
     {
         $widgetElement->setAttribute('name', $variables['full_name']);
 
+        $widgetElement->setAttribute('id', $variables['id']);
+
         if ($variables['read_only']) {
             $widgetElement->setAttribute('readonly', 'readonly');
         }
@@ -269,7 +270,6 @@ class XmlFormViewSerializer
     protected function serializeTextareaWidget(\DOMElement $parentElement, FormView $view, $variables)
     {
         $textareaElement = $parentElement->ownerDocument->createElement('textarea', $variables['value']);
-        $textareaElement->setAttribute('id', $variables['id']);
         $parentElement->appendChild($textareaElement);
 
         $this->addWidgetAttributes($textareaElement, $view, $variables);
@@ -415,8 +415,6 @@ class XmlFormViewSerializer
 
         $this->addWidgetAttributes($selectElement, $view, $variables);
 
-        $selectElement->setAttribute('id', $variables['id']);
-
         if (isset($variables['multiple']) && $variables['multiple']) {
             $selectElement->setAttribute('multiple', 'multiple');
         }
@@ -543,7 +541,6 @@ class XmlFormViewSerializer
     {
         $inputElement = $parentElement->ownerDocument->createElement('input');
         $inputElement->setAttribute('type', 'checkbox');
-        $inputElement->setAttribute('id', $variables['id']);
 
         if (isset($variables['value'])) {
             $inputElement->setAttribute('value', $variables['value']);
@@ -565,7 +562,6 @@ class XmlFormViewSerializer
     {
         $inputElement = $parentElement->ownerDocument->createElement('input');
         $inputElement->setAttribute('type', 'radio');
-        $inputElement->setAttribute('id', $variables['id']);
 
         if (isset($variables['value'])) {
             $inputElement->setAttribute('value', $variables['value']);
