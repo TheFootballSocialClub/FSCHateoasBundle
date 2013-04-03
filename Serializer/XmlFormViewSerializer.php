@@ -8,11 +8,11 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class XmlFormViewSerializer
 {
-    protected $transaltor;
+    protected $translator;
 
-    public function __construct (TranslatorInterface $transaltor)
+    public function __construct (TranslatorInterface $translator)
     {
-        $this->transaltor = $transaltor;
+        $this->translator = $translator;
     }
 
     protected static $baseTypes = array(
@@ -205,7 +205,7 @@ class XmlFormViewSerializer
 
     protected function serializeLabel(\DOMElement $parentElement, $type, $variables)
     {
-        $translatedLabel = $this->transaltor->trans($variables['label']);
+        $translatedLabel = $this->translator->trans($variables['label']);
         $labelElement = $parentElement->ownerDocument->createElement('label',$translatedLabel);
         $parentElement->appendChild($labelElement);
 
@@ -257,7 +257,7 @@ class XmlFormViewSerializer
 
         foreach ($variables['attr'] as $name => $value) {
             if (in_array($name, array('placeholder', 'title'))) {
-                // TODO Translate the thing ...
+                $this->translator->trans($value);
             }
 
             $widgetElement->setAttribute($name, $value);
@@ -420,7 +420,7 @@ class XmlFormViewSerializer
         }
 
         if (isset($variables['empty_value']) && null !== $variables['empty_value']) {
-            $translatedEmpty_value = $this->transaltor->trans($variables['empty_value']);
+            $translatedEmpty_value = $this->translator->trans($variables['empty_value']);
             $noneOptionElement = $selectElement->ownerDocument->createElement('option', $translatedEmpty_value);
             $noneOptionElement->setAttribute('value', '');
 
@@ -463,7 +463,7 @@ class XmlFormViewSerializer
                     'options' => $choiceView,
                 )));
             } else {
-                $translatedLabel = $this->transaltor->trans($choiceView->label);
+                $translatedLabel = $this->translator->trans($choiceView->label);
                 $optionElement = $selectElement->ownerDocument->createElement('option', $translatedLabel);
                 $optionElement->setAttribute('value', $choiceView->value);
 
