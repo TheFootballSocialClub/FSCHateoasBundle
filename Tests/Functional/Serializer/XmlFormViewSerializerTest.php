@@ -59,7 +59,8 @@ class XmlFormViewSerializerTest extends TestCase
 
         $formView = $form->createView();
 
-        $xmlFormViewSerializer = new XmlFormViewSerializer();
+        $translator = $this->getKernel()->getContainer()->get('translator');
+        $xmlFormViewSerializer = new XmlFormViewSerializer($translator);
 
         $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
 
@@ -118,7 +119,8 @@ XML
 
         $formView = $form->createView();
 
-        $xmlFormViewSerializer = new XmlFormViewSerializer();
+        $translator = $this->getKernel()->getContainer()->get('translator');
+        $xmlFormViewSerializer = new XmlFormViewSerializer($translator);
 
         $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
 
@@ -158,7 +160,8 @@ XML
 
         $formView = $form->createView();
 
-        $xmlFormViewSerializer = new XmlFormViewSerializer();
+        $translator = $this->getKernel()->getContainer()->get('translator');
+        $xmlFormViewSerializer = new XmlFormViewSerializer($translator);
 
         $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
 
@@ -415,7 +418,8 @@ XML
             'rel'    => 'create',
         );
 
-        $xmlFormViewSerializer = new XmlFormViewSerializer();
+        $translator = $this->getKernel()->getContainer()->get('translator');
+        $xmlFormViewSerializer = new XmlFormViewSerializer($translator);
 
         $xmlFormViewSerializer->serialize($formView, $formElement = $this->createFormElement());
 

@@ -4,9 +4,17 @@ namespace FSC\HateoasBundle\Serializer;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Extension\Core\View\ChoiceView;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class XmlFormViewSerializer
 {
+    protected $transaltor;
+
+    public function __construct (TranslatorInterface $transaltor)
+    {
+        $this->transaltor = $transaltor;
+    }
+
     protected static $baseTypes = array(
         'text', 'textarea', 'email', 'integer', 'money', 'number', 'password', 'percent', 'search', 'url', 'hidden',
         'collection', 'choice', 'checkbox', 'radio', 'datetime', 'date',
@@ -197,7 +205,8 @@ class XmlFormViewSerializer
 
     protected function serializeLabel(\DOMElement $parentElement, $type, $variables)
     {
-        $labelElement = $parentElement->ownerDocument->createElement('label',$variables['label']);
+        $translatedLabel = $this->transaltor->trans($variables['label']);
+        $labelElement = $parentElement->ownerDocument->createElement('label',$translatedLabel);
         $parentElement->appendChild($labelElement);
 
         $labelElement->setAttribute('for', $variables['id']);
@@ -452,7 +461,8 @@ class XmlFormViewSerializer
                     'options' => $choiceView,
                 )));
             } else {
-                $optionElement = $selectElement->ownerDocument->createElement('option', $choiceView->label);
+                $translatedLabel = $this->transaltor->trans($choiceView->label);
+                $optionElement = $selectElement->ownerDocument->createElement('option', $translatedLabel);
                 $optionElement->setAttribute('value', $choiceView->value);
 
                 if ($this->isSelectedChoice($choiceView, $variables['value'])) {
