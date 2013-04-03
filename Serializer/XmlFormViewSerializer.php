@@ -171,7 +171,8 @@ class XmlFormViewSerializer
     /*
         {% if compound %}
             {{ block('form_widget_compound') }}
-        {% else { %}{ block('form_widget_simple') }}
+        {% else %}
+            {{ block('form_widget_simple') }}
         {% endif %}
     */
     protected function serializeFormWidget(\DOMElement $parentElement, FormView $view, $variables)
@@ -224,7 +225,8 @@ class XmlFormViewSerializer
         {% for attrname, attrvalue in attr %}
             {% if attrname in ['placeholder', 'title'] %}
                 {{ attrname }}="{{ attrvalue|trans({}, translation_domain) }}"
-            {% else { %}{ attrname }}="{{ attrvalue }}"
+            {% else %}
+                {{ attrname }}="{{ attrvalue }}"
             {% endif %}
         {% endfor %}
     */
@@ -363,7 +365,8 @@ class XmlFormViewSerializer
     /*
         {% if expanded %}
             {{ block('choice_widget_expanded') }}
-        {% else { %}{ block('choice_widget_collapsed') }}
+        {% else %}
+            {{ block('choice_widget_collapsed') }}
         {% endif %}
     */
     protected function serializeChoiceWidget(\DOMElement $parentElement, FormView $view, $variables)
