@@ -95,12 +95,7 @@ class XmlFormViewSerializer
                     $this->serializeUrlWidget($parentElement, $view, $variables);
                     break;
                 case 'choice':
-                    if ($variables['expanded']) {
-                        $this->serializeFieldset($parentElement, $view, $variables);
-                    } else {
-                        $this->serializeChoiceWidget($parentElement, $view, $variables);
-                    }
-
+                    $this->serializeChoiceWidget($parentElement, $view, $variables);
                     break;
                 case 'hidden':
                     $this->serializeHiddenWidget($parentElement, $view, $variables);
@@ -360,7 +355,7 @@ class XmlFormViewSerializer
 
         $fieldsetElement->setAttribute('id', $variables['id']);
 
-        $this->serializeChoiceWidget($fieldsetElement, $view, $variables);
+        $this->serializeChoiceWidgetExpanded($fieldsetElement, $view, $variables);
     }
     /*
         {% if expanded %}
@@ -372,7 +367,7 @@ class XmlFormViewSerializer
     protected function serializeChoiceWidget(\DOMElement $parentElement, FormView $view, $variables)
     {
         return isset($variables['expanded']) && $variables['expanded']
-            ? $this->serializeChoiceWidgetExpanded($parentElement, $view, $variables)
+            ? $this->serializeFieldset($parentElement, $view, $variables)
             : $this->serializeChoiceWidgetCollapsed($parentElement, $view, $variables)
         ;
     }
