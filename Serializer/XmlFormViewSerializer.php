@@ -257,7 +257,7 @@ class XmlFormViewSerializer
 
         foreach ($variables['attr'] as $name => $value) {
             if (in_array($name, array('placeholder', 'title'))) {
-                $this->translator->trans($value);
+                $value = $this->translator->trans($value);
             }
 
             $widgetElement->setAttribute($name, $value);
