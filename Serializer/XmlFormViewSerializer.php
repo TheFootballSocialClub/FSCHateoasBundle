@@ -419,7 +419,8 @@ class XmlFormViewSerializer
         }
 
         if (isset($variables['empty_value']) && null !== $variables['empty_value']) {
-            $noneOptionElement = $selectElement->ownerDocument->createElement('option', $variables['empty_value']);
+            $translatedEmpty_value = $this->transaltor->trans($variables['empty_value']);
+            $noneOptionElement = $selectElement->ownerDocument->createElement('option', $translatedEmpty_value);
             $noneOptionElement->setAttribute('value', '');
 
             $selectElement->appendChild($noneOptionElement);
