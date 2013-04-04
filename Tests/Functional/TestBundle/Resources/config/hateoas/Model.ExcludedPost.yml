@@ -1,0 +1,8 @@
+FSC\HateoasBundle\Tests\Functional\TestBundle\Model\ExcludedPost:
+    relations:
+        - rel: parent
+          href:
+              route: api_post_get
+              parameters: { id: .parent.id }
+          exclude_if:
+              ".parent": ~

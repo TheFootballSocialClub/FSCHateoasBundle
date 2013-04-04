@@ -29,4 +29,9 @@ final class Relation
      * @var array
      */
     public $attributes;
+
+    /**
+     * @var array
+     */
+    public $excludeIf = array();
 }

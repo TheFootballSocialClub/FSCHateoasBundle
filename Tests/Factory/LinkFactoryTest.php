@@ -26,7 +26,9 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $relationUrlGenerator = new \FSC\HateoasBundle\Routing\RelationUrlGenerator($metadataFactory, $parametersFactory);
         $relationUrlGenerator->setUrlGenerator('default', $FSCUrlGenerator);
 
-        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator);
+        $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+
+        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator, $propertyAccessor);
 
         $object = (object) array('id' => $id = 3);
 
@@ -67,7 +69,9 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $relationUrlGenerator = new \FSC\HateoasBundle\Routing\RelationUrlGenerator($metadataFactory, $parametersFactory);
         $relationUrlGenerator->setUrlGenerator('default', $FSCUrlGenerator);
 
-        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator);
+        $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+
+        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator, $propertyAccessor);
 
         $object = (object) array('id' => $id = 3);
 
@@ -106,5 +110,41 @@ class LinkFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($rel, $link->getRel());
         $this->assertEquals($href, $link->getHref());
         $this->assertEquals($attributes, $link->getAttributes());
+    }
+
+    public function testLinkNotCreatedWhenShouldBeExcluded()
+    {
+        $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $metadataFactory = $this->getMock('FSC\HateoasBundle\Metadata\MetadataFactoryInterface');
+        $parametersFactory = new \FSC\HateoasBundle\Factory\ParametersFactory(new PropertyAccessor());
+
+        $FSCUrlGenerator = new \FSC\HateoasBundle\Routing\UrlGenerator($urlGenerator);
+
+        $relationUrlGenerator = new \FSC\HateoasBundle\Routing\RelationUrlGenerator($metadataFactory, $parametersFactory);
+        $relationUrlGenerator->setUrlGenerator('default', $FSCUrlGenerator);
+
+        $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+
+        $linkFactory = new LinkFactory($metadataFactory, $parametersFactory, $relationUrlGenerator, $propertyAccessor);
+
+        $object = (object) array('id' => $id = 3, 'parent' => null);
+
+        $relationMetadata = $this->getMock('FSC\HateoasBundle\Metadata\RelationMetadataInterface');
+        $relationMetadata->expects($this->any())->method('getRel')->will($this->returnValue($rel = 'self'));
+        $relationMetadata->expects($this->any())->method('getRoute')->will($this->returnValue($route = 'bar'));
+        $relationMetadata->expects($this->any())->method('getParams')->will($this->returnValue(array('identifier' => '.id')));
+        $relationMetadata->expects($this->any())->method('getExcludeIf')->will($this->returnValue(array('.parent' => null)));
+
+        $classMetadata = $this->getMock('FSC\HateoasBundle\Metadata\ClassMetadataInterface');
+        $classMetadata->expects($this->once())->method('getRelations')->will($this->returnValue(array($relationMetadata, $relationMetadata)));
+
+        $urlGenerator
+            ->expects($this->never())
+            ->method('generate')
+        ;
+
+        $links = $linkFactory->createLinksFromMetadata($classMetadata, $object);
+
+        $this->assertEquals(0, count($links));
     }
 }
