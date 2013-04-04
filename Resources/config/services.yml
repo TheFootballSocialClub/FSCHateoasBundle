@@ -31,6 +31,7 @@ services:
             - @fsc_hateoas.metadata.factory
             - @fsc_hateoas.factory.parameters
             - @fsc_hateoas.routing.relation_url_generator
+            - @fsc_hateoas.property_accessor
 
     fsc_hateoas.factory.parameters:
         class: %fsc_hateoas.factory.parameters.class%

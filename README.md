@@ -666,3 +666,32 @@ class User
 
 }
 ```
+
+## Conditionally excluding links
+
+You can add conditions on relations that will determine whether the link should be excluded or not. For example:
+
+```php
+/**
+ * @Rest\Relation(
+ *      "parent",
+ *      href = @Rest\Route("api_post_get", parameters = { "id" = ".parent.id"}),
+ *      excludeIf = { ".parent" = null }
+ * )
+ */
+class Post
+{
+}
+```
+
+This will not include the `parent` link if the value of `parent` is `null`. This can also be done through the YAML configuration:
+
+```yml
+relations:
+    - rel: parent
+        href:
+            route: api_post_get
+            parameters: { id: .parent.id }
+        exclude_if:
+            ".parent": ~
+```

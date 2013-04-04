@@ -11,11 +11,13 @@ class RelationMetadata implements RelationMetadataInterface
     private $content;
     private $options;
     private $attributes;
+    private $excludeIf;
 
     public function __construct($rel)
     {
         $this->rel = $rel;
         $this->params = array();
+        $this->excludeIf = array();
     }
 
     public function setParams($params)
@@ -113,5 +115,21 @@ class RelationMetadata implements RelationMetadataInterface
     public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * @param array $excludeIf
+     */
+    public function setExcludeIf(array $excludeIf)
+    {
+        $this->excludeIf = (array) $excludeIf;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExcludeIf()
+    {
+        return $this->excludeIf;
     }
 }

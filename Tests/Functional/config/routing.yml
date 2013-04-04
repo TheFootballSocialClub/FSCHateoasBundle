@@ -83,3 +83,10 @@ api_post_get_templated:
         _controller: TestBundle:Post:getPostTemplated
     requirements: { _method: GET }
 
+api_post_get_exclude:
+    pattern: /api/posts/{id}/exclude
+    defaults:
+        _controller: TestBundle:Post:getPostExclude
+    requirements: { _method: GET }
+
+
