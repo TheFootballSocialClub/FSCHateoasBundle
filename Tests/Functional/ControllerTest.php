@@ -452,6 +452,16 @@ XML
         , $response->getContent());
     }
 
+    public function testListPostsJson()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/posts?_format=json');
+
+        $response = $client->getResponse(); /** @var $response Response */
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
     public function testExcludingLinksConditionTrue()
     {
         $client = $this->createClient();
