@@ -69,4 +69,11 @@ class PostController extends Controller
 
         return new Response($this->get('serializer')->serialize($post, $request->get('_format')));
     }
+
+    public function getPostExcludeAction(Request $request, $id)
+    {
+        $post = $this->get('test.provider.post')->getPostExcluded($id);
+
+        return new Response($this->get('serializer')->serialize($post, $request->get('_format')));
+    }
 }

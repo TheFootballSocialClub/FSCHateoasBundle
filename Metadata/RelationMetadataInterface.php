@@ -38,4 +38,10 @@ interface RelationMetadataInterface
      * @return array|null
      */
     public function getAttributes();
+
+    /**
+     * @return array
+     */
+    public function getExcludeIf();
+
 }

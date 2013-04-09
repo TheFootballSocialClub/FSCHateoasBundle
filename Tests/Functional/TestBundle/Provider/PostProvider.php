@@ -8,6 +8,7 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\Post;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\AlternateRouterPost;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\TemplatedPost;
+use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\ExcludedPost;
 
 class PostProvider
 {
@@ -81,6 +82,18 @@ class PostProvider
                 return TemplatedPost::create($id, 'How to create awesome symfony2 application');
             default:
                 return TemplatedPost::create($id, '');
+        }
+    }
+
+    public function getPostExcluded($id)
+    {
+        switch ($id) {
+            case 1:
+                return ExcludedPost::create($id, 'Welcome on the blog!', (object) array('id' => 2));
+            case 2:
+                return ExcludedPost::create($id, 'How to create awesome symfony2 application');
+            default:
+                return ExcludedPost::create($id, '');
         }
     }
 }

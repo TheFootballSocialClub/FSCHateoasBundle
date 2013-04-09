@@ -461,4 +461,45 @@ XML
 
         $this->assertEquals(200, $response->getStatusCode());
     }
+
+    public function testExcludingLinksConditionTrue()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/posts/2/exclude?_format=xml');
+
+        $response = $client->getResponse(); /**  */
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<post id="2">
+  <title><![CDATA[How to create awesome symfony2 application]]></title>
+  <link rel="self" href="http://localhost/api/posts/2"/>
+</post>
+
+XML
+        , $response->getContent());
+    }
+
+    public function testExcludingLinksConditionFalse()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/posts/1/exclude?_format=xml');
+
+        $response = $client->getResponse(); /**  */
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<post id="1">
+  <title><![CDATA[Welcome on the blog!]]></title>
+  <link rel="self" href="http://localhost/api/posts/1"/>
+  <link rel="parent" href="http://localhost/api/posts/2"/>
+</post>
+
+XML
+        , $response->getContent());
+    }
 }
