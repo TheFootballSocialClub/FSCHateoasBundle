@@ -459,7 +459,62 @@ XML
 
         $response = $client->getResponse(); /** @var $response Response */
 
+        $expectedJson = <<<JSON
+{
+    "page":1,
+    "limit":10,
+    "total":3,
+    "results":[
+        {
+            "id":1,
+            "title":"Welcome on the blog!",
+            "links":{
+                "self":{
+                    "href":"http:\/\/localhost\/api\/posts\/1"
+                }
+            }
+        },
+        {
+            "id":2,
+            "title":"How to create awesome symfony2 application",
+            "links":{
+                "self":{
+                    "href":"http:\/\/localhost\/api\/posts\/2"
+                }
+            }
+        },
+        {
+            "id":3,
+            "title":"",
+            "links":{
+                "self":{
+                    "href":"http:\/\/localhost\/api\/posts\/3"
+                }
+            }
+        }
+    ],
+    "links":{
+        "self":{
+            "href":"http:\/\/localhost\/api\/posts?_format=json&limit=10&page=1"
+        },
+        "first":{
+            "href":"http:\/\/localhost\/api\/posts?_format=json&limit=10&page=1"
+        },
+        "last":{
+            "href":"http:\/\/localhost\/api\/posts?_format=json&limit=10&page=1"
+        },
+        "create":{
+            "href":"http:\/\/localhost\/api\/posts\/create"
+        }
+    },
+    "relations":{
+        "create":null
+    }
+}
+JSON;
+
         $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals($this->removeJsonIndentation($expectedJson), $response->getContent());
     }
 
     public function testExcludingLinksConditionTrue()

@@ -61,6 +61,7 @@ services:
         arguments:
             - @fsc_hateoas.factory.link
             - @fsc_hateoas.serializer.link_serialization_helper
+            - @jms_serializer.metadata_factory
             - %fsc_hateoas.json.links_key%
         tags:
             - { name: jms_serializer.event_subscriber }
