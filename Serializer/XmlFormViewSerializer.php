@@ -200,26 +200,30 @@ class XmlFormViewSerializer
     */
     protected function addWidgetAttributes(\DOMElement $widgetElement, FormView $view, $variables)
     {
-        $widgetElement->setAttribute('name', $variables['full_name']);
+        if (!isset($variables['prototype'])) {
+            $widgetElement->setAttribute('name', $variables['full_name']);
 
-        if ($variables['read_only']) {
-            $widgetElement->setAttribute('readonly', 'readonly');
-        }
+            if ($variables['read_only']) {
+                $widgetElement->setAttribute('readonly', 'readonly');
+            }
 
-        if ($variables['disabled']) {
-            $widgetElement->setAttribute('disabled', 'disabled');
-        }
+            if ($variables['disabled']) {
+                $widgetElement->setAttribute('disabled', 'disabled');
+            }
 
-        if ($variables['required']) {
-            $widgetElement->setAttribute('required', 'required');
-        }
+            if ($variables['required']) {
+                $widgetElement->setAttribute('required', 'required');
+            }
 
-        if ($variables['max_length']) {
-            $widgetElement->setAttribute('maxlength', $variables['max_length']);
-        }
+            if ($variables['max_length']) {
+                $widgetElement->setAttribute('maxlength', $variables['max_length']);
+            }
 
-        if ($variables['pattern']) {
-            $widgetElement->setAttribute('pattern', $variables['pattern']);
+            if ($variables['pattern']) {
+                $widgetElement->setAttribute('pattern', $variables['pattern']);
+            }
+        } else {
+            $widgetElement->setAttribute('id', $variables['id']);
         }
 
         foreach ($variables['attr'] as $name => $value) {
@@ -480,14 +484,30 @@ class XmlFormViewSerializer
     protected function serializeCollectionWidget(\DOMElement $parentElement, FormView $view, $variables)
     {
         if (isset($variables['prototype'])) {
-            // TODO test this ?
-            var_dump($variables['prototype']);exit;
-            $variables['attr'] = array_merge($variables['attr'], array(
-                'data-prototype' => $this->renderer->searchAndRenderBlock($variables['prototype'], 'row'),
-            ));
+            $this->serializePrototype($parentElement, $view, $variables);
         }
-
         $this->serializeFormWidget($parentElement, $view, $variables);
+
+    }
+
+    protected function serializePrototype(\DOMElement $parentElement, FormView $view, $variables)
+    {
+        $document = new \DOMDocument('1.0', 'UTF-8');
+
+        $divElement = $document->createElement('div');
+        $divElement->setAttribute('id',$variables['id'].'___name__');
+
+        $this->serializeBlock($divElement,$variables['prototype'], 'row');
+
+        $ulElement = $parentElement->ownerDocument->createElement('ul');
+
+        $variables['attr'] = array_merge($variables['attr'], array(
+            'data-prototype' => htmlentities($document->saveHTML($divElement), ENT_QUOTES, 'UTF-8')
+        ));
+
+        $this->addWidgetAttributes($ulElement, $view, $variables);
+
+        $parentElement->appendChild($ulElement);
     }
 
     /*
