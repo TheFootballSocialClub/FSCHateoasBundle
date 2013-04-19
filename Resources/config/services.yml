@@ -55,6 +55,8 @@ services:
 
     fsc_hateoas.serializer.xml_form_view:
         class: %fsc_hateoas.serializer.xml_form_view.class%
+        arguments:
+            - @translator
 
     fsc_hateoas.serializer.event_subscriber.link:
         class: %fsc_hateoas.serializer.event_subscriber.link.class%
