@@ -340,7 +340,7 @@ class UserController extends Controller
     {
         $pager = $this->get('acme.foo.user_manager')->getUserFriendsPager($id, $page, $limit);
 
-        $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($postsPager); // Automatically add self/first/last/prev/next links
+        $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($pager); // Automatically add self/first/last/prev/next links
 
         $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('users');
 
