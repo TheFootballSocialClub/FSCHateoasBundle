@@ -235,7 +235,7 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 public function getListAction($page = 1, $limit = 10)
 {
     $query = $this->get('doctrine')->getRepository('User')->createQueryXXX();
-    $pager = new Pagerfanta(new DoctrineORMPager($results)); // or any Pagerfanta adapter
+    $pager = new Pagerfanta(new DoctrineORMAdapter($results)); // or any Pagerfanta adapter
     $pager->setCurrentPage($page);
     $pager->setMaxPerPage($limit);
 
@@ -282,7 +282,7 @@ public function getListAction(Request $request, $page = 1, $limit = 10)
     $pager->setCurrentPage($page);
     $pager->setMaxPerPage($limit);
 
-    $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($postsPager); // Automatically add self/first/last/prev/next links
+    $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($pager); // Automatically add self/first/last/prev/next links
 
     $this->get('serializer')->getSerializationVisitor('xml')->setDefaultRootName('users');
 
