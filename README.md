@@ -667,7 +667,7 @@ class User
 }
 ```
 
-## Conditionally excluding links
+## Conditionally excluding links and embedded relations
 
 You can add conditions on relations that will determine whether the link should be excluded or not. For example:
 
@@ -694,4 +694,19 @@ relations:
             parameters: { id: .parent.id }
         exclude_if:
             ".parent": ~
+```
+
+It is also worked with embedded relations:
+
+```php
+/**
+ * @Rest\Relation(
+ *      "parent",
+ *      embed = @Rest\Content( property = ".childs" ),
+ *      excludeIf = { ".showChilds" = null }
+ * )
+ */
+class Post
+{
+}
 ```

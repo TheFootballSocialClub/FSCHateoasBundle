@@ -26,7 +26,8 @@ class ParametersFactory implements ParametersFactoryInterface
         $propertyAccessor = $this->propertyAccessor;
         array_walk($parameters, function (&$value, $key) use ($data, $self, $propertyAccessor) {
             if (is_string($value) && in_array(substr($value, 0, 1), array('.', '['))) {
-                $propertyPath = new PropertyPath(preg_replace('/^\./', '', $value));
+                $value = ltrim($value, '.');
+                $propertyPath = new PropertyPath($value);
                 $value = $propertyAccessor->getValue($data, $propertyPath);
             } elseif ('@' === $value) {
                 $value = $data;
@@ -37,4 +38,28 @@ class ParametersFactory implements ParametersFactoryInterface
 
         return $parameters;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createExclude($object, $excludeIf)
+    {
+        if ( !$excludeIf ) {
+            return false;
+        }
+
+        foreach ($excludeIf as $field => $valueToExclude) {
+            $field = ltrim($field, '.');
+            $propertyPath = new PropertyPath($field);
+
+            $value = $this->propertyAccessor->getValue($object, $propertyPath);
+
+            if ($valueToExclude === $value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

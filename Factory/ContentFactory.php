@@ -37,12 +37,19 @@ class ContentFactory implements ContentFactoryInterface
     {
         $relationsContent = new \SplObjectStorage();
 
+        /**
+         * @var RelationMetadataInterface $relationMetadata
+         */
         foreach ($classMetadata->getRelations() as $relationMetadata) {
             if (null === $relationMetadata->getContent()) {
                 continue;
             }
 
-            $relationsContent->attach($relationMetadata, $this->getContent($relationMetadata, $object));
+            if (!$this->parametersFactory->createExclude($object, $relationMetadata->getExcludeIf())
+                && $content = $this->getContent($relationMetadata, $object)
+            ) {
+                $relationsContent->attach($relationMetadata, $content);
+            }
         }
 
         return $relationsContent->count() === 0 ? null : $relationsContent;
