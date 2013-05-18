@@ -22,7 +22,7 @@
         "jms/metadata": "~1.1",
         "jms/serializer": "0.12.*",
         "jms/serializer-bundle": "*",
-        "symfony/property-access": "~2.2."
+        "symfony/property-access": "~2.2"
     },
     "require-dev": {
         "symfony/class-loader": "*",
