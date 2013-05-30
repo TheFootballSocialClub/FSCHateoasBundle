@@ -88,13 +88,9 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
         if (null !== $relationMetadata->getUrl()) {
             $href = $relationMetadata->getUrl();
 
-            // Check to see if we can get a value through a property path
-            try {
-                $propertyPath = new PropertyPath(trim($href, "."));
+            if (in_array(substr($href, 0, 1), array('.', '['))) {
+                $propertyPath = new PropertyPath(preg_replace('/^\./', '', $href));
                 $href = $this->propertyAccessor->getValue($object, $propertyPath);
-            } catch (NoSuchPropertyException $e) {
-                // Don't do anything in this case. There is unfortunately no way to check the
-                //    existence of a property path beforehand.
             }
         } else {
             $href = $this->generateUrl(
