@@ -93,6 +93,7 @@ or
 ```json
 {
     "id": 24,
+    "username": "adrienbrault",
     "links": [
         {
             "rel": "self",
