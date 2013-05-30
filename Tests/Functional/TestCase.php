@@ -69,4 +69,9 @@ abstract class TestCase extends WebTestCase
 
         $this->assertEquals($expectedSerializedValue, $serializedValue);
     }
+
+    protected function removeJsonIndentation($json)
+    {
+        return preg_replace('/(\n)(?:    )*/', '', $json);
+    }
 }
