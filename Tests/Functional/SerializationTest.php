@@ -2,8 +2,12 @@
 
 namespace FSC\HateoasBundle\Tests\Functional;
 
+use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\UserProxy;
 use FSC\HateoasBundle\Tests\Functional\TestCase;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User;
+use JMS\Serializer\Tests\Fixtures\SimpleObjectProxy;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 
 /**
  * @group functional
@@ -123,6 +127,73 @@ class SerializationTest extends TestCase
     }
 }',
             $user
+        );
+    }
+
+    public function testSerializingDoctrineProxiesToXML()
+    {
+        $user1 = new UserProxy();
+        $user2 = User::create(24, 'Adrien', 'Brault');
+
+        $results = array(
+            $user1,
+            $user2
+        );
+
+        $pager = new Pagerfanta(new ArrayAdapter($results));
+
+        $this->assertSerializedXmlEquals(
+'<collection page="1" limit="10" total="2">
+  <user id="1">
+    <first_name><![CDATA[Ruud]]></first_name>
+    <last_name><![CDATA[Kamphuis]]></last_name>
+    <link rel="self" href="http://localhost/api/users/1"/>
+    <link rel="alternate" href="http://localhost/profile/1"/>
+    <link rel="users" href="http://localhost/api/users"/>
+    <link rel="last-post" href="http://localhost/api/users/1/last-post"/>
+    <link rel="posts" href="http://localhost/api/users/1/posts"/>
+    <link rel="alternate" href="http://localhost/api/users/1/alternate"/>
+    <post rel="last-post" id="2">
+      <title><![CDATA[How to create awesome symfony2 application]]></title>
+      <link rel="self" href="http://localhost/api/posts/2"/>
+    </post>
+    <collection rel="posts" page="1" limit="1" total="2">
+      <link rel="self" href="http://localhost/api/users/1/posts?limit=1&amp;page=1"/>
+      <link rel="first" href="http://localhost/api/users/1/posts?limit=1&amp;page=1"/>
+      <link rel="last" href="http://localhost/api/users/1/posts?limit=1&amp;page=2"/>
+      <link rel="next" href="http://localhost/api/users/1/posts?limit=1&amp;page=2"/>
+      <post id="2">
+        <title><![CDATA[How to create awesome symfony2 application]]></title>
+        <link rel="self" href="http://localhost/api/posts/2"/>
+      </post>
+    </collection>
+  </user>
+  <user id="24">
+    <first_name><![CDATA[Adrien]]></first_name>
+    <last_name><![CDATA[Brault]]></last_name>
+    <link rel="self" href="http://localhost/api/users/24"/>
+    <link rel="alternate" href="http://localhost/profile/24"/>
+    <link rel="users" href="http://localhost/api/users"/>
+    <link rel="last-post" href="http://localhost/api/users/24/last-post"/>
+    <link rel="posts" href="http://localhost/api/users/24/posts"/>
+    <link rel="alternate" href="http://localhost/api/users/24/alternate"/>
+    <post rel="last-post" id="2">
+      <title><![CDATA[How to create awesome symfony2 application]]></title>
+      <link rel="self" href="http://localhost/api/posts/2"/>
+    </post>
+    <collection rel="posts" page="1" limit="1" total="2">
+      <link rel="self" href="http://localhost/api/users/24/posts?limit=1&amp;page=1"/>
+      <link rel="first" href="http://localhost/api/users/24/posts?limit=1&amp;page=1"/>
+      <link rel="last" href="http://localhost/api/users/24/posts?limit=1&amp;page=2"/>
+      <link rel="next" href="http://localhost/api/users/24/posts?limit=1&amp;page=2"/>
+      <post id="2">
+        <title><![CDATA[How to create awesome symfony2 application]]></title>
+        <link rel="self" href="http://localhost/api/posts/2"/>
+      </post>
+    </collection>
+  </user>
+</collection>',
+            $pager
         );
     }
 }
