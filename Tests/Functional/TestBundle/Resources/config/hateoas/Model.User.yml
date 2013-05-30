@@ -34,3 +34,5 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User:
               route: api_user_get_alternate
               parameters:
                   identifier: .id
+        - rel: dynamic_href
+          href: .dynamicHref
