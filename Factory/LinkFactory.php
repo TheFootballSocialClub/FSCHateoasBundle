@@ -2,6 +2,7 @@
 
 namespace FSC\HateoasBundle\Factory;
 
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Symfony\Component\PropertyAccess\PropertyPath;
@@ -86,6 +87,15 @@ class LinkFactory extends AbstractLinkFactory implements LinkFactoryInterface
     {
         if (null !== $relationMetadata->getUrl()) {
             $href = $relationMetadata->getUrl();
+
+            // Check to see if we can get a value through a property path
+            try {
+                $propertyPath = new PropertyPath(trim($href, "."));
+                $href = $this->propertyAccessor->getValue($object, $propertyPath);
+            } catch (NoSuchPropertyException $e) {
+                // Don't do anything in this case. There is unfortunately no way to check the
+                //    existence of a property path beforehand.
+            }
         } else {
             $href = $this->generateUrl(
                 $relationMetadata->getRoute(),

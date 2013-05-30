@@ -47,4 +47,9 @@ class User
 
         return $user;
     }
+
+    public function getDynamicHref()
+    {
+        return "this/is/a/href/from/a/property_path";
+    }
 }

@@ -55,10 +55,11 @@ use JMS\Serializer\Annotation as Serializer;
 use FSC\HateoasBundle\Annotation as Rest;
 
 /**
- * @Rest\Relation("self",      href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }))
- * @Rest\Relation("alternate", href = @Rest\Route("user_profile", parameters = { "user_id" = ".id" }))
- * @Rest\Relation("users",     href = @Rest\Route("api_user_list"))
- * @Rest\Relation("rss",       href = "http://domain.com/users.rss")
+ * @Rest\Relation("self",               href = @Rest\Route("api_user_get", parameters = { "id" = ".id" }))
+ * @Rest\Relation("alternate",          href = @Rest\Route("user_profile", parameters = { "user_id" = ".id" }))
+ * @Rest\Relation("users",              href = @Rest\Route("api_user_list"))
+ * @Rest\Relation("rss",                href = "http://domain.com/users.rss")
+ * @Rest\Relation("from_property_path", href = ".dynamicHref")
  *
  * @Serializer\XmlRoot("user")
  */
@@ -67,8 +68,15 @@ class User
     /** @Serializer\XmlAttribute */
     public $id;
     public $username;
+
+    public function getDynamicHref() {
+        return "dynamic/Href/here";
+    }
 }
 ```
+
+Note that the href can either be a `@Route` annotation, a string, or a property path, which will be resolved
+when serializing.
 
 ### Usage
 
