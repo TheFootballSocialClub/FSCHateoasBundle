@@ -83,8 +83,19 @@ class PagerfantaHandler implements SubscribingHandlerInterface
 
         foreach ($pager->getCurrentPageResults() as $result) {
             $elementName = 'entry';
-            if (is_object($result) && null !== ($resultMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($result)))) {
-                $elementName = $resultMetadata->xmlRootName ?: $elementName;
+            if (is_object($result)) {
+                $className = get_class($result);
+
+                // Handle Doctrine proxies differently
+                if ($result instanceof Proxy || $result instanceof ORMProxy) {
+                    $result->__load();
+
+                    $className = get_parent_class($result);
+                }
+
+                if(null !== ($resultMetadata = $this->serializerMetadataFactory->getMetadataForClass($className))) {
+                    $elementName = $resultMetadata->xmlRootName ?: $elementName;
+                }
             }
 
             $entryNode = $visitor->getDocument()->createElement($elementName);
