@@ -10,6 +10,8 @@ use JMS\Serializer\Context;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Metadata\MetadataFactoryInterface;
 use Pagerfanta\Pagerfanta;
+use Doctrine\Common\Persistence\Proxy;
+use Doctrine\ORM\Proxy\Proxy as ORMProxy;
 
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
 use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
