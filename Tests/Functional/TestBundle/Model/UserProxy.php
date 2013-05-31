@@ -1,10 +1,10 @@
 <?php
 
-namespace FSC\HateoasBundle\Tests\Functional\TestBundle\Model;
+namespace Proxies\__CG__\FSC\HateoasBundle\Tests\Functional\TestBundle\Model;
 
 use Doctrine\Common\Persistence\Proxy;
 
-class UserProxy extends User implements Proxy
+class User extends \FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User implements Proxy
 {
     public $__isInitialized__ = false;
 

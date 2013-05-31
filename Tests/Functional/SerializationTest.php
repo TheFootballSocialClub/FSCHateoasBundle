@@ -2,7 +2,6 @@
 
 namespace FSC\HateoasBundle\Tests\Functional;
 
-use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\UserProxy;
 use FSC\HateoasBundle\Tests\Functional\TestCase;
 use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User;
 use JMS\Serializer\Tests\Fixtures\SimpleObjectProxy;
@@ -132,7 +131,9 @@ class SerializationTest extends TestCase
 
     public function testSerializingDoctrineProxiesToXML()
     {
-        $user1 = new UserProxy();
+        require __DIR__ . "/TestBundle/Model/UserProxy.php";
+
+        $user1 = new \Proxies\__CG__\FSC\HateoasBundle\Tests\Functional\TestBundle\Model\User;
         $user2 = User::create(24, 'Adrien', 'Brault');
 
         $results = array(
