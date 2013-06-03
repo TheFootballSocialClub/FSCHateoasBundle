@@ -10,6 +10,7 @@ use JMS\Serializer\Context;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Metadata\MetadataFactoryInterface;
 use Pagerfanta\Pagerfanta;
+use Doctrine\Common\Util\ClassUtils;
 
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
 use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
@@ -83,8 +84,12 @@ class PagerfantaHandler implements SubscribingHandlerInterface
 
         foreach ($pager->getCurrentPageResults() as $result) {
             $elementName = 'entry';
-            if (is_object($result) && null !== ($resultMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($result)))) {
-                $elementName = $resultMetadata->xmlRootName ?: $elementName;
+            if (is_object($result)) {
+                $className = ClassUtils::getClass($result);
+
+                if(null !== ($resultMetadata = $this->serializerMetadataFactory->getMetadataForClass($className))) {
+                    $elementName = $resultMetadata->xmlRootName ?: $elementName;
+                }
             }
 
             $entryNode = $visitor->getDocument()->createElement($elementName);
