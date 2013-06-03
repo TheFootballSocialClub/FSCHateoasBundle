@@ -4,9 +4,9 @@ namespace FSC\HateoasBundle\Tests\Functional\TestBundle\Model;
 
 class User
 {
-    private $id;
-    private $firstName;
-    private $lastName;
+    protected $id;
+    protected $firstName;
+    protected $lastName;
 
     public function setId($id)
     {
