@@ -154,6 +154,7 @@ class SerializationTest extends TestCase
     <link rel="last-post" href="http://localhost/api/users/1/last-post"/>
     <link rel="posts" href="http://localhost/api/users/1/posts"/>
     <link rel="alternate" href="http://localhost/api/users/1/alternate"/>
+    <link rel="dynamic_href" href="this/is/a/href/from/a/property_path"/>
     <post rel="last-post" id="2">
       <title><![CDATA[How to create awesome symfony2 application]]></title>
       <link rel="self" href="http://localhost/api/posts/2"/>
@@ -178,6 +179,7 @@ class SerializationTest extends TestCase
     <link rel="last-post" href="http://localhost/api/users/24/last-post"/>
     <link rel="posts" href="http://localhost/api/users/24/posts"/>
     <link rel="alternate" href="http://localhost/api/users/24/alternate"/>
+    <link rel="dynamic_href" href="this/is/a/href/from/a/property_path"/>
     <post rel="last-post" id="2">
       <title><![CDATA[How to create awesome symfony2 application]]></title>
       <link rel="self" href="http://localhost/api/posts/2"/>
