@@ -87,6 +87,7 @@ services:
             - true
             - %fsc_hateoas.json.links_key%
             - %fsc_hateoas.json.relations_key%
+            - @fsc_hateoas.metadata.relations_manager
         tags:
             - { name: jms_serializer.subscribing_handler }
 

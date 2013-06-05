@@ -21,6 +21,13 @@ class PostController extends Controller
         return new Response($this->get('serializer')->serialize($postsCollection, $request->get('_format')));
     }
 
+    public function listPostsPagerAction(Request $request)
+    {
+        $postsPager = $this->get('test.provider.post')->getPostsPager();
+
+        return new Response($this->get('serializer')->serialize($postsPager, $request->get('_format')));
+    }
+
     public function getPostAction(Request $request, $id)
     {
         $post = $this->get('test.provider.post')->getPost($id);
