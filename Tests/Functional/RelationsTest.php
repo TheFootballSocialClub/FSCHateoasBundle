@@ -181,7 +181,12 @@ XML
                 }
             }
         }
-    ]
+    ],
+    "_links":{
+        "self":{"href":"http:\/\/localhost\/api\/mixed?_format=json&limit=10&page=1"},
+        "first":{"href":"http:\/\/localhost\/api\/mixed?_format=json&limit=10&page=1"},
+        "last":{"href":"http:\/\/localhost\/api\/mixed?_format=json&limit=10&page=1"}
+    }
 }
 JSON;
 
