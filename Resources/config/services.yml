@@ -4,13 +4,13 @@ parameters:
     fsc_hateoas.factory.parameters.class: FSC\HateoasBundle\Factory\ParametersFactory
     fsc_hateoas.factory.content.class: FSC\HateoasBundle\Factory\ContentFactory
     fsc_hateoas.factory.form_view.class: FSC\HateoasBundle\Factory\FormViewFactory
-    fsc_hateoas.serializer.xml_form_view.class: FSC\HateoasBundle\Serializer\XmlFormViewSerializer
+    fsc_hateoas.serializer.xml_form_view.class: AdrienBrault\FormSerializer\XmlFormViewSerializer
     fsc_hateoas.serializer.event_subscriber.link.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
     fsc_hateoas.serializer.event_subscriber.embedder.class: FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber
     fsc_hateoas.serializer.handler.pagerfanta.class: FSC\HateoasBundle\Serializer\Handler\PagerfantaHandler
     fsc_hateoas.serializer.handler.halpagerfanta.class: FSC\HateoasBundle\Serializer\Handler\HalPagerfantaHandler
     fsc_hateoas.serializer.handler.form_view.class: FSC\HateoasBundle\Serializer\Handler\FormViewHandler
-    fsc_hateoas.serializer.handler.form.class: FSC\HateoasBundle\Serializer\Handler\FormHandler
+    fsc_hateoas.serializer.handler.form.class: AdrienBrault\FormSerializer\FormToViewHandler
     fsc_hateoas.factory.identity.class: FSC\HateoasBundle\Factory\IdentityFactory
     fsc_hateoas.routing.generator.class: FSC\HateoasBundle\Routing\UrlGenerator
     fsc_hateoas.routing.relation_url_generator.class: FSC\HateoasBundle\Routing\RelationUrlGenerator

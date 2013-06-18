@@ -2,6 +2,7 @@
 
 namespace FSC\HateoasBundle\Serializer\Handler;
 
+use AdrienBrault\FormSerializer\XmlFormViewSerializerInterface;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
 use FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber;
 use FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber;
@@ -11,8 +12,6 @@ use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\Context;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Symfony\Component\Form\FormView;
-
-use FSC\HateoasBundle\Serializer\XmlFormViewSerializer;
 
 /**
  * Serializer a FormView
@@ -41,7 +40,7 @@ class FormViewHandler implements SubscribingHandlerInterface
     protected $embedderEventSubscriber;
     protected $linkEventSubscriber;
 
-    public function __construct(XmlFormViewSerializer $xmlFormViewSerializer,
+    public function __construct(XmlFormViewSerializerInterface $xmlFormViewSerializer,
         EmbedderEventSubscriber $embedderEventSubscriber, LinkEventSubscriber $linkEventSubscriber
     ) {
         $this->xmlFormViewSerializer = $xmlFormViewSerializer;
