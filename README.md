@@ -2,6 +2,8 @@ FSCHateoasBundle
 ================
 
 [![Build Status](https://secure.travis-ci.org/TheFootballSocialClub/FSCHateoasBundle.png)](http://travis-ci.org/TheFootballSocialClub/FSCHateoasBundle)
+[![Latest Stable Version](https://poser.pugx.org/fsc/hateoas-bundle/v/stable.png)](https://packagist.org/packages/fsc/hateoas-bundle)
+[![Total Downloads](https://poser.pugx.org/fsc/hateoas-bundle/downloads.png)](https://packagist.org/packages/fsc/hateoas-bundle)
 
 This bundle hooks into the JMSSerializerBundle serialization process, and provides HATEOAS features.
 Right now, only adding links is supported.
