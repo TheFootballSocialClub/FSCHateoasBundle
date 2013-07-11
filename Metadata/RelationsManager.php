@@ -106,7 +106,7 @@ class RelationsManager implements RelationsManagerInterface
 
         $relationsBuilder->add('last', array(
             'route' => $route,
-            'parameters' => array_merge($routeParameters, array($pageParameterName => ($pager->getNbPages() != 0)?:1))
+            'parameters' => array_merge($routeParameters, array($pageParameterName => ($pager->getNbPages()>0)?$pager->getNbPages():1))
         ));
 
         if ($pager->hasPreviousPage()) {
