@@ -42,7 +42,6 @@
         "psr-0": { "FSC\\HateoasBundle": "" }
     },
     "target-dir": "FSC/HateoasBundle",
-    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "0.4-dev"

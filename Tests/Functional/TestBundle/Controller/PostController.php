@@ -16,7 +16,10 @@ class PostController extends Controller
 
         $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($postsPager); // Automatically add self/first/last/prev/next links
 
-        $postsCollection = new PostsCollection($postsPager); // Class that holds relations data (ie: create form relation)
+        $postsCollection = new PostsCollection(
+            $postsPager,
+            $this->get('test.provider.user')->getUser(1)
+        ); // Class that holds relations data (ie: create form relation)
 
         return new Response($this->get('serializer')->serialize($postsCollection, $request->get('_format')));
     }
