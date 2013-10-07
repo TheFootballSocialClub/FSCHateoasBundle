@@ -8,7 +8,6 @@ use JMS\Serializer\XmlSerializationVisitor;
 use JMS\Serializer\EventDispatcher\Events;
 use JMS\Serializer\EventDispatcher\Event;
 
-use Metadata\MetadataFactoryInterface as JMSMetadataFactoryInterface;
 use Symfony\Component\Form\FormView;
 use Pagerfanta\PagerfantaInterface;
 
@@ -17,6 +16,7 @@ use FSC\HateoasBundle\Factory\ParametersFactoryInterface;
 use FSC\HateoasBundle\Metadata\RelationMetadataInterface;
 use FSC\HateoasBundle\Metadata\RelationContentMetadataInterface;
 use FSC\HateoasBundle\Metadata\RelationsManagerInterface;
+use FSC\HateoasBundle\Serializer\MetadataHelper;
 
 class EmbedderEventSubscriber implements EventSubscriberInterface
 {
@@ -38,26 +38,28 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
     }
 
     protected $contentFactory;
-    protected $serializerMetadataFactory;
     protected $relationsManager;
     protected $parametersFactory;
     protected $typeParser;
+    protected $metadataHelper;
     protected $relationsJsonKey;
+    protected $deferredEmbeds;
 
     public function __construct(
         ContentFactoryInterface $contentFactory,
-        JMSMetadataFactoryInterface $serializerMetadataFactory,
         RelationsManagerInterface $relationsManager,
         ParametersFactoryInterface $parametersFactory,
+        MetadataHelper $metadataHelper,
         TypeParser $typeParser = null,
         $relationsJsonKey = null
     ) {
         $this->contentFactory = $contentFactory;
-        $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->relationsManager = $relationsManager;
         $this->parametersFactory = $parametersFactory;
+        $this->metadataHelper = $metadataHelper;
         $this->typeParser = $typeParser ?: new TypeParser();
         $this->relationsJsonKey = $relationsJsonKey ?: 'relations';
+        $this->deferredEmbeds = new \SplObjectStorage();
     }
 
     public function onPostSerializeXML(Event $event)
@@ -102,24 +104,54 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
     public function getOnPostSerializeData(Event $event)
     {
-        if (null === ($relationsContent = $this->contentFactory->create($event->getObject())) || empty($relationsContent)) {
-            return;
-        }
+        $object = $event->getObject();
+        $context = $event->getContext();
+        $metadataStack = $context->getMetadataStack();
+        $visitingStack = $context->getVisitingStack();
+
+        $relationsContent = $this->contentFactory->create($object);
 
         $visitor = $event->getVisitor();
 
         $relationsData = array();
-        foreach ($relationsContent as $relationMetadata) {
-            $relationContent = $relationsContent[$relationMetadata];
-            $this->addRelationRelations($event, $relationContent, $relationMetadata);
-            $relationsData[$relationMetadata->getRel()] = $visitor->getNavigator()->accept(
-                $relationContent,
-                $this->getContentType($relationMetadata->getContent()),
-                $event->getContext()
-            );
+        if (null !== $relationsContent) {
+            $context->startVisiting($object);
+            foreach ($relationsContent as $relationMetadata) {
+                $relationContent = $relationsContent[$relationMetadata];
+                $this->addRelationRelations($event, $relationContent, $relationMetadata);
+                $relationsData[$relationMetadata->getRel()] = $visitor->getNavigator()->accept(
+                    $relationContent,
+                    $this->getContentType($relationMetadata->getContent()),
+                    $event->getContext()
+                );
+            }
+            $context->stopVisiting($object);
         }
 
-        return $relationsData;
+        if ($this->deferredEmbeds->contains($object)) {
+            // $object contains inlined objects that had links
+
+            $relationsData = array_merge($this->deferredEmbeds->offsetGet($object), $relationsData);
+            $this->deferredEmbeds->detach($object);
+        }
+
+        $parentObjectInlining = $this->metadataHelper->getParentObjectInlining($object, $context);
+        if (null !== $parentObjectInlining) {
+            if ($this->deferredEmbeds->contains($parentObjectInlining)) {
+                $relationsData = array_merge($this->deferredEmbeds->offsetGet($parentObjectInlining), $relationsData);
+            }
+
+            // We need to defer the links serialization to the $parentObject
+            $this->deferredEmbeds->attach($parentObjectInlining, $relationsData);
+
+            return null;
+        }
+
+        return
+            null !== $relationsContent || !empty($relationsData)
+            ? $relationsData
+            : null
+        ;
     }
 
     protected function getRelationXmlElementName(RelationMetadataInterface $relationMetadata, $content)
@@ -129,8 +161,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         if (null !== $relationMetadata->getContent()->getSerializerXmlElementName()) {
             $elementName = $relationMetadata->getContent()->getSerializerXmlElementName();
         } elseif (null !== $relationMetadata->getContent()->getSerializerXmlElementRootName()) {
-            $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($content));
-            $elementName = $classMetadata->xmlRootName ?: $elementName;
+            $elementName = $this->metadataHelper->getXmlRootName($content) ?: $elementName;
         }
 
         if (null === $elementName && ('Pagerfanta\\PagerfantaInterface') && $content instanceof PagerfantaInterface) {

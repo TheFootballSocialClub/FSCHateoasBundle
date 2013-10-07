@@ -61,12 +61,8 @@ class FormViewHandler implements SubscribingHandlerInterface
             $visitor->document = $visitor->createDocument();
         }
 
-        $context->stopVisiting($formView); // Make sure the visiting behavior is the same as for normal events to call the getOnPostSerializeData
-
         $this->embedderEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $formView, $type));
         $this->linkEventSubscriber->onPostSerializeXML(new ObjectEvent($context, $formView, $type));
-
-        $context->startVisiting($formView);
 
         $this->xmlFormViewSerializer->serialize($formView, $visitor->getCurrentNode());
     }

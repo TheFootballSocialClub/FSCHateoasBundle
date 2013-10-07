@@ -63,8 +63,6 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
             'total' => $pager->getNbResults(),
         );
 
-        $context->stopVisiting($halPager); // Make sure the visiting behavior is the same as for normal events to call the getOnPostSerializeData
-
         if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
             $data[$this->linksJsonKey] = $links;
         }
@@ -72,8 +70,6 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
         if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
             $data[$this->relationsJsonKey] = $relations;
         }
-
-        $context->startVisiting($halPager);
 
         $resultsType = array(
             'name' => 'array',
