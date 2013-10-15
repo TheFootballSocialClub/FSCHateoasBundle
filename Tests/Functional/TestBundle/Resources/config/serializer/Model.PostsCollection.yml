@@ -3,3 +3,5 @@ FSC\HateoasBundle\Tests\Functional\TestBundle\Model\PostsCollection:
     properties:
         pager:
             inline: true
+        user:
+            inline: true

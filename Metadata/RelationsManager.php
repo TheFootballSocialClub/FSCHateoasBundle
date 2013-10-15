@@ -19,15 +19,14 @@ class RelationsManager implements RelationsManagerInterface
     protected $defaultPageParameterName;
     protected $defaultLimitParameterName;
 
-    public function __construct(MetadataFactoryInterface $metadataFactory,
-        RelationsBuilderFactory $relationsBuilderFactory, ContainerInterface $container,
-        $defaultPageParameterName = 'page', $defaultLimitParameterName = 'limit')
-    {
+    public function __construct(
+        MetadataFactoryInterface $metadataFactory,
+        RelationsBuilderFactory $relationsBuilderFactory,
+        ContainerInterface $container
+    ) {
         $this->metadataFactory = $metadataFactory;
         $this->relationsBuilderFactory = $relationsBuilderFactory;
         $this->container = $container;
-        $this->defaultPageParameterName = $defaultPageParameterName;
-        $this->defaultLimitParameterName = $defaultLimitParameterName;
     }
 
     /**
@@ -80,48 +79,8 @@ class RelationsManager implements RelationsManagerInterface
 
     protected function createPagerNavigationRelations(PagerfantaInterface $pager, $route, $routeParameters = array(), $pageParameterName = null, $limitParameterName = null)
     {
-        if (null === $pageParameterName) {
-            $pageParameterName = $this->defaultPageParameterName;
-        }
-        if (null === $limitParameterName) {
-            $limitParameterName = $this->defaultLimitParameterName;
-        }
-
-        if (!isset($routeParameters[$pageParameterName])) {
-            $routeParameters[$pageParameterName] = $pager->getCurrentPage();
-        }
-        if (!isset($routeParameters[$limitParameterName])) {
-            $routeParameters[$limitParameterName] = $pager->getMaxPerPage();
-        }
-
         $relationsBuilder = $this->relationsBuilderFactory->create();
-        $relationsBuilder->add('self', array(
-            'route' => $route,
-            'parameters' => $routeParameters,
-        ));
-        $relationsBuilder->add('first', array(
-            'route' => $route,
-            'parameters' => array_merge($routeParameters, array($pageParameterName => '1'))
-        ));
-
-        $relationsBuilder->add('last', array(
-            'route' => $route,
-            'parameters' => array_merge($routeParameters, array($pageParameterName => ($pager->getNbPages()>0)?$pager->getNbPages():1))
-        ));
-
-        if ($pager->hasPreviousPage()) {
-            $relationsBuilder->add('previous', array(
-                'route' => $route,
-                'parameters' => array_merge($routeParameters, array($pageParameterName => $pager->getPreviousPage()))
-            ));
-        }
-
-        if ($pager->hasNextPage()) {
-            $relationsBuilder->add('next', array(
-                'route' => $route,
-                'parameters' => array_merge($routeParameters, array($pageParameterName => $pager->getNextPage()))
-            ));
-        }
+        $relationsBuilder->addPagerNavigationRelations($pager, $route, $routeParameters, $pageParameterName, $limitParameterName);
 
         return $relationsBuilder->build();
     }

@@ -4,8 +4,20 @@ namespace FSC\HateoasBundle\Metadata\Builder;
 
 class RelationsBuilderFactory
 {
-    public static function create()
+    protected $defaultPageParameterName;
+    protected $defaultLimitParameterName;
+
+    public function __construct(
+        $defaultPageParameterName = 'page',
+        $defaultLimitParameterName = 'limit'
+    ) {
+
+        $this->defaultPageParameterName = $defaultPageParameterName;
+        $this->defaultLimitParameterName = $defaultLimitParameterName;
+    }
+
+    public function create()
     {
-        return new RelationsBuilder();
+        return new RelationsBuilder($this->defaultPageParameterName, $this->defaultLimitParameterName);
     }
 }

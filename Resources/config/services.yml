@@ -5,6 +5,7 @@ parameters:
     fsc_hateoas.factory.content.class: FSC\HateoasBundle\Factory\ContentFactory
     fsc_hateoas.factory.form_view.class: FSC\HateoasBundle\Factory\FormViewFactory
     fsc_hateoas.serializer.xml_form_view.class: AdrienBrault\FormSerializer\XmlFormViewSerializer
+    fsc_hateoas.serializer.metadata_helper.class: FSC\HateoasBundle\Serializer\MetadataHelper
     fsc_hateoas.serializer.event_subscriber.link.class: FSC\HateoasBundle\Serializer\EventSubscriber\LinkEventSubscriber
     fsc_hateoas.serializer.event_subscriber.embedder.class: FSC\HateoasBundle\Serializer\EventSubscriber\EmbedderEventSubscriber
     fsc_hateoas.serializer.handler.pagerfanta.class: FSC\HateoasBundle\Serializer\Handler\PagerfantaHandler
@@ -56,12 +57,18 @@ services:
     fsc_hateoas.serializer.xml_form_view:
         class: %fsc_hateoas.serializer.xml_form_view.class%
 
+    fsc_hateoas.serializer.metadata_helper:
+        class: %fsc_hateoas.serializer.metadata_helper.class%
+        arguments:
+            - @jms_serializer.metadata_factory
+        public: false
+
     fsc_hateoas.serializer.event_subscriber.link:
         class: %fsc_hateoas.serializer.event_subscriber.link.class%
         arguments:
             - @fsc_hateoas.factory.link
             - @fsc_hateoas.serializer.link_serialization_helper
-            - @jms_serializer.metadata_factory
+            - @fsc_hateoas.serializer.metadata_helper
             - %fsc_hateoas.json.links_key%
         tags:
             - { name: jms_serializer.event_subscriber }
@@ -70,9 +77,9 @@ services:
         class: %fsc_hateoas.serializer.event_subscriber.embedder.class%
         arguments:
             - @fsc_hateoas.factory.content
-            - @jms_serializer.metadata_factory
             - @fsc_hateoas.metadata.relations_manager
             - @fsc_hateoas.factory.parameters
+            - @fsc_hateoas.serializer.metadata_helper
             - null
             - %fsc_hateoas.json.relations_key%
         tags:

@@ -4,6 +4,7 @@ namespace FSC\HateoasBundle\Metadata\Builder;
 
 use FSC\HateoasBundle\Metadata\RelationMetadata;
 use FSC\HateoasBundle\Metadata\RelationContentMetadata;
+use Pagerfanta\PagerfantaInterface;
 
 class RelationsBuilder implements RelationsBuilderInterface
 {
@@ -12,9 +13,16 @@ class RelationsBuilder implements RelationsBuilderInterface
      */
     protected $relationsMetadata;
 
-    public function __construct()
-    {
+    protected $defaultPageParameterName;
+    protected $defaultLimitParameterName;
+
+    public function __construct(
+        $defaultPageParameterName = 'page',
+        $defaultLimitParameterName = 'limit'
+    ) {
         $this->relationsMetadata = array();
+        $this->defaultPageParameterName = $defaultPageParameterName;
+        $this->defaultLimitParameterName = $defaultLimitParameterName;
     }
 
     public function add($rel, $href, array $embed = null, array $attributes = null, array $excludeIf = null)
@@ -91,6 +99,51 @@ class RelationsBuilder implements RelationsBuilderInterface
         }
 
         $this->relationsMetadata[] = $relationMetadata;
+    }
+    
+    public function addPagerNavigationRelations(PagerfantaInterface $pager, $route, $routeParameters = array(), $pageParameterName = null, $limitParameterName = null)
+    {
+        if (null === $pageParameterName) {
+            $pageParameterName = $this->defaultPageParameterName;
+        }
+        if (null === $limitParameterName) {
+            $limitParameterName = $this->defaultLimitParameterName;
+        }
+
+        if (!isset($routeParameters[$pageParameterName])) {
+            $routeParameters[$pageParameterName] = $pager->getCurrentPage();
+        }
+        if (!isset($routeParameters[$limitParameterName])) {
+            $routeParameters[$limitParameterName] = $pager->getMaxPerPage();
+        }
+
+        $this->add('self', array(
+            'route' => $route,
+            'parameters' => $routeParameters,
+        ));
+        $this->add('first', array(
+            'route' => $route,
+            'parameters' => array_merge($routeParameters, array($pageParameterName => '1'))
+        ));
+
+        $this->add('last', array(
+            'route' => $route,
+            'parameters' => array_merge($routeParameters, array($pageParameterName => ($pager->getNbPages()>0)?$pager->getNbPages():1))
+        ));
+
+        if ($pager->hasPreviousPage()) {
+            $this->add('previous', array(
+                'route' => $route,
+                'parameters' => array_merge($routeParameters, array($pageParameterName => $pager->getPreviousPage()))
+            ));
+        }
+
+        if ($pager->hasNextPage()) {
+            $this->add('next', array(
+                'route' => $route,
+                'parameters' => array_merge($routeParameters, array($pageParameterName => $pager->getNextPage()))
+            ));
+        }
     }
 
     public function build()

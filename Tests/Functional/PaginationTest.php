@@ -63,6 +63,11 @@ XML
             , $response->getContent());
     }
 
+    /**
+     * Test to make sure that inlining craziness work
+     *
+     * The example in itself does not make much sense
+     */
     public function testListPostsXml()
     {
         $client = $this->createClient();
@@ -73,7 +78,7 @@ XML
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<posts page="1" limit="10" total="3">
+<posts page="1" limit="10" total="3" id="1">
   <link rel="self" href="http://localhost/api/posts?_format=xml&amp;limit=10&amp;page=1"/>
   <link rel="first" href="http://localhost/api/posts?_format=xml&amp;limit=10&amp;page=1"/>
   <link rel="last" href="http://localhost/api/posts?_format=xml&amp;limit=10&amp;page=1"/>
@@ -89,6 +94,29 @@ XML
     <title><![CDATA[]]></title>
     <link rel="self" href="http://localhost/api/posts/3"/>
   </post>
+  <first_name><![CDATA[Adrien]]></first_name>
+  <last_name><![CDATA[Brault]]></last_name>
+  <link rel="self" href="http://localhost/api/users/1"/>
+  <link rel="alternate" href="http://localhost/profile/1"/>
+  <link rel="users" href="http://localhost/api/users"/>
+  <link rel="last-post" href="http://localhost/api/users/1/last-post"/>
+  <link rel="posts" href="http://localhost/api/users/1/posts"/>
+  <link rel="alternate" href="http://localhost/api/users/1/alternate"/>
+  <link rel="dynamic_href" href="this/is/a/href/from/a/property_path"/>
+  <post rel="last-post" id="2">
+    <title><![CDATA[How to create awesome symfony2 application]]></title>
+    <link rel="self" href="http://localhost/api/posts/2"/>
+  </post>
+  <collection rel="posts" page="1" limit="1" total="2">
+    <link rel="self" href="http://localhost/api/users/1/posts?limit=1&amp;page=1"/>
+    <link rel="first" href="http://localhost/api/users/1/posts?limit=1&amp;page=1"/>
+    <link rel="last" href="http://localhost/api/users/1/posts?limit=1&amp;page=2"/>
+    <link rel="next" href="http://localhost/api/users/1/posts?limit=1&amp;page=2"/>
+    <post id="2">
+      <title><![CDATA[How to create awesome symfony2 application]]></title>
+      <link rel="self" href="http://localhost/api/posts/2"/>
+    </post>
+  </collection>
   <link rel="create" href="http://localhost/api/posts/create"/>
   <form rel="create" method="POST" action="http://localhost/api/posts">
     <link rel="self" href="http://localhost/api/posts/create"/>
@@ -196,21 +224,60 @@ JSON;
             }
         }
     ],
+    "id":1,
+    "first_name":"Adrien",
+    "last_name":"Brault",
     "links":{
-        "self":{
-            "href":"http:\/\/localhost\/api\/posts?_format=json&limit=10&page=1"
-        },
+        "self":[
+            {"href":"http:\/\/localhost\/api\/posts?_format=json&limit=10&page=1"},
+            {"href":"http:\/\/localhost\/api\/users\/1"}
+        ],
         "first":{
             "href":"http:\/\/localhost\/api\/posts?_format=json&limit=10&page=1"
         },
         "last":{
             "href":"http:\/\/localhost\/api\/posts?_format=json&limit=10&page=1"
         },
+        "alternate":[
+            {"href":"http:\/\/localhost\/profile\/1"},
+            {"href":"http:\/\/localhost\/api\/users\/1\/alternate"}
+        ],
+        "users":{"href":"http:\/\/localhost\/api\/users"},
+        "last-post":{"href":"http:\/\/localhost\/api\/users\/1\/last-post"},
+        "posts":{"href":"http:\/\/localhost\/api\/users\/1\/posts"},
+        "dynamic_href":{"href":"this\/is\/a\/href\/from\/a\/property_path"},
         "create":{
             "href":"http:\/\/localhost\/api\/posts\/create"
         }
     },
     "relations":{
+        "last-post":{
+            "id":2,
+            "title":"How to create awesome symfony2 application",
+            "links":{
+                "self":{"href":"http:\/\/localhost\/api\/posts\/2"}
+            }
+        },
+        "posts":{
+            "page":1,
+            "limit":1,
+            "total":2,
+            "results":[
+                {
+                    "id":2,
+                    "title":"How to create awesome symfony2 application",
+                    "links":{
+                        "self":{"href":"http:\/\/localhost\/api\/posts\/2"}
+                    }
+                }
+            ],
+            "links":{
+                "self":{"href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=1"},
+                "first":{"href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=1"},
+                "last":{"href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=2"},
+                "next":{"href":"http:\/\/localhost\/api\/users\/1\/posts?limit=1&page=2"}
+            }
+        },
         "create":null
     }
 }
