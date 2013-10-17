@@ -106,8 +106,6 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
     {
         $object = $event->getObject();
         $context = $event->getContext();
-        $metadataStack = $context->getMetadataStack();
-        $visitingStack = $context->getVisitingStack();
 
         $relationsContent = $this->contentFactory->create($object);
 
@@ -137,12 +135,7 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
 
         $parentObjectInlining = $this->metadataHelper->getParentObjectInlining($object, $context);
         if (null !== $parentObjectInlining) {
-            if ($this->deferredEmbeds->contains($parentObjectInlining)) {
-                $relationsData = array_merge($this->deferredEmbeds->offsetGet($parentObjectInlining), $relationsData);
-            }
-
-            // We need to defer the links serialization to the $parentObject
-            $this->deferredEmbeds->attach($parentObjectInlining, $relationsData);
+            $this->defer($parentObjectInlining, $relationsData);
 
             return null;
         }
@@ -187,5 +180,15 @@ class EmbedderEventSubscriber implements EventSubscriberInterface
         }
 
         return $this->typeParser->parse($relationContentMetadata->getSerializerType());
+    }
+
+    public function defer($parentObjectInlining, $relationsData)
+    {
+        if ($this->deferredEmbeds->contains($parentObjectInlining)) {
+            $relationsData = array_merge($this->deferredEmbeds->offsetGet($parentObjectInlining), $relationsData);
+        }
+
+        // We need to defer the links serialization to the $parentObject
+        $this->deferredEmbeds->attach($parentObjectInlining, $relationsData);
     }
 }

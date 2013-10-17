@@ -74,8 +74,6 @@ class LinkEventSubscriber implements EventSubscriberInterface
     {
         $object = $event->getObject();
         $context = $event->getContext();
-        $metadataStack = $context->getMetadataStack();
-        $visitingStack = $context->getVisitingStack();
 
         $links = $this->linkFactory->createLinks($object);
         if ($this->deferredLinks->contains($object)) {

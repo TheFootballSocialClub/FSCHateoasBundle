@@ -63,21 +63,28 @@ class HalPagerfantaHandler implements SubscribingHandlerInterface
             'total' => $pager->getNbResults(),
         );
 
-        if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
-            $data[$this->linksJsonKey] = $links;
-        }
-
-        if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type)))) {
-            $data[$this->relationsJsonKey] = $relations;
-        }
-
         $resultsType = array(
             'name' => 'array',
         );
         if (isset($type['params'])) {
             $resultsType['params'] = $type['params'];
         }
-        $data[$this->relationsJsonKey][$halPager->getRel()] = $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $context);
+
+        // make sure the pager links/embeds are deffered to the halpager
+        $this->linkEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type));
+        $this->embedderEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $pager, $type));
+
+        $this->embedderEventSubscriber->defer($halPager, array(
+            $halPager->getRel() => $visitor->getNavigator()->accept($pager->getCurrentPageResults(), $resultsType, $context),
+        ));
+
+        if (null !== ($links = $this->linkEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $halPager, $type)))) {
+            $data[$this->linksJsonKey] = $links;
+        }
+
+        if (null !== ($relations = $this->embedderEventSubscriber->getOnPostSerializeData(new ObjectEvent($context, $halPager, $type)))) {
+            $data[$this->relationsJsonKey] = $relations;
+        }
 
         if ($shouldSetRoot) {
             $visitor->setRoot($data);
