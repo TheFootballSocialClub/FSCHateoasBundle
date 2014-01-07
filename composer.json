@@ -23,7 +23,7 @@
         "jms/serializer": ">=0.12.0,<0.15.0-dev",
         "jms/serializer-bundle": "*",
         "symfony/property-access": "~2.2",
-        "adrienbrault/form-serializer": "0.1.*,>=0.1.2"
+        "adrienbrault/form-serializer": "~0.1.2"
     },
     "require-dev": {
         "symfony/class-loader": "*",
