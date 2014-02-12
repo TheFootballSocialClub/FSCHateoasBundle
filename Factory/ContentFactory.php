@@ -42,7 +42,10 @@ class ContentFactory implements ContentFactoryInterface
                 continue;
             }
 
-            $relationsContent->attach($relationMetadata, $this->getContent($relationMetadata, $object));
+            $content = $this->getContent($relationMetadata, $object);
+            if ($content) {
+                $relationsContent->attach($relationMetadata, $content);
+            }
         }
 
         return $relationsContent->count() === 0 ? null : $relationsContent;
