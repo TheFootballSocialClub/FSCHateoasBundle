@@ -28,8 +28,14 @@ class MetadataHelper
         }
 
         if (
-            $metadataStack->count() > 0 && $metadataStack[0]->inline
-            && $this->serializerMetadataFactory->getMetadataForClass(get_class($parentObject)) === $metadataStack[1]
+            (
+                $metadataStack->count() > 0 && $metadataStack[0]->inline
+                && $this->serializerMetadataFactory->getMetadataForClass(get_class($parentObject)) === $metadataStack[1]
+            )
+            || (
+                $this->isSubclassOf(get_class($object), 'Pagerfanta\Pagerfanta')
+                && $this->isSubclassOf(get_class($parentObject), 'FSC\HateoasBundle\Model\HalPagerfanta')
+            )
         ) {
             return $parentObject;
         }
@@ -42,5 +48,12 @@ class MetadataHelper
         $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($object));
 
         return $classMetadata->xmlRootName;
+    }
+
+    private function isSubclassOf($class1, $class2)
+    {
+        $class = new \ReflectionClass($class1);
+
+        return $class1 === $class2 || $class->isSubclassOf($class2);
     }
 }

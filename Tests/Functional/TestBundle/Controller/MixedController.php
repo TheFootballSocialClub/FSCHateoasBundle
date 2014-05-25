@@ -2,6 +2,7 @@
 
 namespace FSC\HateoasBundle\Tests\Functional\TestBundle\Controller;
 
+use FSC\HateoasBundle\Tests\Functional\TestBundle\Model\PostsCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +36,11 @@ class MixedController extends Controller
 
         $halPager = HalPagerfanta::create($pager, 'test-rel');
 
-        return new Response($this->get('serializer')->serialize($halPager, $request->get('_format')));
+        $postsCollection = new PostsCollection(
+            $halPager,
+            $this->get('test.provider.user')->getUser(1)
+        );
+
+        return new Response($this->get('serializer')->serialize($postsCollection, $request->get('_format')));
     }
 }
