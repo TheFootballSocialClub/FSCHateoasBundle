@@ -8,6 +8,11 @@ api_root_empty:
     defaults:
         _controller: TestBundle:Root:empty
 
+api_users_proxy_pager:
+    pattern: /api/users/proxy-pager
+    defaults:
+        _controller: TestBundle:User:getUsersProxyPager
+
 api_user_get:
     pattern: /api/users/{identifier}
 
@@ -40,6 +45,12 @@ api_post_list:
     requirements: { _method: GET }
     defaults:
         _controller: TestBundle:Post:listPosts
+
+api_post_list_pager:
+    pattern: /api/posts/pager
+    requirements: { _method: GET }
+    defaults:
+        _controller: TestBundle:Post:listPostsPager
 
 api_post_get:
     pattern: /api/posts/{id}

@@ -2,6 +2,7 @@
 
 namespace FSC\HateoasBundle\Serializer\Handler;
 
+use FSC\HateoasBundle\Metadata\RelationsManager;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\XmlSerializationVisitor;
@@ -38,6 +39,7 @@ class PagerfantaHandler implements SubscribingHandlerInterface
     protected $xmlElementsNamesUseSerializerMetadata;
     protected $linksJsonKey;
     protected $relationsJsonKey;
+    protected $relationsManager;
 
     public function __construct(
         MetadataFactoryInterface $serializerMetadataFactory,
@@ -45,7 +47,8 @@ class PagerfantaHandler implements SubscribingHandlerInterface
         LinkEventSubscriber $linkEventSubscriber,
         $xmlElementsNamesUseSerializerMetadata = true,
         $linksKey = null,
-        $relationsKey = null
+        $relationsKey = null,
+        RelationsManager $relationsManager
     ) {
         $this->serializerMetadataFactory = $serializerMetadataFactory;
         $this->embedderEventSubscriber = $embedderEventSubscriber;
@@ -53,10 +56,13 @@ class PagerfantaHandler implements SubscribingHandlerInterface
         $this->xmlElementsNamesUseSerializerMetadata = $xmlElementsNamesUseSerializerMetadata;
         $this->linksJsonKey = $linksKey ?: 'links';
         $this->relationsJsonKey = $relationsKey ?: 'relations';
+        $this->relationsManager = $relationsManager;
     }
 
     public function serializeToXML(XmlSerializationVisitor $visitor, Pagerfanta $pager, array $type, Context $context)
     {
+        $this->relationsManager->addBasicRelations($pager);
+
         if (null === $visitor->document) {
             $visitorClass = new \ReflectionClass(get_class($visitor));
             $defaultRootNameProperty = $visitorClass->getProperty('defaultRootName');
@@ -106,6 +112,8 @@ class PagerfantaHandler implements SubscribingHandlerInterface
 
     public function serializeToArray(GenericSerializationVisitor $visitor, Pagerfanta $pager, array $type, Context $context)
     {
+        $this->relationsManager->addBasicRelations($pager);
+
         $resultsType = array(
             'name' => 'array',
         );
