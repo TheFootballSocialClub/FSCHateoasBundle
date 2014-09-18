@@ -9,6 +9,8 @@ class MetadataHelper
 {
     protected $serializerMetadataFactory;
 
+    protected $linksDisabled = false;
+
     public function __construct(MetadataFactory $serializerMetadataFactory)
     {
         $this->serializerMetadataFactory = $serializerMetadataFactory;
@@ -42,5 +44,20 @@ class MetadataHelper
         $classMetadata = $this->serializerMetadataFactory->getMetadataForClass(get_class($object));
 
         return $classMetadata->xmlRootName;
+    }
+
+    public function disableLinks()
+    {
+        $this->linksDisabled = true;
+    }
+
+    public function enableLinks()
+    {
+        $this->linksDisabled = false;
+    }
+
+    public function areLinksDisabled()
+    {
+        return $this->linksDisabled;
     }
 }
