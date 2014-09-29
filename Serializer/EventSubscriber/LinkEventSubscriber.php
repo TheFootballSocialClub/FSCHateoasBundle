@@ -52,6 +52,10 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     public function onPostSerializeXML(Event $event)
     {
+        if ($this->metadataHelper->areLinksDisabled()) {
+            return;
+        }
+
         if (null === ($links = $this->linkFactory->createLinks($event->getObject(), $event->getType()))) {
             return;
         }
@@ -61,6 +65,10 @@ class LinkEventSubscriber implements EventSubscriberInterface
 
     public function onPostSerialize(Event $event)
     {
+        if ($this->metadataHelper->areLinksDisabled()) {
+            return;
+        }
+
         $links = $this->getOnPostSerializeData($event);
 
         if (empty($links)) {

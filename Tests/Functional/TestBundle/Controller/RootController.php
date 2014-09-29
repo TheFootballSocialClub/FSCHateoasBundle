@@ -27,6 +27,16 @@ class RootController extends Controller
         return new Response($this->get('serializer')->serialize($root, $request->get('_format')));
     }
 
+    public function disabledLinksAction(Request $request)
+    {
+        $root = new Root();
+
+        $this->get('fsc_hateoas.metadata.relations_manager')->addRelation($root, 'adrienbrault', 'http://adrienbrault.fr');
+        $this->get('fsc_hateoas.serializer.metadata_helper')->disableLinks();
+
+        return new Response($this->get('serializer')->serialize($root, $request->get('_format')));
+    }
+
     public function emptyAction(Request $request)
     {
         $data = new EmptyRoot();
