@@ -98,6 +98,22 @@ XML
             , $response->getContent());
     }
 
+    public function testRootControllerDisabledLinksXml()
+    {
+        $client = $this->createClient();
+        $client->request('GET', '/api/disabled_links?_format=xml');
+
+        $response = $client->getResponse(); /** @var $response Response */
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<root/>
+
+XML
+            , $response->getContent());
+    }
+
     public function testRootRuntimeMetadataControllerXml()
     {
         $client = $this->createClient();

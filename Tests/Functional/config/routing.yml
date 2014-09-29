@@ -8,6 +8,11 @@ api_root_empty:
     defaults:
         _controller: TestBundle:Root:empty
 
+api_root_disabled_links:
+    pattern: /api/disabled_links
+    defaults:
+        _controller: TestBundle:Root:disabledLinks
+
 api_user_get:
     pattern: /api/users/{identifier}
 
