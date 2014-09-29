@@ -205,6 +205,16 @@ class RootController extends Controller
 </root>
 ```
 
+## Disable links
+
+Under certain circumstances it might be desired to disable the output of relation links. The output can be turned
+off like this:
+
+```php
+$container->get('fsc_hateoas.serializer.metadata_helper')->disableLinks();
+```
+
+
 ## Json Format
 
 The bundle supports customizing the keys of links and embedded relations when serializing to Json. They are
